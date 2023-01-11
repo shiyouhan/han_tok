@@ -1,28 +1,99 @@
 PODS:
+  - "app_settings (3.0.0+1)":
+    - Flutter
+  - BaiduMapKit/Base (6.5.3)
+  - BaiduMapKit/Map (6.5.3):
+    - BaiduMapKit/Base
+  - BaiduMapKit/Utils (6.5.3):
+    - BaiduMapKit/Base
+  - BMKLocationKit (2.0.5)
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - flutter_baidu_mapapi_base (3.3.0):
+    - BaiduMapKit/Utils (= 6.5.3)
+    - Flutter
+  - flutter_baidu_mapapi_map (3.3.0):
+    - BaiduMapKit/Map (= 6.5.3)
+    - Flutter
+    - flutter_baidu_mapapi_base
+  - flutter_bmflocation (2.0.1):
+    - BMKLocationKit (~> 2.0.4)
+    - Flutter
+  - flutter_sim_country_code (0.0.1):
+    - Flutter
+  - images_picker (0.0.1):
+    - Flutter
+    - ZLPhotoBrowser (= 4.2.5)
   - path_provider_ios (0.0.1):
+    - Flutter
+  - permission_handler_apple (9.0.4):
     - Flutter
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - ZLPhotoBrowser (4.2.5):
+    - ZLPhotoBrowser/Core (= 4.2.5)
+  - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
+  - flutter_baidu_mapapi_base (from `.symlinks/plugins/flutter_baidu_mapapi_base/ios`)
+  - flutter_baidu_mapapi_map (from `.symlinks/plugins/flutter_baidu_mapapi_map/ios`)
+  - flutter_bmflocation (from `.symlinks/plugins/flutter_bmflocation/ios`)
+  - flutter_sim_country_code (from `.symlinks/plugins/flutter_sim_country_code/ios`)
+  - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
+SPEC REPOS:
+  trunk:
+    - BaiduMapKit
+    - BMKLocationKit
+    - ZLPhotoBrowser
+
 EXTERNAL SOURCES:
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
+  flutter_baidu_mapapi_base:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_base/ios"
+  flutter_baidu_mapapi_map:
+    :path: ".symlinks/plugins/flutter_baidu_mapapi_map/ios"
+  flutter_bmflocation:
+    :path: ".symlinks/plugins/flutter_bmflocation/ios"
+  flutter_sim_country_code:
+    :path: ".symlinks/plugins/flutter_sim_country_code/ios"
+  images_picker:
+    :path: ".symlinks/plugins/images_picker/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
+  app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
+  BaiduMapKit: 54623026cd183511b1525a448094211d4fd5d646
+  BMKLocationKit: c0a4266f84ad2a3296df8c24f14f0ed20dbbf0ee
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_baidu_mapapi_base: 58a3649c5f54636944e771745628238ca14bc728
+  flutter_baidu_mapapi_map: 8ec980c0224ec6977d1bfeeb0cf9b8d7f38381c3
+  flutter_bmflocation: 1bd73181196567fe1529f765aa4f8e2615a8a3cf
+  flutter_sim_country_code: 364e91e71f067cdec1dd1228eb4d1f13ab1a54e5
+  images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: 215d1c899491b6e58adc38bcd11428ff29e16b72
 
 COCOAPODS: 1.11.3

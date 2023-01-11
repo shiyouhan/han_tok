@@ -8,10 +8,14 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/index/bindings/index_binding.dart';
 import '../modules/index/views/index_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/message/bindings/message_binding.dart';
 import '../modules/message/views/message_view.dart';
 import '../modules/mine/bindings/mine_binding.dart';
 import '../modules/mine/views/mine_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -28,7 +32,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.INDEX,
-      page: () => const IndexView(),
+      page: () => IndexView(),
       binding: IndexBinding(),
     ),
     GetPage(
@@ -50,6 +54,11 @@ class AppPages {
       name: _Paths.MINE,
       page: () => const MineView(),
       binding: MineBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
     ),
   ];
 }

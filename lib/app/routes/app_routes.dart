@@ -9,6 +9,7 @@ abstract class Routes {
   static const CAMERA = _Paths.CAMERA;
   static const MESSAGE = _Paths.MESSAGE;
   static const MINE = _Paths.MINE;
+  static const LOGIN = _Paths.LOGIN;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const CAMERA = '/camera';
   static const MESSAGE = '/message';
   static const MINE = '/mine';
+  static const LOGIN = '/login';
 }

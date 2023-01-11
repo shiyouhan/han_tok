@@ -1,9 +1,10 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:get/get.dart';
 
 class MineController extends GetxController {
-  //TODO: Implement MineController
+  final city = ''.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +19,4 @@ class MineController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

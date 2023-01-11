@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -9,6 +12,8 @@ import '../../../data/base_style.dart';
 import '../../camera/views/camera_view.dart';
 import '../../friend/views/friend_view.dart';
 import '../../index/views/index_view.dart';
+import '../../login/controllers/login_bottom_controller.dart';
+import '../../login/views/login_bottom_view.dart';
 import '../../message/views/message_view.dart';
 import '../../mine/views/mine_view.dart';
 
@@ -20,6 +25,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  LoginBottomController loginController = Get.put(LoginBottomController());
   Color bgColor = Color(0xff111215);
   Color textColor = Colors.white;
   Color iconColor = Colors.white;
@@ -33,6 +39,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final paddingTop = MediaQueryData.fromWindow(window).padding.top;
     return Container(
       color: bottomColor,
       child: SafeArea(
@@ -80,6 +88,48 @@ class _HomeViewState extends State<HomeView> {
                     borderColor = e > 1 ? Colors.black : Colors.white;
                     bottomColor = e > 1 ? Colors.white : Color(0xff111215);
                   }),
+                  if (loginController.userToken.value.isEmpty)
+                    {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AnnotatedRegion<SystemUiOverlayStyle>(
+                            value: SystemUiOverlayStyle.dark,
+                            child: SizedBox(
+                              height: size.height,
+                              child: Column(
+                                children: [
+                                  SizedBox(height: paddingTop.h),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => Get.back(),
+                                          child: Icon(
+                                            Icons.clear,
+                                            size: 24,
+                                          ),
+                                        ),
+                                        Text(
+                                          '帮助与设置',
+                                          style: BaseStyle.fs16,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  LoginBottomView(),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    },
                   if (e == 2)
                     {
                       Get.to(() => CameraView()),
