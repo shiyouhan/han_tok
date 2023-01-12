@@ -16,7 +16,6 @@ import 'generated/l10n.dart';
 Request request = Request();
 
 void main() {
-  // // 请求单例初始化
   request.init(
     baseUrl: NetUrl.kHttp_HostName,
     responseFormat: HttpResponseFormat('code', 'msg', true, 'data'),

@@ -8,7 +8,9 @@ import 'package:han_tok/app/modules/mine/controllers/info_desc_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/info_location_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/info_nickname_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/info_num_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/like_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_info_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/private_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/visit_controller.dart';
 
 import '../controllers/mine_controller.dart';
@@ -16,6 +18,12 @@ import '../controllers/mine_controller.dart';
 class MineBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<LikeController>(
+      () => LikeController(),
+    );
+    Get.lazyPut<PrivateController>(
+      () => PrivateController(),
+    );
     Get.lazyPut<CompositionController>(
       () => CompositionController(),
     );
