@@ -390,11 +390,10 @@ class _CodeState extends State<Code> {
                   controller: controller.codeController.value,
                   onChanged: (value) {
                     controller.codeNumber(value);
-                    print(value);
+                    // print(value);
                   },
                 ),
               )),
-          // SizedBox(width: 6.w),
           GestureDetector(
             onTap: _seconds == widget.countdown
                 ? () {

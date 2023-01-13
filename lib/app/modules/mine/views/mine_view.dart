@@ -13,6 +13,9 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart';
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_follow_controller.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +25,11 @@ import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
 import '../../../utils/Iconfont.dart';
 import '../../login/controllers/login_bottom_controller.dart';
+import '../controllers/composition_controller.dart';
 import '../controllers/mine_controller.dart';
+import '../model/PublicList.dart';
+import 'count/mine_count_view.dart';
+import 'info/info_desc_view.dart';
 import 'info/mine_info_view.dart';
 import 'setting/setting_view.dart';
 import 'top/search_view.dart';
@@ -55,6 +62,11 @@ class _VideoTabBarState extends State<VideoTabBar>
   final LocationFlutterPlugin _myLocPlugin = LocationFlutterPlugin();
   LoginBottomController loginController = Get.put(LoginBottomController());
   MineController controller = Get.put(MineController());
+  MineCountController countController = Get.put(MineCountController());
+  MineFollowController followController = Get.put(MineFollowController());
+  MineFanController fanController = Get.put(MineFanController());
+  CompositionController compositionController =
+      Get.put(CompositionController());
   late TabController _tabController;
   String? path;
   late ScrollController _scrollController;
@@ -685,7 +697,6 @@ class _VideoTabBarState extends State<VideoTabBar>
                                 children: [
                                   Text(
                                     loginController.nickname.value,
-                                    // nicknameController.nickname.value,
                                     style: BaseStyle.fs20W
                                         .copyWith(fontWeight: FontWeight.bold),
                                   ),
@@ -748,10 +759,13 @@ class _VideoTabBarState extends State<VideoTabBar>
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
+                                          Obx(
+                                            () => Text(
+                                              controller.praised.value
+                                                  .toString(),
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                           SizedBox(width: 5.h),
                                           Text(
@@ -761,56 +775,83 @@ class _VideoTabBarState extends State<VideoTabBar>
                                         ],
                                       ),
                                       SizedBox(width: 18.h),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            '朋友',
-                                            style: BaseStyle.fs16,
-                                          ),
-                                        ],
+                                      InkWell(
+                                        onTap: () => {
+                                          countController.friend(),
+                                          Get.to(() => MineCountView()),
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '0',
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(width: 5.h),
+                                            Text(
+                                              '朋友',
+                                              style: BaseStyle.fs16,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(width: 18.h),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            '关注',
-                                            style: BaseStyle.fs16,
-                                          ),
-                                        ],
+                                      InkWell(
+                                        onTap: () => {
+                                          countController.follow(),
+                                          Get.to(() => MineCountView()),
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Obx(
+                                              () => Text(
+                                                followController
+                                                    .followList.length
+                                                    .toString(),
+                                                style: BaseStyle.fs16.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(width: 5.h),
+                                            Text(
+                                              '关注',
+                                              style: BaseStyle.fs16,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(width: 18.h),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            '粉丝',
-                                            style: BaseStyle.fs16,
-                                          ),
-                                        ],
-                                      ),
+                                      InkWell(
+                                        onTap: () => {
+                                          countController.fan(),
+                                          Get.to(() => MineCountView()),
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Obx(
+                                              () => Text(
+                                                fanController.fanList.length
+                                                    .toString(),
+                                                style: BaseStyle.fs16.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(width: 5.h),
+                                            Text(
+                                              '粉丝',
+                                              style: BaseStyle.fs16,
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                   SizedBox(height: 12.h),
                                   Obx(
                                     () => GestureDetector(
-                                      // onTap: () => Get.to(() => InfoDescView()),
+                                      onTap: () => Get.to(() => InfoDescView()),
                                       child: loginController
                                                   .description.value ==
                                               '这家伙很懒，什么都没留下~'

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:han_tok/app/modules/login/views/login_view.dart';
 
 import 'app/config/net_url.dart';
 import 'app/config/request.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         theme: defaultTheme,
         darkTheme: appDarkTheme,
         themeMode: ThemeMode.light,
-        initialRoute: AppPages.INITIAL,
+        // initialRoute: AppPages.INITIAL,
+        initialRoute: Routes.LOGIN,
         getPages: AppPages.routes,
         // 命名路由配置
         builder: EasyLoading.init(),

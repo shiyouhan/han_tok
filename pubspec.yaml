@@ -44,6 +44,12 @@ dependencies:
   app_settings: ^4.1.8
   # md5加密
   crypto: ^3.0.2
+  # 基础的点击
+  tapped: ^2.0.0
+  # 视频播放器
+  video_player: ^2.4.7
+  # map取值
+  safemap: ^2.1.0
   # 国际化
   flutter_localizations:
     sdk: flutter

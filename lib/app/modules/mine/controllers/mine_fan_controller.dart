@@ -4,23 +4,18 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
-import '../model/PublicList.dart';
+import '../model/Fan.dart';
 
-class CompositionController extends GetxController {
-  var publicList = [].obs;
+class MineFanController extends GetxController {
+  var fanList = [].obs;
   final page = 1.obs;
   final pageSize = 99.obs;
-  final praised = 0.obs;
+  final friend = false.obs;
 
   @override
   void onInit() async {
-    publicList.value = await getVideo();
-    // for (var element in publicList) {
-    //   praised.value += publicList[element]['likeCounts'] as int;
-    //   print(praised.value);
-    // }
-    publicList.value =
-        publicList.map((element) => PublicList.fromJson(element)).toList();
+    fanList.value = await getFanList();
+    fanList.value = fanList.map((element) => Fan.fromJson(element)).toList();
     super.onInit();
   }
 
@@ -34,12 +29,12 @@ class CompositionController extends GetxController {
     super.onClose();
   }
 
-  //TODO:获取作品列表
-  Future<List> getVideo() async {
+  //TODO:获取我的粉丝列表
+  Future<List> getFanList() async {
     var prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
     var result = await request.get(
-        '/vlog/myPublicList?userId=$id&page=${page.value}&pageSize=${pageSize.value}');
+        '/fans/queryMyFans?myId=$id&page=${page.value}&pageSize=${pageSize.value}');
     print(result);
     return result['rows'];
   }

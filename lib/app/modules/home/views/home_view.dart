@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/login/views/login_view.dart';
 
 import '../../../data/base_style.dart';
 import '../../camera/views/camera_view.dart';
@@ -90,45 +91,46 @@ class _HomeViewState extends State<HomeView> {
                   }),
                   if (loginController.userToken.value.isEmpty)
                     {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AnnotatedRegion<SystemUiOverlayStyle>(
-                            value: SystemUiOverlayStyle.dark,
-                            child: SizedBox(
-                              height: size.height,
-                              child: Column(
-                                children: [
-                                  SizedBox(height: paddingTop.h),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () => Get.back(),
-                                          child: Icon(
-                                            Icons.clear,
-                                            size: 24,
-                                          ),
-                                        ),
-                                        Text(
-                                          '帮助与设置',
-                                          style: BaseStyle.fs16,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  LoginBottomView(),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                      Get.to(() => LoginView()),
+                      // showModalBottomSheet(
+                      //   isScrollControlled: true,
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return AnnotatedRegion<SystemUiOverlayStyle>(
+                      //       value: SystemUiOverlayStyle.dark,
+                      //       child: SizedBox(
+                      //         height: size.height,
+                      //         child: Column(
+                      //           children: [
+                      //             // SizedBox(height: paddingTop.h),
+                      //             // Padding(
+                      //             //   padding:
+                      //             //       EdgeInsets.symmetric(horizontal: 16.w),
+                      //             //   child: Row(
+                      //             //     mainAxisAlignment:
+                      //             //         MainAxisAlignment.spaceBetween,
+                      //             //     children: [
+                      //             //       GestureDetector(
+                      //             //         onTap: () => Get.back(),
+                      //             //         child: Icon(
+                      //             //           Icons.clear,
+                      //             //           size: 24,
+                      //             //         ),
+                      //             //       ),
+                      //             //       Text(
+                      //             //         '帮助与设置',
+                      //             //         style: BaseStyle.fs16,
+                      //             //       ),
+                      //             //     ],
+                      //             //   ),
+                      //             // ),
+                      //             // LoginBottomView(),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                     },
                   if (e == 2)
                     {

@@ -1,21 +1,19 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
 
 import '../../../../data/base_style.dart';
-import '../../controllers/like_controller.dart';
+import '../../../../data/video/controller/user_info_controller.dart';
 
-class LikeView extends GetView {
-  const LikeView({Key? key}) : super(key: key);
+class InfoLikeView extends GetView {
+  const InfoLikeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    MineController mineController = Get.put(MineController());
-    // LikeController controller = Get.put(LikeController());
-    return mineController.likeList.isEmpty
+    UserInfoController infoController = Get.put(UserInfoController());
+    return infoController.likeList.isEmpty
         ? Container(
             color: Colors.white,
             child: Center(
@@ -46,7 +44,7 @@ class LikeView extends GetView {
               crossAxisCount: 3,
               childAspectRatio: 3 / 4,
             ),
-            itemCount: mineController.likeList.length,
+            itemCount: infoController.likeList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 child: Stack(
@@ -60,7 +58,7 @@ class LikeView extends GetView {
                           border: Border.all(width: 1, color: Colors.grey),
                         ),
                         child: Image.network(
-                          mineController.likeList[index].cover,
+                          infoController.likeList[index].cover,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -77,7 +75,7 @@ class LikeView extends GetView {
                           ),
                           SizedBox(width: 2.w),
                           Text(
-                            mineController.likeList[index].likeCounts
+                            infoController.likeList[index].likeCounts
                                 .toString(),
                             style: BaseStyle.fs16W,
                           )

@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/data/base_data.dart';
-import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
+import 'package:han_tok/app/data/video/controller/user_info_controller.dart';
 
+import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
 import '../../../../utils/Iconfont.dart';
 
-class CompositionView extends GetView {
-  const CompositionView({Key? key}) : super(key: key);
+class InfoOpusView extends GetView {
+  const InfoOpusView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    MineController mineController = Get.put(MineController());
-    return Obx(() => mineController.publicList.isEmpty
+    UserInfoController infoController = Get.put(UserInfoController());
+    return Obx(() => infoController.publicList.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -56,7 +56,7 @@ class CompositionView extends GetView {
               crossAxisCount: 3,
               childAspectRatio: 3 / 4,
             ),
-            itemCount: mineController.publicList.length,
+            itemCount: infoController.publicList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 child: Stack(
@@ -70,7 +70,7 @@ class CompositionView extends GetView {
                           border: Border.all(width: 0.5.w, color: Colors.white),
                         ),
                         child: Image.network(
-                          mineController.publicList[index].cover,
+                          infoController.publicList[index].cover,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -87,7 +87,7 @@ class CompositionView extends GetView {
                           ),
                           SizedBox(width: 2.w),
                           Text(
-                            mineController.publicList[index].likeCounts
+                            infoController.publicList[index].likeCounts
                                 .toString(),
                             style: BaseStyle.fs16W,
                           )

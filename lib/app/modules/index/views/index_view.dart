@@ -15,7 +15,6 @@ class IndexView extends GetView<IndexController> {
   @override
   Widget build(BuildContext context) {
     IndexController controller = Get.put(IndexController());
-    //  final double statusBarHeight = MediaQuery.of(context).padding.top;
     final size = MediaQuery.of(context).size;
     return DefaultTabController(
       //导航栏的长度
