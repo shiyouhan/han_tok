@@ -9,6 +9,7 @@ import 'package:han_tok/app/data/video/controller/user_info_controller.dart';
 import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
 import '../../../../utils/Iconfont.dart';
+import 'opus_detail_view.dart';
 
 class InfoOpusView extends GetView {
   const InfoOpusView({Key? key}) : super(key: key);
@@ -58,7 +59,16 @@ class InfoOpusView extends GetView {
             ),
             itemCount: infoController.publicList.length,
             itemBuilder: (context, index) {
+              String vlogId = infoController.publicList[index].id;
+              String vlogerId = infoController.publicList[index].vlogerId;
+              String url = infoController.publicList[index].url;
+              String updatedTime = infoController.publicList[index].updatedTime;
               return GestureDetector(
+                onTap: () => Get.to(() => OpusDetailView(
+                    vlogId: vlogId,
+                    vlogerId: vlogerId,
+                    url: url,
+                    updatedTime: updatedTime)),
                 child: Stack(
                   children: [
                     AbsorbPointer(

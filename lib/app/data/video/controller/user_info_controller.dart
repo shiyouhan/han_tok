@@ -18,6 +18,7 @@ class UserInfoController extends GetxController {
   var publicList = [].obs;
   var likeList = [].obs;
 
+  final id = ''.obs;
   final nickname = ''.obs;
   final hantokNum = ''.obs;
   final avatar = 'http://img.syhan.top/uPic/grey.jpg'.obs;
@@ -34,12 +35,6 @@ class UserInfoController extends GetxController {
 
   @override
   void onInit() async {
-    publicList.value = await getPublic();
-    publicList.value =
-        publicList.map((element) => PublicList.fromJson(element)).toList();
-    likeList.value = await getLike();
-    likeList.value =
-        likeList.map((element) => LikeList.fromJson(element)).toList();
     super.onInit();
   }
 
@@ -77,6 +72,12 @@ class UserInfoController extends GetxController {
       day.value = int.parse(birthday.value.substring(9, 10));
       late DateTime brt = DateTime(year.value, month.value, day.value);
       age.value = BirthUtil.getAge(brt);
+      publicList.value = await getPublic();
+      publicList.value =
+          publicList.map((element) => PublicList.fromJson(element)).toList();
+      likeList.value = await getLike();
+      likeList.value =
+          likeList.map((element) => LikeList.fromJson(element)).toList();
       print(value);
     }).catchError((error) {
       EasyLoading.showError('数据解析异常');

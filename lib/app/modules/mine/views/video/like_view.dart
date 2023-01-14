@@ -8,6 +8,7 @@ import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
 
 import '../../../../data/base_style.dart';
 import '../../controllers/like_controller.dart';
+import 'vlog_detail_view.dart';
 
 class LikeView extends GetView {
   const LikeView({Key? key}) : super(key: key);
@@ -48,7 +49,12 @@ class LikeView extends GetView {
             ),
             itemCount: mineController.likeList.length,
             itemBuilder: (context, index) {
+              String vlogId = mineController.likeList[index].vlogId;
+              String vlogerId = mineController.likeList[index].vlogerId;
+              String url = mineController.likeList[index].url;
               return GestureDetector(
+                onTap: () => Get.to(() => VlogDetailView(
+                    vlogId: vlogId, vlogerId: vlogerId, url: url)),
                 child: Stack(
                   children: [
                     AbsorbPointer(

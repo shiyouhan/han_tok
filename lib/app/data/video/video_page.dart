@@ -251,7 +251,6 @@ class VideoUserInfo extends GetView {
             ],
           ),
         ),
-        // Text(vlogerId!),
         SizedBox(height: 10.h),
         Column(
           children: [

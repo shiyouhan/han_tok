@@ -13,8 +13,6 @@ import 'package:han_tok/app/modules/index/views/info/info_like_view.dart';
 import 'package:han_tok/app/modules/index/views/info/info_opus_view.dart';
 import 'package:images_picker/images_picker.dart';
 
-import '../../modules/mine/model/LikeList.dart';
-import '../../modules/mine/model/PublicList.dart';
 import '../../utils/Iconfont.dart';
 import '../base_data.dart';
 import '../base_style.dart';
@@ -37,11 +35,9 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
   var kExpandedHeight = 400;
   String city = '';
 
-  late String? vlogerId = widget.vlogerId;
-
   @override
   void initState() {
-    controller.vlogerId.value = vlogerId!;
+    controller.vlogerId.value = widget.vlogerId!;
     controller.query();
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
@@ -105,59 +101,6 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                 color: _showTitle ? Colors.black : Colors.white,
               ),
             ),
-            // actions: [
-            //   GestureDetector(
-            //     onTap: () => Get.to(VisitView()),
-            //     child: _showTitle
-            //         ? Icon(
-            //             Icons.person,
-            //             color: Colors.black,
-            //           )
-            //         : CircleAvatar(
-            //             radius: 16.r,
-            //             backgroundColor: Colors.grey.withOpacity(0.5),
-            //             child: Icon(
-            //               Icons.person,
-            //               color: Colors.white,
-            //             ),
-            //           ),
-            //   ),
-            //   SizedBox(width: 12.w),
-            //   GestureDetector(
-            //     onTap: () => Get.to(SearchView()),
-            //     child: _showTitle
-            //         ? Icon(
-            //             Icons.search,
-            //             color: Colors.black,
-            //           )
-            //         : CircleAvatar(
-            //             radius: 16.r,
-            //             backgroundColor: Colors.grey.withOpacity(0.5),
-            //             child: Icon(
-            //               Icons.search,
-            //               color: Colors.white,
-            //             ),
-            //           ),
-            //   ),
-            //   SizedBox(width: 12.w),
-            //   GestureDetector(
-            //     onTap: () => Get.to(SettingView()),
-            //     child: _showTitle
-            //         ? Icon(
-            //             Icons.settings,
-            //             color: Colors.black,
-            //           )
-            //         : CircleAvatar(
-            //             radius: 16.r,
-            //             backgroundColor: Colors.grey.withOpacity(0.5),
-            //             child: Icon(
-            //               Icons.settings,
-            //               color: Colors.white,
-            //             ),
-            //           ),
-            //   ),
-            //   SizedBox(width: 15.w),
-            // ],
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.pin,
               background: Stack(
@@ -687,8 +630,12 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
               indicatorColor: Colors.black,
               controller: _tabController,
               tabs: [
-                Tab(text: '作品'),
-                Tab(text: '喜欢'),
+                Obx(
+                  () => Tab(text: '作品 ${controller.publicList.length}'),
+                ),
+                Obx(
+                  () => Tab(text: '喜欢 ${controller.likeList.length}'),
+                ),
               ],
             ),
           )

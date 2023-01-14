@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
+import 'package:han_tok/app/modules/mine/views/video/video_detail_view.dart';
 
 import '../../../../data/base_style.dart';
 
@@ -56,7 +57,11 @@ class PrivateView extends GetView {
             ),
             itemCount: mineController.privateList.length,
             itemBuilder: (context, index) {
+              String vlogId = mineController.privateList[index].id;
+              String url = mineController.privateList[index].url;
               return GestureDetector(
+                onTap: () =>
+                    Get.to(() => VideoDetailView(vlogId: vlogId, url: url)),
                 child: Stack(
                   children: [
                     AbsorbPointer(

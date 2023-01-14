@@ -19,7 +19,7 @@ class User {
     required this.canHantokNumBeUpdated,
     required this.createdTime,
     required this.updatedTime,
-    required this.userToken,
+    this.userToken,
     required this.myFollowsCounts,
     required this.myFansCounts,
     required this.totalLikeMeCounts,
@@ -41,7 +41,7 @@ class User {
   late final int canHantokNumBeUpdated;
   late final String createdTime;
   late final String updatedTime;
-  late final String userToken;
+  late final Null userToken;
   late final int myFollowsCounts;
   late final int myFansCounts;
   late final int totalLikeMeCounts;
