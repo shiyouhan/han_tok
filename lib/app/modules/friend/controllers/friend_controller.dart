@@ -1,12 +1,18 @@
+// ignore_for_file: unnecessary_overrides
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FriendController extends GetxController {
-  //TODO: Implement FriendController
+  final isShow = false.obs;
 
-  final count = 0.obs;
+  PageController? pageController;
+  var currentPage = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
+    pageController = PageController();
   }
 
   @override
@@ -19,5 +25,7 @@ class FriendController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void show() => isShow.value = true;
+  void leave() => isShow.value = false;
+  void change(index) => currentPage.value = index;
 }

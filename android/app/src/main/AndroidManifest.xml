@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="top.syhan.han_tok">
 
     <!--允许访问网络，必选权限-->
@@ -56,6 +57,9 @@
             <meta-data
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="hWvDObdeP0MPNsXpXLN2hlytCNaGQ0xG" />
+            <meta-data
+                android:name="flutterEmbedding"
+                android:value="2" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

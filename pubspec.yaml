@@ -30,6 +30,7 @@ dependencies:
   country_calling_code_picker: ^2.0.1
   # 图片选择器
   images_picker: ^1.2.11
+  image_picker: ^0.8.6
   # 获取设备信息
   device_info_plus: ^4.0.3
   # 插件选择器
@@ -50,6 +51,10 @@ dependencies:
   video_player: ^2.4.7
   # map取值
   safemap: ^2.1.0
+  # 带指示器弹窗
+  popover: ^0.2.8
+  # 扫描
+  scan: ^1.6.0
   # 国际化
   flutter_localizations:
     sdk: flutter

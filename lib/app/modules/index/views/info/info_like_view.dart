@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../data/video/controller/user_info_controller.dart';
+import 'like_detail_view.dart';
 
 class InfoLikeView extends GetView {
   const InfoLikeView({Key? key}) : super(key: key);
@@ -46,7 +47,12 @@ class InfoLikeView extends GetView {
             ),
             itemCount: infoController.likeList.length,
             itemBuilder: (context, index) {
+              String vlogId = infoController.likeList[index].vlogId;
+              String vlogerId = infoController.likeList[index].vlogerId;
+              String url = infoController.likeList[index].url;
               return GestureDetector(
+                onTap: () => Get.to(() => LikeDetailView(
+                    vlogId: vlogId, vlogerId: vlogerId, url: url)),
                 child: Stack(
                   children: [
                     AbsorbPointer(
