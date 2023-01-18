@@ -11,13 +11,17 @@ import '../../../utils/BirthUtil.dart';
 import '../../home/views/home_view.dart';
 import '../model/Login.dart';
 import '../model/User.dart';
+import '../views/reset_password_view.dart';
 
 class LoginBottomController extends GetxController {
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   var phoneController = TextEditingController().obs;
   var codeController = TextEditingController().obs;
+  var phoneController1 = TextEditingController().obs;
+  var passwordController = TextEditingController().obs;
 
-  var isSelected = false.obs;
+  var isSelected1 = false.obs;
+  var isSelected2 = false.obs;
   var isShowed = false.obs;
   final mobile = '18018384983'.obs;
   final code = ''.obs;
@@ -64,13 +68,15 @@ class LoginBottomController extends GetxController {
     super.onClose();
   }
 
-  void radioSelect(value) => isSelected.value = true;
+  void radioOne(value) => isSelected1.value = true;
+  void radioTwo(value) => isSelected2.value = true;
   void openCode(value) => isShowed.value = true;
   void closeCode(value) => isShowed.value = true;
   void phoneNumber(value) => mobile.value = value;
   void codeNumber(value) => code.value = value;
+  void passwordNumber(value) => password.value = value;
 
-  //todo:发送验证码
+  //todo:发送登录验证码
   getVerify() async {
     if (phoneController.value.text.isNotEmpty) {
       await request
@@ -84,13 +90,28 @@ class LoginBottomController extends GetxController {
     }
   }
 
-  //todo:登录
+  //todo:发送重置密码验证码
+  getCode() async {
+    if (phoneController1.value.text.isNotEmpty) {
+      await request
+          .post('/passport/getSMSCode?mobile=${phoneController1.value.text}')
+          .then((value) {
+        print(value);
+        Get.to(() => ResetPasswordView());
+      }).catchError((error) {
+        EasyLoading.showError('数据解析异常');
+        print(error);
+      });
+    }
+  }
+
+  //todo:验证码登录
   login() async {
     Map<String, dynamic> data = {
       "mobile": phoneController.value.text,
       "smsCode": codeController.value.text
     };
-    request.post('/passport/login', data: data).then((value) async {
+    request.post('/passport/codeLogin', data: data).then((value) async {
       id.value = Login.fromJson(value).id;
       userToken.value = Login.fromJson(value).userToken;
       var prefs = await SharedPreferences.getInstance();
@@ -109,6 +130,40 @@ class LoginBottomController extends GetxController {
       }
       print(time.value);
       loginWay.value = 1;
+      print(loginWay.value);
+      query();
+      Get.to(() => HomeView());
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  //todo:密码登录
+  passwordLogin() async {
+    Map<String, dynamic> data = {
+      "mobile": phoneController1.value.text,
+      "password": passwordController.value.text
+    };
+    request.post('/passport/passwordLogin', data: data).then((value) async {
+      id.value = Login.fromJson(value).id;
+      userToken.value = Login.fromJson(value).userToken;
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('userToken', Login.fromJson(value).userToken);
+      prefs.setString('id', Login.fromJson(value).id);
+      print(value);
+      DateTime dateTime = DateTime.now();
+      minute.value = dateTime.minute;
+      if (minute.value >= 0 && minute.value < 10) {
+        minute1.value = '0${minute.value}';
+        time.value =
+            '${dateTime.year}.${dateTime.month}.${dateTime.day} ${dateTime.hour}:${minute1.value}:${dateTime.second}';
+      } else {
+        time.value =
+            '${dateTime.year}.${dateTime.month}.${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+      }
+      print(time.value);
+      loginWay.value = 2;
       print(loginWay.value);
       query();
       Get.to(() => HomeView());

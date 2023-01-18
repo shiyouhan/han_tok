@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/login/views/login_password_view.dart';
 
 import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
@@ -42,11 +43,11 @@ class LoginBottomView extends GetView {
                 Obx(
                   () => Radio(
                     value: true,
-                    groupValue: controller.isSelected.value,
+                    groupValue: controller.isSelected1.value,
                     activeColor: Colors.blue,
                     splashRadius: 4.r,
                     onChanged: (value) {
-                      controller.radioSelect(value);
+                      controller.radioOne(value);
                       print(value);
                     },
                   ),
@@ -88,7 +89,7 @@ class LoginBottomView extends GetView {
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 16.h),
             Container(
               height: 48.h,
               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -99,19 +100,23 @@ class LoginBottomView extends GetView {
               child: Row(
                 children: [
                   SelectCountry(),
-                  SizedBox(
-                    height: 16.h,
-                    width: 1,
+                  Container(
+                    height: 10.h,
+                    width: 1.w,
+                    color: Colors.grey.withOpacity(.5),
+                    margin: EdgeInsets.only(right: 4.w),
                   ),
                   SizedBox(
                     width: size.width * 0.6,
                     child: Obx(
-                      () => TextFormField(
+                      () => TextField(
                         cursorColor: Colors.red,
                         decoration: InputDecoration(
                           hintText: "请输入手机号码",
+                          hintStyle: BaseStyle.fs14G,
                           border: InputBorder.none,
                         ),
+                        keyboardType: TextInputType.phone,
                         controller: controller.phoneController.value,
                         onChanged: (value) {
                           controller.phoneNumber(value);
@@ -132,7 +137,7 @@ class LoginBottomView extends GetView {
             ),
             GestureDetector(
               onTap: () => {
-                if (controller.isSelected.value == false)
+                if (controller.isSelected1.value == false)
                   {
                     EasyLoading.showToast('请先勾选，同意后再进行登录'),
                   }
@@ -156,29 +161,32 @@ class LoginBottomView extends GetView {
             SizedBox(height: 16.h),
             Row(
               children: [
-                Container(
-                  height: 48.h,
-                  padding: EdgeInsets.symmetric(horizontal: 35.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(
-                      color: Config.primarySwatchColor.shade50,
-                      width: 1.w,
+                GestureDetector(
+                  onTap: () => Get.to(() => LoginPasswordView()),
+                  child: Container(
+                    height: 48.h,
+                    padding: EdgeInsets.symmetric(horizontal: 35.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(
+                        color: Config.primarySwatchColor.shade50,
+                        width: 1.w,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        IconFont.yaoshi,
-                        // Icons.create_outlined,
-                        size: 16,
-                      ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        '密码登录',
-                        style: BaseStyle.fs12,
-                      ),
-                    ],
+                    child: Row(
+                      children: [
+                        Icon(
+                          IconFont.yaoshi,
+                          // Icons.create_outlined,
+                          size: 16,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          '密码登录',
+                          style: BaseStyle.fs12,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 10.w),
@@ -348,7 +356,7 @@ class _CodeState extends State<Code> {
   _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       _seconds--;
-      _verifyStr = '${_seconds}s后重发';
+      _verifyStr = '$_seconds';
       if (_seconds == 0) {
         _verifyStr = '重新获取';
         _seconds = widget.countdown;
@@ -358,9 +366,7 @@ class _CodeState extends State<Code> {
     });
   }
 
-  /// 取消倒计时的计时器。
   void _cancelTimer() {
-    // 计时器（`Timer`）组件的取消（`cancel`）方法，取消计时器。
     _timer.cancel();
   }
 
@@ -371,10 +377,9 @@ class _CodeState extends State<Code> {
 
     return Container(
       width: size.width - 64.w,
-      height: 44.h,
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 20.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      height: 48.h,
+      margin: EdgeInsets.only(top: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: Config.primarySwatchColor.shade50,
         borderRadius: BorderRadius.circular(5.r),
@@ -388,8 +393,10 @@ class _CodeState extends State<Code> {
                   cursorColor: Colors.red,
                   decoration: InputDecoration(
                     hintText: "请输入验证码",
+                    hintStyle: BaseStyle.fs14G,
                     border: InputBorder.none,
                   ),
+                  keyboardType: TextInputType.number,
                   controller: controller.codeController.value,
                   onChanged: (value) {
                     controller.codeNumber(value);
@@ -404,18 +411,11 @@ class _CodeState extends State<Code> {
                     _startTimer();
                   }
                 : null,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14.w),
-              margin: EdgeInsets.symmetric(vertical: 6.w),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: Colors.white),
-                borderRadius: BorderRadius.circular(5.r),
-              ),
-              child: Text(
-                _verifyStr,
-                style: BaseStyle.fs14.copyWith(color: Colors.white),
-              ),
+            child: Text(
+              _verifyStr,
+              style: (_verifyStr == '获取验证码' || _verifyStr == '重新获取')
+                  ? BaseStyle.fs14.copyWith(color: Colors.red.withOpacity(.8))
+                  : BaseStyle.fs14G,
             ),
           ),
         ],

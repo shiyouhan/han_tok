@@ -61,6 +61,7 @@ class AccountCodeView extends GetView {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                           ),
+                          keyboardType: TextInputType.number,
                           controller: controller.codeController,
                           onChanged: (value) {
                             controller.codeStr(value);
@@ -158,7 +159,9 @@ class _CodeState extends State<Code> {
           : null,
       child: Text(
         _verifyStr,
-        style: BaseStyle.fs14G,
+        style: (_verifyStr == '获取验证码' || _verifyStr == '重新获取')
+            ? BaseStyle.fs14.copyWith(color: Colors.red.withOpacity(.8))
+            : BaseStyle.fs14G,
       ),
     );
   }

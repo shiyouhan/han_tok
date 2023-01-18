@@ -16,202 +16,207 @@ class FriendAddView extends GetView {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-              height: 36.h,
-              margin: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                color: Config.primarySwatchColor.shade50,
-              ),
-              child: TextField(
-                onChanged: (String value) {},
-                cursorColor: Colors.lightBlueAccent,
-                decoration: InputDecoration(
-                  hintText: '搜索用户名字/HanTok号',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                ),
-              ),
-            ),
-            Container(
-              height: 88.h,
-              padding: EdgeInsets.only(left: 16),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  FunctionList model = items[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FunctionListItem(model.iconData, model.title),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 100.h),
-            Column(
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            color: Colors.white,
+            child: Column(
               children: [
-                SizedBox(
-                  width: size.width,
-                  height: 80.h,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 7.h,
-                        left: size.width / 2 - 87.w,
-                        child: SizedBox(
-                          width: 56.w,
-                          height: 56.h,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(28.r),
-                            child: Image.asset(
-                              'assets/images/nologin.jpeg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 7.h,
-                        left: size.width / 2,
-                        child: SizedBox(
-                          width: 56.w,
-                          height: 56.h,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(28.r),
-                            child: Image.asset(
-                              'assets/images/nologin.jpeg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: size.width / 2 - 51.w,
-                        child: Container(
-                          width: 70.w,
-                          height: 70.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35.r),
-                            color: Colors.pinkAccent,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(35.r),
-                            child: Image.asset(
-                              'assets/images/nologin.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 26.h),
-                Text(
-                  '发现通讯录朋友',
-                  style: BaseStyle.fs18Wb.copyWith(color: Colors.black),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  '你身边的朋友在用HanTok，快去看看吧',
-                  style: BaseStyle.fs14G,
-                ),
-                SizedBox(height: 20.h),
                 Container(
-                  width: size.width,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 28),
+                  height: 36.h,
+                  margin: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.r),
-                    color: Colors.pinkAccent,
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 13),
-                  child: Text(
-                    '查看',
-                    style:
-                        BaseStyle.fs16W.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 94.h),
-                Container(
-                  decoration: BoxDecoration(
-                    color: BaseData.bodyColor,
                     borderRadius: BorderRadius.circular(10.r),
+                    color: Config.primarySwatchColor.shade50,
                   ),
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Container(
-                          width: 48.w,
-                          height: 48.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24.r),
-                            color: Config.primarySwatchColor.shade50,
-                          ),
-                          child: Icon(
-                            IconFont.weixin,
-                            color: Colors.green,
-                            size: 28,
-                          ),
-                        ),
-                        title: Text(
-                          '快速添加微信好友',
-                          style: BaseStyle.fs14,
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                  child: TextField(
+                    onChanged: (String value) {},
+                    cursorColor: Colors.lightBlueAccent,
+                    decoration: InputDecoration(
+                      hintText: '搜索用户名字/HanTok号',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey,
                       ),
-                      SizedBox(height: 16.h),
-                      ListTile(
-                        leading: Container(
-                          width: 48.w,
-                          height: 48.h,
-                          padding: EdgeInsets.all(9.w),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24.r),
-                            color: Config.primarySwatchColor.shade50,
-                          ),
-                          child: SvgPicture.asset(
-                            "assets/svg/QQ1.svg",
-                          ),
-                        ),
-                        title: Text(
-                          '快速添加QQ好友',
-                          style: BaseStyle.fs14,
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey,
                       ),
-                    ],
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
+                    ),
                   ),
                 ),
+                Container(
+                  height: 88.h,
+                  padding: EdgeInsets.only(left: 16),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      FunctionList model = items[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FunctionListItem(model.iconData, model.title),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 100.h),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: size.width,
+                      height: 80.h,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 7.h,
+                            left: size.width / 2 - 87.w,
+                            child: SizedBox(
+                              width: 56.w,
+                              height: 56.h,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(28.r),
+                                child: Image.asset(
+                                  'assets/images/nologin.jpeg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 7.h,
+                            left: size.width / 2,
+                            child: SizedBox(
+                              width: 56.w,
+                              height: 56.h,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(28.r),
+                                child: Image.asset(
+                                  'assets/images/nologin.jpeg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: size.width / 2 - 51.w,
+                            child: Container(
+                              width: 70.w,
+                              height: 70.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(35.r),
+                                color: Colors.pinkAccent,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(35.r),
+                                child: Image.asset(
+                                  'assets/images/nologin.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 26.h),
+                    Text(
+                      '发现通讯录朋友',
+                      style: BaseStyle.fs18Wb.copyWith(color: Colors.black),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      '你身边的朋友在用HanTok，快去看看吧',
+                      style: BaseStyle.fs14G,
+                    ),
+                    SizedBox(height: 20.h),
+                    Container(
+                      width: size.width,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(horizontal: 28),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.r),
+                        color: Colors.pinkAccent,
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 13),
+                      child: Text(
+                        '查看',
+                        style: BaseStyle.fs16W
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.06),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: BaseData.bodyColor,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Container(
+                              width: 48.w,
+                              height: 48.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24.r),
+                                color: Config.primarySwatchColor.shade50,
+                              ),
+                              child: Icon(
+                                IconFont.weixin,
+                                color: Colors.green,
+                                size: 28,
+                              ),
+                            ),
+                            title: Text(
+                              '快速添加微信好友',
+                              style: BaseStyle.fs14,
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                          ListTile(
+                            leading: Container(
+                              width: 48.w,
+                              height: 48.h,
+                              padding: EdgeInsets.all(9.w),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24.r),
+                                color: Config.primarySwatchColor.shade50,
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/svg/QQ1.svg",
+                              ),
+                            ),
+                            title: Text(
+                              '快速添加QQ好友',
+                              style: BaseStyle.fs14,
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -247,8 +252,8 @@ class FunctionListItem extends StatelessWidget {
             iconData,
             size: 32,
           ),
-          SizedBox(height: 10.h),
-          Text(title),
+          SizedBox(height: 8.h),
+          Text(title, style: BaseStyle.fs12),
         ],
       ),
     );
