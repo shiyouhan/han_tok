@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 
-import '../../modules/index/controllers/recommend_controller.dart';
+import '../../../../modules/index/controllers/recommend_controller.dart';
 
 Socket? socket;
 
@@ -54,8 +54,8 @@ class Video {
             cover: e.cover.toString(),
             width: 100,
             height: 100,
-            likeCounts: 99,
-            commentsCounts: 99,
+            likeCounts: e.likeCounts,
+            commentsCounts: e.commentsCounts,
             isPrivate: 1,
             doIFollowVloger: true,
             doILikeThisVlog: true,

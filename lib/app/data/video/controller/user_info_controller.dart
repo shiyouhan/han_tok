@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unnecessary_overrides, avoid_print
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 import '../../../../main.dart';
@@ -12,6 +13,7 @@ import '../../../utils/BirthUtil.dart';
 class UserInfoController extends GetxController {
   final vlogerId = ''.obs;
   final followed = false.obs;
+  final isMine = false.obs;
 
   final page = 1.obs;
   final pageSize = 99.obs;
@@ -83,6 +85,27 @@ class UserInfoController extends GetxController {
       EasyLoading.showError('数据解析异常');
       print(error);
     });
+  }
+
+  //TODO:查看是否关注
+  queryFollow() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+
+    if (vlogerId.value == id) {
+      isMine.value = true;
+    } else {
+      isMine.value = false;
+      request
+          .get('/fans/queryDoIFollowVloger?vlogerId=${vlogerId.value}&myId=$id')
+          .then((value) async {
+        followed.value = value;
+        print(value);
+      }).catchError((error) {
+        EasyLoading.showError('数据解析异常');
+        print(error);
+      });
+    }
   }
 
   //TODO:获取作品列表

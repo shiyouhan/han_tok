@@ -39,6 +39,7 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
   void initState() {
     controller.vlogerId.value = widget.vlogerId!;
     controller.query();
+    controller.queryFollow();
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -544,7 +545,14 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                                     ),
                                                     SizedBox(width: 2.w),
                                                     Text(
-                                                      controller.province.value,
+                                                      controller.province.value
+                                                          .substring(
+                                                              0,
+                                                              controller
+                                                                      .province
+                                                                      .value
+                                                                      .length -
+                                                                  1),
                                                       style: BaseStyle.fs12,
                                                     ),
                                                   ],
@@ -555,61 +563,71 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   SizedBox(height: 16.h),
-                                  Obx(
-                                    () => controller.followed.value == false
-                                        ? GestureDetector(
-                                            onTap: () => controller.follow(),
-                                            child: Container(
-                                              width: size.width,
-                                              height: 44.h,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                color: Colors.pink,
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    size: 20,
-                                                    color: Colors.white,
+                                  Obx(() => controller.isMine.value == false
+                                      ? Obx(
+                                          () => controller.followed.value ==
+                                                  false
+                                              ? GestureDetector(
+                                                  onTap: () =>
+                                                      controller.follow(),
+                                                  child: Container(
+                                                    width: size.width,
+                                                    height: 44.h,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.r),
+                                                      color: Colors.pink,
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.add,
+                                                          size: 20,
+                                                          color: Colors.white,
+                                                        ),
+                                                        SizedBox(width: 4.w),
+                                                        Text(
+                                                          '关注',
+                                                          style: BaseStyle.fs16W
+                                                              .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  SizedBox(width: 4.w),
-                                                  Text(
-                                                    '关注',
-                                                    style: BaseStyle.fs16W
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                )
+                                              : GestureDetector(
+                                                  onTap: () =>
+                                                      controller.cancelFollow(),
+                                                  child: Container(
+                                                    width: size.width / 2,
+                                                    height: 44.h,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.r),
+                                                      color:
+                                                          BaseData.kBackColor,
+                                                    ),
+                                                    child: Text(
+                                                      '已关注',
+                                                      style: BaseStyle.fs16
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : GestureDetector(
-                                            onTap: () =>
-                                                controller.cancelFollow(),
-                                            child: Container(
-                                              width: size.width / 2,
-                                              height: 44.h,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                color: BaseData.kBackColor,
-                                              ),
-                                              child: Text(
-                                                '已关注',
-                                                style: BaseStyle.fs16.copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ),
-                                  ),
+                                                ),
+                                        )
+                                      : Container())
                                 ],
                               ),
                             ),

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_overrides
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -47,17 +47,4 @@ class LikeDetailController extends GetxController {
       print(error);
     });
   }
-
-//todo:获取用户信息
-// query() async {
-//   request.get('/userInfo/query?userId=${vlogerId.value}').then((value) async {
-//     vlogerName.value = User.fromJson(value).nickname;
-//     vlogerFace.value = User.fromJson(value).avatar;
-//     province.value = User.fromJson(value).province;
-//     print(value);
-//   }).catchError((error) {
-//     EasyLoading.showError('数据解析异常');
-//     print(error);
-//   });
-// }
 }

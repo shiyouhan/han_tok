@@ -27,7 +27,6 @@ import '../../../utils/Iconfont.dart';
 import '../../login/controllers/login_bottom_controller.dart';
 import '../controllers/composition_controller.dart';
 import '../controllers/mine_controller.dart';
-import '../model/PublicList.dart';
 import 'count/mine_count_view.dart';
 import 'info/info_desc_view.dart';
 import 'info/mine_info_view.dart';
@@ -805,8 +804,7 @@ class _VideoTabBarState extends State<VideoTabBar>
                                           children: [
                                             Obx(
                                               () => Text(
-                                                followController
-                                                    .followList.length
+                                                controller.followList.length
                                                     .toString(),
                                                 style: BaseStyle.fs16.copyWith(
                                                     fontWeight:

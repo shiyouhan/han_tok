@@ -3,18 +3,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/data/video/video.dart';
-import 'package:han_tok/app/data/video/video_button.dart';
-import 'package:han_tok/app/data/video/video_comment.dart';
-import 'package:safemap/safemap.dart';
+import 'package:han_tok/app/data/video/views/index/video.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/video/controller/video_list_controller.dart';
 import '../../../data/video/video_page.dart';
 import '../../../data/video/video_scaffold.dart';
 import '../controllers/recommend_controller.dart';
-
-import 'package:han_tok/app/data/video/bottomSheet.dart' as CustomBottomSheet;
 
 class RecommendView extends GetView {
   const RecommendView({Key? key}) : super(key: key);
@@ -215,6 +210,8 @@ class _RecommendPageState extends State<RecommendPage>
                   vlogerId: data.vlogerId,
                   vlogerFace: data.vlogerFace,
                   vlogerName: data.vlogerName,
+                  likeCounts: data.likeCounts,
+                  commentsCounts: data.commentsCounts,
                 ),
                 onSingleTap: () async {
                   if (player.controller.value.isPlaying) {

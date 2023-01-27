@@ -1,7 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +13,7 @@ import 'package:han_tok/app/data/base_style.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
 
+import '../../../main.dart';
 import '../../utils/Iconfont.dart';
 import 'video_gesture.dart';
 
@@ -45,7 +49,7 @@ class VideoPage extends StatelessWidget {
     this.onSingleTap,
     this.video,
     // required this.aspectRatio,
-    this.hidePauseIcon: false,
+    this.hidePauseIcon = false,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -152,23 +156,62 @@ class _VideoLoadingPlaceHolderState extends State<VideoLoadingPlaceHolder>
   }
 }
 
-class VideoUserInfo extends GetView {
+class VideoUserInfo extends StatefulWidget {
   final String? desc;
   final String? vlogerId;
   final String? vlogerName;
   final String? vlogerFace;
+  final int? likeCounts;
+  final int? commentsCounts;
   const VideoUserInfo({
     Key? key,
     this.vlogerId,
     this.vlogerFace,
     this.vlogerName,
     this.desc,
+    this.likeCounts,
+    this.commentsCounts,
   }) : super(key: key);
+
+  @override
+  State<VideoUserInfo> createState() => _VideoUserInfoState();
+}
+
+class _VideoUserInfoState extends State<VideoUserInfo> {
+  VideoController videoController = Get.put(VideoController());
+
+  //TODO:查看是否关注
+  queryFollow() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+
+    if (widget.vlogerId == id) {
+      videoController.isMine.value = true;
+    } else {
+      videoController.isMine.value = false;
+      request
+          .get(
+              '/fans/queryDoIFollowVloger?vlogerId=${widget.vlogerId}&myId=$id')
+          .then((value) async {
+        videoController.followed.value = value;
+        print(value);
+      }).catchError((error) {
+        EasyLoading.showError('数据解析异常');
+        print(error);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    queryFollow();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    VideoController videoController = Get.put(VideoController());
+    // VideoController videoController = Get.put(VideoController());
 
     Widget bottomInfo = Container(
       padding: EdgeInsets.only(
@@ -186,16 +229,30 @@ class VideoUserInfo extends GetView {
                 style: BaseStyle.fs16W,
               ),
               Text(
-                '$vlogerName',
+                '${widget.vlogerName}',
                 style: BaseStyle.fs16W.copyWith(fontWeight: FontWeight.w600),
               ),
+              SizedBox(width: 6.w),
+              Container(
+                decoration: BoxDecoration(
+                  color: BaseData.bodyColor.withOpacity(.2),
+                  borderRadius: BorderRadius.circular(2.r),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                child: Obx(() => videoController.isMine.value == true
+                    ? Text(
+                        '自己',
+                        style: BaseStyle.fs12G,
+                      )
+                    : Container()),
+              )
             ],
           ),
           Container(
             width: size.width * 0.7,
             padding: EdgeInsets.symmetric(vertical: 6),
             child: Text(
-              '$desc',
+              '${widget.desc}',
               style: BaseStyle.fs14.copyWith(color: Colors.white),
             ),
           ),
@@ -211,7 +268,7 @@ class VideoUserInfo extends GetView {
           child: Stack(
             children: <Widget>[
               GestureDetector(
-                onTap: () => Get.to(() => UserInfo(vlogerId: vlogerId)),
+                onTap: () => Get.to(() => UserInfo(vlogerId: widget.vlogerId)),
                 child: Container(
                   width: 48.w,
                   height: 48.w,
@@ -225,29 +282,57 @@ class VideoUserInfo extends GetView {
                   ),
                   child: ClipOval(
                     child: Image.network(
-                      vlogerFace!,
+                      widget.vlogerFace!,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
-              Positioned(
-                left: 14,
-                bottom: 0,
-                child: Container(
-                  width: 22.w,
-                  height: 22.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11.r),
-                    color: Colors.pink,
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              Obx(
+                () => videoController.isMine.value == false
+                    ? Obx(
+                        () => videoController.followed.value == false
+                            ? Positioned(
+                                left: 14,
+                                bottom: 0,
+                                child: Container(
+                                  width: 22.w,
+                                  height: 22.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11.r),
+                                    color: Colors.pink,
+                                  ),
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : Positioned(
+                                left: 14,
+                                bottom: 0,
+                                child: Container(
+                                  width: 22.w,
+                                  height: 22.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11.r),
+                                  ),
+                                ),
+                              ),
+                      )
+                    : Positioned(
+                        left: 14,
+                        bottom: 0,
+                        child: Container(
+                          width: 22.w,
+                          height: 22.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(11.r),
+                          ),
+                        ),
+                      ),
+              )
             ],
           ),
         ),
@@ -261,7 +346,7 @@ class VideoUserInfo extends GetView {
             ),
             SizedBox(height: 2.h),
             Text(
-              '99万',
+              DataUtil().generator(widget.likeCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
@@ -276,7 +361,7 @@ class VideoUserInfo extends GetView {
             ),
             SizedBox(height: 4.h),
             Text(
-              '99万',
+              DataUtil().generator(widget.commentsCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
@@ -291,7 +376,7 @@ class VideoUserInfo extends GetView {
             ),
             SizedBox(height: 4.h),
             Text(
-              '6789',
+              '收藏',
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
@@ -643,7 +728,7 @@ class VideoUserInfo extends GetView {
             ),
             SizedBox(height: 4.h),
             Text(
-              '1',
+              '分享',
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
@@ -666,7 +751,7 @@ class VideoUserInfo extends GetView {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.r),
                 child: Image.network(
-                  vlogerFace!,
+                  widget.vlogerFace!,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -699,11 +784,12 @@ class VideoUserInfo extends GetView {
 }
 
 class FunctionListItem extends StatelessWidget {
-  String function;
-  IconData iconData;
-  Color bgColor;
+  final String function;
+  final IconData iconData;
+  final Color bgColor;
 
-  FunctionListItem(this.function, this.iconData, this.bgColor, {super.key});
+  const FunctionListItem(this.function, this.iconData, this.bgColor,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

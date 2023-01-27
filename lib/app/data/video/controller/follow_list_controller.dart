@@ -5,9 +5,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:han_tok/app/data/video/views/follow/video_follow.dart';
 import 'package:video_player/video_player.dart';
-
-import '../views/index/video.dart';
 
 typedef LoadMoreVideo = Future<List<VPVideoController>> Function(
   int index,
@@ -16,8 +15,8 @@ typedef LoadMoreVideo = Future<List<VPVideoController>> Function(
 
 /// TikTokVideoListController是一系列视频的控制器，内部管理了视频控制器数组
 /// 提供了预加载/释放/加载更多功能
-class VideoListController extends ChangeNotifier {
-  VideoListController({
+class FollowListController extends ChangeNotifier {
+  FollowListController({
     this.loadMoreCount = 1,
     this.preloadCount = 2,
 
@@ -178,7 +177,7 @@ class VPVideoController extends TikTokVideoController<VideoPlayerController> {
   VideoPlayerController? _controller;
   ValueNotifier<bool> _showPauseIcon = ValueNotifier<bool>(false);
 
-  final Video? videoInfo;
+  final VideoFollow? videoInfo;
 
   final ControllerBuilder<VideoPlayerController> _builder;
   final ControllerSetter<VideoPlayerController>? _afterInit;

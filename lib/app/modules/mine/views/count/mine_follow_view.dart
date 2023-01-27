@@ -15,7 +15,7 @@ class MineFollowView extends GetView {
   @override
   Widget build(BuildContext context) {
     MineController mineController = Get.put(MineController());
-    // MineFollowController controller = Get.put(MineFollowController());
+    MineFollowController controller = Get.put(MineFollowController());
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 14.w),

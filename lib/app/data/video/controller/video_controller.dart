@@ -1,7 +1,6 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, unnecessary_overrides, avoid_print
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/modules/mine/model/Fan.dart';
 import 'package:han_tok/app/modules/mine/model/Follow.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,6 +28,9 @@ class VideoController extends GetxController {
   var fansList = [].obs;
   final page = 1.obs;
   final pageSize = 99.obs;
+
+  final followed = false.obs;
+  final isMine = false.obs;
 
   Future<List> getVideo() async {
     var prefs = await SharedPreferences.getInstance();
