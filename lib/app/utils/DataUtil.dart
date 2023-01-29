@@ -2,16 +2,12 @@
 
 class DataUtil {
   String generator(num) {
-    if (num > 999 && num < 99999) {
-      return "${(num / 1000).toStringAsFixed(1)} K";
-    } else if (num > 99999 && num < 999999) {
-      return "${(num / 1000).toStringAsFixed(0)} K";
-    } else if (num > 999999 && num < 999999999) {
-      return "${(num / 1000000).toStringAsFixed(1)} M";
-    } else if (num > 999999999) {
-      return "${(num / 1000000000).toStringAsFixed(1)} B";
-    } else {
+    if (num >= 0 && num < 10000) {
       return num.toString();
+    } else if (num >= 10000 && num < 100000000) {
+      return "${(num / 10000).toStringAsFixed(1)}万";
+    } else {
+      return "${(num / 100000000).toStringAsFixed(1)}亿";
     }
   }
 }

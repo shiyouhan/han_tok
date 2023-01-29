@@ -14,7 +14,7 @@ import '../model/User.dart';
 import '../views/reset_password_view.dart';
 
 class LoginBottomController extends GetxController {
-  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  // Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   var phoneController = TextEditingController().obs;
   var codeController = TextEditingController().obs;
   var phoneController1 = TextEditingController().obs;

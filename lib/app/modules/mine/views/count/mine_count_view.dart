@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart';
 
 import '../../../../data/base_style.dart';
@@ -15,6 +16,7 @@ class MineCountView extends GetView {
   @override
   Widget build(BuildContext context) {
     MineCountController controller = Get.put(MineCountController());
+    VideoController videoController = Get.put(VideoController());
     final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 3,
@@ -35,7 +37,10 @@ class MineCountView extends GetView {
           ),
           elevation: 0,
           leading: GestureDetector(
-            onTap: () => Get.back(),
+            onTap: () => {
+              videoController.renew(),
+              Get.back(),
+            },
             child: Icon(
               Icons.arrow_back_ios,
               size: 24,

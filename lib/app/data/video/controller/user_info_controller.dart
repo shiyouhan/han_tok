@@ -1,6 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages, unnecessary_overrides, avoid_print
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +13,10 @@ import '../../../modules/mine/model/PublicList.dart';
 import '../../../utils/BirthUtil.dart';
 
 class UserInfoController extends GetxController {
+  MineController mineController = Get.put(MineController());
+  VideoController videoController = Get.put(VideoController());
   final vlogerId = ''.obs;
-  final followed = false.obs;
+  // final followed = false.obs;
   final isMine = false.obs;
 
   final page = 1.obs;
@@ -36,7 +40,7 @@ class UserInfoController extends GetxController {
   var age = ''.obs;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
   }
 
@@ -48,14 +52,6 @@ class UserInfoController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-  }
-
-  void follow() {
-    followed.value = true;
-  }
-
-  void cancelFollow() {
-    followed.value = false;
   }
 
   //TODO:获取用户信息
@@ -99,13 +95,64 @@ class UserInfoController extends GetxController {
       request
           .get('/fans/queryDoIFollowVloger?vlogerId=${vlogerId.value}&myId=$id')
           .then((value) async {
-        followed.value = value;
+        videoController.followed.value = value;
         print(value);
       }).catchError((error) {
         EasyLoading.showError('数据解析异常');
         print(error);
       });
     }
+    update();
+  }
+
+  //TODO:关注用户
+  follow() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+    String token = prefs.getString('userToken')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+
+    request
+        .post('/fans/follow?vlogerId=${vlogerId.value}&myId=$id',
+            headers: headers)
+        .then((value) async {
+      videoController.followed.value = true;
+      print(value);
+      videoController.renew();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+    update();
+  }
+
+  //TODO:取关用户
+  cancel() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+    String token = prefs.getString('userToken')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+
+    request
+        .post('/fans/cancel?vlogerId=${vlogerId.value}&myId=$id',
+            headers: headers)
+        .then((value) async {
+      videoController.followed.value = false;
+      print(value);
+      videoController.renew();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+    update();
   }
 
   //TODO:获取作品列表

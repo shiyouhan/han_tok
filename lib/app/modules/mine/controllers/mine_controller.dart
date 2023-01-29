@@ -1,21 +1,23 @@
 // ignore_for_file: unnecessary_overrides, depend_on_referenced_packages, avoid_print
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/login/controllers/login_bottom_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
 import '../model/Fan.dart';
-import '../model/Follow.dart';
 import '../model/LikeList.dart';
 import '../model/PublicList.dart';
 
 class MineController extends GetxController {
-  LoginBottomController loginController = Get.put(LoginBottomController());
+  var loginController = Get.find<LoginBottomController>();
+  VideoController videoController = Get.put(VideoController());
+
   final city = ''.obs;
   final page = 1.obs;
   final pageSize = 99.obs;
-  final praised = 0.obs;
+  var praised = 0.obs;
 
   var publicList = [].obs;
   var privateList = [].obs;
@@ -37,9 +39,6 @@ class MineController extends GetxController {
         privateList.map((element) => PublicList.fromJson(element)).toList();
     fanList.value = await getFanList();
     fanList.value = fanList.map((element) => Fan.fromJson(element)).toList();
-    followList.value = await getFollowList();
-    followList.value =
-        followList.map((element) => Follow.fromJson(element)).toList();
     super.onInit();
   }
 
@@ -51,6 +50,12 @@ class MineController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void renewFans() async {
+    fanList.value = await getFanList();
+    fanList.value = fanList.map((element) => Fan.fromJson(element)).toList();
+    update();
   }
 
   //TODO:获取作品列表

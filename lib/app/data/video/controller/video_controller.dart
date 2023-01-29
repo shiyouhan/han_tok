@@ -9,9 +9,9 @@ import '../../../../../main.dart';
 class VideoController extends GetxController {
   @override
   void onInit() async {
-    fansList.value = await getVideo();
-    fansList.value =
-        fansList.map((element) => Follow.fromJson(element)).toList();
+    followList.value = await getVideo();
+    followList.value =
+        followList.map((element) => Follow.fromJson(element)).toList();
     super.onInit();
   }
 
@@ -25,19 +25,25 @@ class VideoController extends GetxController {
     super.onClose();
   }
 
-  var fansList = [].obs;
+  var followList = [].obs;
   final page = 1.obs;
   final pageSize = 99.obs;
 
   final followed = false.obs;
   final isMine = false.obs;
 
+  void renew() async {
+    followList.value = await getVideo();
+    followList.value =
+        followList.map((element) => Follow.fromJson(element)).toList();
+    update();
+  }
+
   Future<List> getVideo() async {
     var prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
     var result = await request.get(
         '/fans/queryMyFollows?myId=$id&page=${page.value}&pageSize=${pageSize.value}');
-    fansList.value = result['rows'];
     print(result);
     return result['rows'];
   }

@@ -14,6 +14,7 @@ import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
 
 import '../../../main.dart';
+import '../../modules/mine/controllers/mine_controller.dart';
 import '../../utils/Iconfont.dart';
 import 'video_gesture.dart';
 
@@ -27,15 +28,11 @@ import 'video_gesture.dart';
 ///
 class VideoPage extends StatelessWidget {
   final Widget? video;
-  // final double aspectRatio;
   final String? tag;
   final double bottomPadding;
-
   final Widget? rightButtonColumn;
   final Widget? userInfoWidget;
-
   final bool hidePauseIcon;
-
   final Function? onAddFavorite;
   final Function? onSingleTap;
 
@@ -48,7 +45,6 @@ class VideoPage extends StatelessWidget {
     this.onAddFavorite,
     this.onSingleTap,
     this.video,
-    // required this.aspectRatio,
     this.hidePauseIcon = false,
   }) : super(key: key);
   @override
@@ -179,6 +175,7 @@ class VideoUserInfo extends StatefulWidget {
 
 class _VideoUserInfoState extends State<VideoUserInfo> {
   VideoController videoController = Get.put(VideoController());
+  MineController mineController = Get.put(MineController());
 
   //TODO:查看是否关注
   queryFollow() async {
@@ -202,6 +199,34 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
     }
   }
 
+  //TODO:关注用户
+  follow() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+    String token = prefs.getString('userToken')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+
+    request
+        .post('/fans/follow?vlogerId=${widget.vlogerId}&myId=$id',
+            headers: headers)
+        .then((value) async {
+      videoController.followed.value = true;
+      videoController.renew();
+      print(value);
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  getRefresh() async {
+    print('页面刷新');
+  }
+
   @override
   void initState() {
     queryFollow();
@@ -211,7 +236,6 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // VideoController videoController = Get.put(VideoController());
 
     Widget bottomInfo = Container(
       padding: EdgeInsets.only(
@@ -268,7 +292,13 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
           child: Stack(
             children: <Widget>[
               GestureDetector(
-                onTap: () => Get.to(() => UserInfo(vlogerId: widget.vlogerId)),
+                // onTap: () => Get.to(() => UserInfo(vlogerId: widget.vlogerId)),
+                onTap: () => Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                          builder: (_) => UserInfo(vlogerId: widget.vlogerId)),
+                    )
+                    .then((val) => val ? getRefresh() : null),
                 child: Container(
                   width: 48.w,
                   height: 48.w,
@@ -295,17 +325,20 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
                             ? Positioned(
                                 left: 14,
                                 bottom: 0,
-                                child: Container(
-                                  width: 22.w,
-                                  height: 22.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(11.r),
-                                    color: Colors.pink,
-                                  ),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 16,
-                                    color: Colors.white,
+                                child: GestureDetector(
+                                  onTap: () => follow(),
+                                  child: Container(
+                                    width: 22.w,
+                                    height: 22.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(11.r),
+                                      color: Colors.pink,
+                                    ),
+                                    child: Icon(
+                                      Icons.add,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               )
@@ -386,6 +419,7 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
           children: [
             GestureDetector(
               onTap: () => {
+                videoController.renew(),
                 showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
@@ -445,48 +479,53 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
                             padding: EdgeInsets.only(left: 16.w),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: videoController.fansList
-                                    .map(
-                                      (element) => Padding(
-                                        padding: EdgeInsets.only(right: 22.w),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: 50.w,
-                                              height: 50.h,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.r),
-                                                child: Image.network(
-                                                    element.face.toString()),
-                                              ),
+                              child: Obx(() => Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: videoController.followList
+                                        .map(
+                                          (element) => Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 22.w),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 50.w,
+                                                  height: 50.h,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.r),
+                                                    child: Image.network(element
+                                                        .face
+                                                        .toString()),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10.h),
+                                                Container(
+                                                  height: 40.h,
+                                                  width: 50.w,
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: Text(
+                                                    element.nickname.toString(),
+                                                    style: BaseStyle.fs10,
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(height: 10.h),
-                                            Container(
-                                              height: 40.h,
-                                              width: 50.w,
-                                              alignment: Alignment.topCenter,
-                                              child: Text(
-                                                element.nickname.toString(),
-                                                style: BaseStyle.fs10,
-                                                textAlign: TextAlign.center,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: true,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  )),
                             ),
                           ),
                           Container(

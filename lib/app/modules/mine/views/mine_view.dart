@@ -13,6 +13,7 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart';
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_follow_controller.dart';
@@ -23,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../main.dart';
 import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
+import '../../../utils/DataUtil.dart';
 import '../../../utils/Iconfont.dart';
 import '../../login/controllers/login_bottom_controller.dart';
 import '../controllers/composition_controller.dart';
@@ -38,25 +40,14 @@ import 'video/composition_view.dart';
 import 'video/like_view.dart';
 import 'video/private_view.dart';
 
-class MineView extends GetView<MineController> {
+class MineView extends StatefulWidget {
   const MineView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: VideoTabBar(),
-    );
-  }
+  State<MineView> createState() => _MineViewState();
 }
 
-class VideoTabBar extends StatefulWidget {
-  const VideoTabBar({Key? key}) : super(key: key);
-
-  @override
-  State<VideoTabBar> createState() => _VideoTabBarState();
-}
-
-class _VideoTabBarState extends State<VideoTabBar>
+class _MineViewState extends State<MineView>
     with SingleTickerProviderStateMixin {
   final LocationFlutterPlugin _myLocPlugin = LocationFlutterPlugin();
   LoginBottomController loginController = Get.put(LoginBottomController());
@@ -64,6 +55,7 @@ class _VideoTabBarState extends State<VideoTabBar>
   MineCountController countController = Get.put(MineCountController());
   MineFollowController followController = Get.put(MineFollowController());
   MineFanController fanController = Get.put(MineFanController());
+  VideoController videoController = Get.put(VideoController());
   CompositionController compositionController =
       Get.put(CompositionController());
   late TabController _tabController;
@@ -760,8 +752,9 @@ class _VideoTabBarState extends State<VideoTabBar>
                                         children: [
                                           Obx(
                                             () => Text(
-                                              controller.praised.value
-                                                  .toString(),
+                                              DataUtil().generator(
+                                                  compositionController
+                                                      .praised.value),
                                               style: BaseStyle.fs16.copyWith(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -776,7 +769,7 @@ class _VideoTabBarState extends State<VideoTabBar>
                                       SizedBox(width: 18.h),
                                       InkWell(
                                         onTap: () => {
-                                          countController.friend(),
+                                          // countController.friend(),
                                           Get.to(() => MineCountView()),
                                         },
                                         child: Row(
@@ -797,15 +790,16 @@ class _VideoTabBarState extends State<VideoTabBar>
                                       SizedBox(width: 18.h),
                                       InkWell(
                                         onTap: () => {
-                                          countController.follow(),
+                                          // countController.follow(),
                                           Get.to(() => MineCountView()),
                                         },
                                         child: Row(
                                           children: [
                                             Obx(
                                               () => Text(
-                                                controller.followList.length
-                                                    .toString(),
+                                                DataUtil().generator(
+                                                    videoController
+                                                        .followList.length),
                                                 style: BaseStyle.fs16.copyWith(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -822,15 +816,15 @@ class _VideoTabBarState extends State<VideoTabBar>
                                       SizedBox(width: 18.h),
                                       InkWell(
                                         onTap: () => {
-                                          countController.fan(),
+                                          // countController.fan(),
                                           Get.to(() => MineCountView()),
                                         },
                                         child: Row(
                                           children: [
                                             Obx(
                                               () => Text(
-                                                fanController.fanList.length
-                                                    .toString(),
+                                                DataUtil().generator(
+                                                    controller.fanList.length),
                                                 style: BaseStyle.fs16.copyWith(
                                                     fontWeight:
                                                         FontWeight.bold),

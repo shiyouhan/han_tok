@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
+import 'package:han_tok/app/data/video/user_info.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_follow_controller.dart';
 
 import '../../../../data/base_style.dart';
@@ -14,8 +15,10 @@ class MineFollowView extends GetView {
   const MineFollowView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    MineController mineController = Get.put(MineController());
+    VideoController videoController = Get.put(VideoController());
     MineFollowController controller = Get.put(MineFollowController());
+
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -50,78 +53,83 @@ class MineFollowView extends GetView {
               SizedBox(height: 16.h),
               Obx(
                 () => Text(
-                  '我的关注（${mineController.followList.length}人）',
+                  '我的关注（${videoController.followList.length}人）',
                   style: BaseStyle.fs12G,
                 ),
               ),
               SizedBox(height: 10.h),
               Obx(
                 () => Column(
-                  children: mineController.followList
+                  children: videoController.followList
                       .map(
-                        (element) => Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 56.w,
-                                height: 56.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(28.r),
+                        (element) => GestureDetector(
+                          onTap: () => Get.to(
+                              () => UserInfo(vlogerId: element.vlogerId)),
+                          child: Container(
+                            width: size.width,
+                            padding: EdgeInsets.only(bottom: 16.h),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 56.w,
+                                  height: 56.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28.r),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(28.r),
+                                    child:
+                                        Image.network(element.face.toString()),
+                                  ),
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(28.r),
-                                  child: Image.network(element.face.toString()),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 14.w),
+                                  child: Text(
+                                    element.nickname,
+                                    style: BaseStyle.fs16
+                                        .copyWith(fontWeight: FontWeight.w500),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 14.w),
-                                child: Text(
-                                  element.nickname,
-                                  style: BaseStyle.fs16
-                                      .copyWith(fontWeight: FontWeight.w500),
+                                Spacer(),
+                                GestureDetector(
+                                  onTap: () => {
+                                    controller.cancel(element.vlogerId),
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.w, vertical: 6.h),
+                                    decoration: BoxDecoration(
+                                      color: Config.primarySwatchColor.shade50,
+                                      borderRadius: BorderRadius.circular(5.r),
+                                    ),
+                                    child: Text(
+                                      '已关注',
+                                      style: BaseStyle.fs12,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              Obx(
-                                () => controller.followed.value == true
-                                    ? GestureDetector(
-                                        onTap: () => controller.unFollow(),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20.w, vertical: 6.h),
-                                          decoration: BoxDecoration(
-                                            color: Config
-                                                .primarySwatchColor.shade50,
-                                            borderRadius:
-                                                BorderRadius.circular(5.r),
-                                          ),
-                                          child: Text(
-                                            '已关注',
-                                            style: BaseStyle.fs12,
-                                          ),
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () => controller.follow(),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20.w, vertical: 6.h),
-                                          decoration: BoxDecoration(
-                                            color: Colors.redAccent
-                                                .withOpacity(.8),
-                                            borderRadius:
-                                                BorderRadius.circular(5.r),
-                                          ),
-                                          child: Text(
-                                            '关注',
-                                            style: BaseStyle.fs12
-                                                .copyWith(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                              ),
-                            ],
+                                // GestureDetector(
+                                //   onTap: () => controller
+                                //       .follow(element.vlogerId),
+                                //   child: Container(
+                                //     padding: EdgeInsets.symmetric(
+                                //         horizontal: 20.w,
+                                //         vertical: 6.h),
+                                //     decoration: BoxDecoration(
+                                //       color: Colors.redAccent
+                                //           .withOpacity(.8),
+                                //       borderRadius:
+                                //       BorderRadius.circular(5.r),
+                                //     ),
+                                //     child: Text(
+                                //       '关注',
+                                //       style: BaseStyle.fs12.copyWith(
+                                //           color: Colors.white),
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
                           ),
                         ),
                       )

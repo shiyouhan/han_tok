@@ -63,6 +63,7 @@ class CompositionView extends GetView {
               itemBuilder: (context, index) {
                 String vlogId = mineController.publicList[index].id;
                 String url = mineController.publicList[index].url;
+
                 return GestureDetector(
                   onTap: () =>
                       Get.to(() => VideoDetailView(vlogId: vlogId, url: url)),

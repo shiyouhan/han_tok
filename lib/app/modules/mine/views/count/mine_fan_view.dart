@@ -9,13 +9,16 @@ import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../data/theme_data.dart';
+import '../../../../data/video/user_info.dart';
 
 class MineFanView extends GetView {
   const MineFanView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     MineController mineController = Get.put(MineController());
-    // MineFanController controller = Get.put(MineFanController());
+    MineFanController controller = Get.put(MineFanController());
+
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -57,71 +60,81 @@ class MineFanView extends GetView {
               Obx(
                 () => Column(
                   children: mineController.fanList
-                      .map(
-                        (element) => Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 56.w,
-                                height: 56.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(28.r),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(28.r),
-                                  child: Image.network(element.face.toString()),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 14.w),
-                                child: Text(
-                                  element.nickname,
-                                  style: BaseStyle.fs16
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              Spacer(),
-                              element.friend == true
-                                  ? GestureDetector(
-                                      // onTap: () => controller.unFollow(),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w, vertical: 6.h),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Config.primarySwatchColor.shade50,
-                                          borderRadius:
-                                              BorderRadius.circular(5.r),
-                                        ),
-                                        child: Text(
-                                          '已互关',
-                                          style: BaseStyle.fs12,
-                                        ),
-                                      ),
-                                    )
-                                  : GestureDetector(
-                                      // onTap: () => controller.follow(),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w, vertical: 6.h),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Colors.redAccent.withOpacity(.8),
-                                          borderRadius:
-                                              BorderRadius.circular(5.r),
-                                        ),
-                                        child: Text(
-                                          '回关',
-                                          style: BaseStyle.fs12
-                                              .copyWith(color: Colors.white),
-                                        ),
-                                      ),
+                      .map((element) => GestureDetector(
+                            onTap: () =>
+                                Get.to(() => UserInfo(vlogerId: element.fanId)),
+                            child: Container(
+                              width: size.width,
+                              padding: EdgeInsets.only(bottom: 16.h),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 56.w,
+                                    height: 56.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(28.r),
                                     ),
-                            ],
-                          ),
-                        ),
-                      )
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(28.r),
+                                      child: Image.network(
+                                          element.face.toString()),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 14.w),
+                                    child: Text(
+                                      element.nickname,
+                                      style: BaseStyle.fs16.copyWith(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  element.friend == true
+                                      ? GestureDetector(
+                                          onTap: () =>
+                                              controller.cancel(element.fanId),
+                                          child: Container(
+                                            width: 70.w,
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 6.h),
+                                            decoration: BoxDecoration(
+                                              color: Config
+                                                  .primarySwatchColor.shade50,
+                                              borderRadius:
+                                                  BorderRadius.circular(5.r),
+                                            ),
+                                            child: Text(
+                                              '已互关',
+                                              style: BaseStyle.fs12,
+                                            ),
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () =>
+                                              controller.follow(element.fanId),
+                                          child: Container(
+                                            width: 70.w,
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 6.h),
+                                            decoration: BoxDecoration(
+                                              color: Colors.redAccent
+                                                  .withOpacity(.8),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.r),
+                                            ),
+                                            child: Text(
+                                              '回关',
+                                              style: BaseStyle.fs12.copyWith(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ))
                       .toList(),
                 ),
               ),

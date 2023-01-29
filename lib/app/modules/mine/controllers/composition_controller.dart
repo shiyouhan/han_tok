@@ -1,26 +1,22 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print, unnecessary_overrides
 
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../main.dart';
-import '../model/PublicList.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/private_controller.dart';
 
 class CompositionController extends GetxController {
-  var publicList = [].obs;
-  final page = 1.obs;
-  final pageSize = 99.obs;
-  final praised = 0.obs;
+  MineController mineController = Get.put(MineController());
+  PrivateController privateController = Get.put(PrivateController());
+
+  var publicPraised = 0.obs;
+  var praised = 0.obs;
 
   @override
   void onInit() async {
-    publicList.value = await getVideo();
-    // for (var element in publicList) {
-    //   praised.value += publicList[element]['likeCounts'] as int;
-    //   print(praised.value);
-    // }
-    publicList.value =
-        publicList.map((element) => PublicList.fromJson(element)).toList();
+    for (var element in mineController.publicList) {
+      publicPraised += element.likeCounts;
+    }
+    praised = privateController.privatePraised + publicPraised.toInt();
     super.onInit();
   }
 
@@ -32,15 +28,5 @@ class CompositionController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-  }
-
-  //TODO:获取作品列表
-  Future<List> getVideo() async {
-    var prefs = await SharedPreferences.getInstance();
-    String id = prefs.getString('id')!;
-    var result = await request.get(
-        '/vlog/myPublicList?userId=$id&page=${page.value}&pageSize=${pageSize.value}');
-    print(result);
-    return result['rows'];
   }
 }

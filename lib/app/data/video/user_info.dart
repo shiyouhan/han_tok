@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, avoid_print, must_be_immutable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, avoid_print, must_be_immutable, unnecessary_overrides
 
 import 'dart:io';
 import 'dart:ui';
@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/index/views/info/info_like_view.dart';
 import 'package:han_tok/app/modules/index/views/info/info_opus_view.dart';
 import 'package:images_picker/images_picker.dart';
@@ -29,6 +30,7 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
   UserInfoController controller = Get.put(UserInfoController());
+  VideoController videoController = Get.put(VideoController());
   late TabController _tabController;
   String? path;
   late ScrollController _scrollController;
@@ -96,7 +98,8 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                 : Text(''),
             centerTitle: true,
             leading: GestureDetector(
-              onTap: () => Get.back(),
+              // onTap: () => Get.back(),
+              onTap: () => Navigator.pop(context, true),
               child: Icon(
                 Icons.arrow_back_ios,
                 color: _showTitle ? Colors.black : Colors.white,
@@ -565,7 +568,8 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                   SizedBox(height: 16.h),
                                   Obx(() => controller.isMine.value == false
                                       ? Obx(
-                                          () => controller.followed.value ==
+                                          () => videoController
+                                                      .followed.value ==
                                                   false
                                               ? GestureDetector(
                                                   onTap: () =>
@@ -604,7 +608,7 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                                 )
                                               : GestureDetector(
                                                   onTap: () =>
-                                                      controller.cancelFollow(),
+                                                      controller.cancel(),
                                                   child: Container(
                                                     width: size.width / 2,
                                                     height: 44.h,
