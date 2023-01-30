@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../data/video/controller/user_info_controller.dart';
@@ -34,7 +35,7 @@ class InfoLikeView extends GetView {
                               style: BaseStyle.fs16
                                   .copyWith(fontWeight: FontWeight.bold)),
                         ),
-                        Text('当前列表所有人可见',
+                        Text('当前列表所有人不可见',
                             textAlign: TextAlign.center,
                             style: BaseStyle.fs14G),
                       ],
@@ -54,9 +55,13 @@ class InfoLikeView extends GetView {
                   String vlogId = infoController.likeList[index].vlogId;
                   String vlogerId = infoController.likeList[index].vlogerId;
                   String url = infoController.likeList[index].url;
+                  int likeCounts = infoController.likeList[index].likeCounts;
                   return GestureDetector(
                     onTap: () => Get.to(() => LikeDetailView(
-                        vlogId: vlogId, vlogerId: vlogerId, url: url)),
+                        vlogId: vlogId,
+                        vlogerId: vlogerId,
+                        url: url,
+                        likeCounts: likeCounts)),
                     child: Stack(
                       children: [
                         AbsorbPointer(
@@ -85,8 +90,8 @@ class InfoLikeView extends GetView {
                               ),
                               SizedBox(width: 2.w),
                               Text(
-                                infoController.likeList[index].likeCounts
-                                    .toString(),
+                                DataUtil().generator(
+                                    infoController.likeList[index].likeCounts),
                                 style: BaseStyle.fs16W,
                               )
                             ],

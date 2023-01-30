@@ -59,9 +59,10 @@ class PrivateView extends GetView {
             itemBuilder: (context, index) {
               String vlogId = mineController.privateList[index].id;
               String url = mineController.privateList[index].url;
+              int likeCounts = mineController.privateList[index].likeCounts;
               return GestureDetector(
-                onTap: () =>
-                    Get.to(() => VideoDetailView(vlogId: vlogId, url: url)),
+                onTap: () => Get.to(() => VideoDetailView(
+                    vlogId: vlogId, url: url, likeCounts: likeCounts)),
                 child: Stack(
                   children: [
                     AbsorbPointer(

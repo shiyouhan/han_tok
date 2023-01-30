@@ -10,8 +10,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
+import 'package:han_tok/app/modules/index/controllers/info_opus_controller.dart';
 import 'package:han_tok/app/modules/index/views/info/info_like_view.dart';
 import 'package:han_tok/app/modules/index/views/info/info_opus_view.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 import 'package:images_picker/images_picker.dart';
 
 import '../../utils/Iconfont.dart';
@@ -30,6 +32,7 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
   UserInfoController controller = Get.put(UserInfoController());
+  InfoOpusController infoOpusController = Get.put(InfoOpusController());
   VideoController videoController = Get.put(VideoController());
   late TabController _tabController;
   String? path;
@@ -42,6 +45,11 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
     controller.vlogerId.value = widget.vlogerId!;
     controller.query();
     controller.queryFollow();
+    controller.getFollowAndFan();
+    // for (var element in controller.publicList) {
+    //   controller.publicPraised += element.likeCounts;
+    // }
+    // print(controller.publicPraised);
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -232,7 +240,7 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: size.height * 0.14),
+                      SizedBox(height: size.height * 0.125),
                       SizedBox(
                         width: size.width,
                         child: Row(
@@ -402,27 +410,92 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            '获赞',
-                                            style: BaseStyle.fs16,
-                                          ),
-                                        ],
+                                      GestureDetector(
+                                        onTap: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return SimpleDialog(
+                                                title: SizedBox(
+                                                  height: 140.h,
+                                                  child: Image.asset(
+                                                    'assets/images/zan.png',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                                titlePadding: EdgeInsets.zero,
+                                                contentPadding: EdgeInsets.zero,
+                                                children: [
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 26.h),
+                                                    child: Obx(
+                                                      () => Text(
+                                                        '"${controller.nickname.value}"共获得 ${DataUtil().generator(controller.publicPraised.value)} 个赞',
+                                                        style: BaseStyle.fs16
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        .7)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 1.h,
+                                                    color: Colors.grey
+                                                        .withOpacity(.2),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () => Get.back(),
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 12.h),
+                                                      child: Text(
+                                                        '确认',
+                                                        style: BaseStyle.fs16
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              DataUtil().generator(controller
+                                                  .publicPraised.value),
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(width: 5.h),
+                                            Text(
+                                              '获赞',
+                                              style: BaseStyle.fs16,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(width: 18.h),
                                       Row(
                                         children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
+                                          Obx(
+                                            () => Text(
+                                              DataUtil().generator(
+                                                  controller.followList.length),
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                           SizedBox(width: 5.h),
                                           Text(
@@ -434,10 +507,13 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                       SizedBox(width: 18.h),
                                       Row(
                                         children: [
-                                          Text(
-                                            '0',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.bold),
+                                          Obx(
+                                            () => Text(
+                                              DataUtil().generator(
+                                                  controller.fanList.length),
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                           SizedBox(width: 5.h),
                                           Text(

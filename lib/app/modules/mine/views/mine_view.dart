@@ -13,6 +13,7 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart';
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
@@ -748,23 +749,85 @@ class _MineViewState extends State<MineView>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Obx(
-                                            () => Text(
-                                              DataUtil().generator(
-                                                  compositionController
-                                                      .praised.value),
-                                              style: BaseStyle.fs16.copyWith(
-                                                  fontWeight: FontWeight.bold),
+                                      GestureDetector(
+                                        onTap: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return SimpleDialog(
+                                                title: SizedBox(
+                                                  height: 140.h,
+                                                  child: Image.asset(
+                                                    'assets/images/zan.png',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                                titlePadding: EdgeInsets.zero,
+                                                contentPadding: EdgeInsets.zero,
+                                                children: [
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 26.h),
+                                                    child: Obx(
+                                                      () => Text(
+                                                        '"${loginController.nickname.value}"共获得 ${DataUtil().generator(compositionController.praised.value)} 个赞',
+                                                        style: BaseStyle.fs16
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        .7)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 1.h,
+                                                    color: Colors.grey
+                                                        .withOpacity(.2),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () => Get.back(),
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 12.h),
+                                                      child: Text(
+                                                        '确认',
+                                                        style: BaseStyle.fs16
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            Obx(
+                                              () => Text(
+                                                DataUtil().generator(
+                                                    compositionController
+                                                        .praised.value),
+                                                style: BaseStyle.fs16.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            '获赞',
-                                            style: BaseStyle.fs16,
-                                          ),
-                                        ],
+                                            SizedBox(width: 5.h),
+                                            Text(
+                                              '获赞',
+                                              style: BaseStyle.fs16,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(width: 18.h),
                                       InkWell(

@@ -10,6 +10,8 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../data/video/controller/user_info_controller.dart';
+import '../../../../data/video/user_info.dart';
+import '../../../../utils/DataUtil.dart';
 import '../../../../utils/Iconfont.dart';
 import '../../controllers/like_detail_controller.dart';
 
@@ -17,11 +19,13 @@ class LikeDetailView extends GetView {
   String vlogId;
   String vlogerId;
   String url;
+  int likeCounts;
   LikeDetailView(
       {Key? key,
       required this.vlogId,
       required this.vlogerId,
-      required this.url})
+      required this.url,
+      required this.likeCounts})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,11 @@ class LikeDetailView extends GetView {
               ],
               backgroundColor: Colors.black,
             ),
-            body: LikeDetail(vlogId: vlogId, vlogerId: vlogerId, url: url),
+            body: LikeDetail(
+                vlogId: vlogId,
+                vlogerId: vlogerId,
+                url: url,
+                likeCounts: likeCounts),
           ),
         ),
       ),
@@ -67,11 +75,13 @@ class LikeDetail extends StatefulWidget {
   String vlogId;
   String vlogerId;
   String url;
+  int likeCounts;
   LikeDetail(
       {Key? key,
       required this.vlogId,
       required this.vlogerId,
-      required this.url})
+      required this.url,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -147,22 +157,26 @@ class _LikeDetailState extends State<LikeDetail> {
 
     Widget rightInfo = Column(
       children: [
-        Container(
-          width: 48.w,
-          height: 48.w,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white,
-              width: 2,
+        GestureDetector(
+          onTap: () =>
+              Get.to(() => UserInfo(vlogerId: controller.vlogerId.value)),
+          child: Container(
+            width: 48.w,
+            height: 48.w,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(24.r),
+              color: Colors.white70,
             ),
-            borderRadius: BorderRadius.circular(24.r),
-            color: Colors.white70,
-          ),
-          child: ClipOval(
-            child: Obx(
-              () => Image.network(
-                controller.vlogerFace.value,
-                fit: BoxFit.cover,
+            child: ClipOval(
+              child: Obx(
+                () => Image.network(
+                  controller.vlogerFace.value,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -177,7 +191,9 @@ class _LikeDetailState extends State<LikeDetail> {
             ),
             SizedBox(height: 2.h),
             Text(
-              '赞',
+              widget.likeCounts == 0
+                  ? '赞'
+                  : DataUtil().generator(widget.likeCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],

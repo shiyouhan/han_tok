@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 
 import '../../../../main.dart';
 import '../../../modules/index/model/User.dart';
+import '../../../modules/mine/model/Fan.dart';
+import '../../../modules/mine/model/Follow.dart';
 import '../../../modules/mine/model/LikeList.dart';
 import '../../../modules/mine/model/PublicList.dart';
 import '../../../utils/BirthUtil.dart';
@@ -16,13 +18,16 @@ class UserInfoController extends GetxController {
   MineController mineController = Get.put(MineController());
   VideoController videoController = Get.put(VideoController());
   final vlogerId = ''.obs;
-  // final followed = false.obs;
   final isMine = false.obs;
 
   final page = 1.obs;
   final pageSize = 99.obs;
   var publicList = [].obs;
   var likeList = [].obs;
+  var fanList = [].obs;
+  var followList = [].obs;
+
+  var publicPraised = 0.obs;
 
   final id = ''.obs;
   final nickname = ''.obs;
@@ -54,6 +59,21 @@ class UserInfoController extends GetxController {
     super.onClose();
   }
 
+  void getFollowAndFan() async => {
+        fanList.value = await getFanList(),
+        fanList.value =
+            fanList.map((element) => Fan.fromJson(element)).toList(),
+        followList.value = await getFollowList(),
+        followList.value =
+            followList.map((element) => Follow.fromJson(element)).toList(),
+        publicList.value = await getPublic(),
+        publicList.value =
+            publicList.map((element) => PublicList.fromJson(element)).toList(),
+        likeList.value = await getLike(),
+        likeList.value =
+            likeList.map((element) => LikeList.fromJson(element)).toList(),
+      };
+
   //TODO:获取用户信息
   query() async {
     request.get('/userInfo/query?userId=${vlogerId.value}').then((value) async {
@@ -70,12 +90,10 @@ class UserInfoController extends GetxController {
       day.value = int.parse(birthday.value.substring(9, 10));
       late DateTime brt = DateTime(year.value, month.value, day.value);
       age.value = BirthUtil.getAge(brt);
-      publicList.value = await getPublic();
-      publicList.value =
-          publicList.map((element) => PublicList.fromJson(element)).toList();
-      likeList.value = await getLike();
-      likeList.value =
-          likeList.map((element) => LikeList.fromJson(element)).toList();
+      for (var element in publicList) {
+        publicPraised += element.likeCounts;
+      }
+      print(publicPraised);
       print(value);
     }).catchError((error) {
       EasyLoading.showError('数据解析异常');
@@ -167,6 +185,22 @@ class UserInfoController extends GetxController {
   Future<List> getLike() async {
     var result = await request.get(
         '/vlog/myLikedList?userId=${vlogerId.value}&page=${page.value}&pageSize=${pageSize.value}');
+    print(result);
+    return result['rows'];
+  }
+
+  //TODO:获取用户粉丝列表
+  Future<List> getFanList() async {
+    var result = await request.get(
+        '/fans/queryMyFans?myId=${vlogerId.value}&page=${page.value}&pageSize=${pageSize.value}');
+    print(result);
+    return result['rows'];
+  }
+
+  //TODO:获取用户关注列表
+  Future<List> getFollowList() async {
+    var result = await request.get(
+        '/fans/queryMyFollows?myId=${vlogerId.value}&page=${page.value}&pageSize=${pageSize.value}');
     print(result);
     return result['rows'];
   }

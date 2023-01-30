@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/controller/user_info_controller.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 
 import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
@@ -68,11 +69,13 @@ class InfoOpusView extends GetView {
                 String url = infoController.publicList[index].url;
                 String updatedTime =
                     infoController.publicList[index].updatedTime;
+                int likeCounts = infoController.publicList[index].likeCounts;
                 return GestureDetector(
                   onTap: () => Get.to(() => OpusDetailView(
                       vlogId: vlogId,
                       vlogerId: vlogerId,
                       url: url,
+                      likeCounts: likeCounts,
                       updatedTime: updatedTime)),
                   child: Stack(
                     children: [
@@ -103,8 +106,8 @@ class InfoOpusView extends GetView {
                             ),
                             SizedBox(width: 2.w),
                             Text(
-                              infoController.publicList[index].likeCounts
-                                  .toString(),
+                              DataUtil().generator(
+                                  infoController.publicList[index].likeCounts),
                               style: BaseStyle.fs16W,
                             )
                           ],

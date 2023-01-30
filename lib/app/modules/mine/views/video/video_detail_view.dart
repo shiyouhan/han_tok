@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/mine/controllers/video_detail_controller.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../data/base_data.dart';
@@ -16,7 +17,12 @@ import '../../../../utils/Iconfont.dart';
 class VideoDetailView extends GetView {
   String vlogId;
   String url;
-  VideoDetailView({Key? key, required this.vlogId, required this.url})
+  int likeCounts;
+  VideoDetailView(
+      {Key? key,
+      required this.vlogId,
+      required this.url,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -51,7 +57,7 @@ class VideoDetailView extends GetView {
               ],
               backgroundColor: Colors.black,
             ),
-            body: VideoDetail(vlogId: vlogId, url: url),
+            body: VideoDetail(vlogId: vlogId, url: url, likeCounts: likeCounts),
           ),
         ),
       ),
@@ -62,7 +68,12 @@ class VideoDetailView extends GetView {
 class VideoDetail extends StatefulWidget {
   String vlogId;
   String url;
-  VideoDetail({Key? key, required this.vlogId, required this.url})
+  int likeCounts;
+  VideoDetail(
+      {Key? key,
+      required this.vlogId,
+      required this.url,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -175,7 +186,9 @@ class _VideoDetailState extends State<VideoDetail> {
             ),
             SizedBox(height: 2.h),
             Text(
-              '赞',
+              widget.likeCounts == 0
+                  ? '赞'
+                  : DataUtil().generator(widget.likeCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],

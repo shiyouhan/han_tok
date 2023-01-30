@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
 import 'package:han_tok/app/modules/mine/views/video/video_detail_view.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 
 import '../../../../data/base_style.dart';
 import '../../../../utils/Iconfont.dart';
@@ -63,10 +64,11 @@ class CompositionView extends GetView {
               itemBuilder: (context, index) {
                 String vlogId = mineController.publicList[index].id;
                 String url = mineController.publicList[index].url;
+                int likeCounts = mineController.publicList[index].likeCounts;
 
                 return GestureDetector(
-                  onTap: () =>
-                      Get.to(() => VideoDetailView(vlogId: vlogId, url: url)),
+                  onTap: () => Get.to(() => VideoDetailView(
+                      vlogId: vlogId, url: url, likeCounts: likeCounts)),
                   child: Stack(
                     children: [
                       AbsorbPointer(
@@ -96,8 +98,8 @@ class CompositionView extends GetView {
                             ),
                             SizedBox(width: 2.w),
                             Text(
-                              mineController.publicList[index].likeCounts
-                                  .toString(),
+                              DataUtil().generator(
+                                  mineController.publicList[index].likeCounts),
                               style: BaseStyle.fs16W,
                             )
                           ],

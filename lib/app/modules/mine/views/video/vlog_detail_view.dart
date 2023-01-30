@@ -6,10 +6,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/user_info.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
+import '../../../../utils/DataUtil.dart';
 import '../../../../utils/Iconfont.dart';
 import '../../controllers/vlog_detail_controller.dart';
 
@@ -17,11 +18,13 @@ class VlogDetailView extends GetView {
   String vlogId;
   String vlogerId;
   String url;
+  int likeCounts;
   VlogDetailView(
       {Key? key,
       required this.vlogId,
       required this.url,
-      required this.vlogerId})
+      required this.vlogerId,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -56,7 +59,11 @@ class VlogDetailView extends GetView {
               ],
               backgroundColor: Colors.black,
             ),
-            body: VlogDetail(vlogId: vlogId, vlogerId: vlogerId, url: url),
+            body: VlogDetail(
+                vlogId: vlogId,
+                vlogerId: vlogerId,
+                url: url,
+                likeCounts: likeCounts),
           ),
         ),
       ),
@@ -68,11 +75,13 @@ class VlogDetail extends StatefulWidget {
   String vlogId;
   String vlogerId;
   String url;
+  int likeCounts;
   VlogDetail(
       {Key? key,
       required this.vlogId,
       required this.url,
-      required this.vlogerId})
+      required this.vlogerId,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -147,22 +156,26 @@ class _VlogDetailState extends State<VlogDetail> {
 
     Widget rightInfo = Column(
       children: [
-        Container(
-          width: 48.w,
-          height: 48.w,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white,
-              width: 2,
+        GestureDetector(
+          onTap: () =>
+              Get.to(() => UserInfo(vlogerId: controller.vlogerId.value)),
+          child: Container(
+            width: 48.w,
+            height: 48.w,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(24.r),
+              color: Colors.white70,
             ),
-            borderRadius: BorderRadius.circular(24.r),
-            color: Colors.white70,
-          ),
-          child: ClipOval(
-            child: Obx(
-              () => Image.network(
-                controller.vlogerFace.value,
-                fit: BoxFit.cover,
+            child: ClipOval(
+              child: Obx(
+                () => Image.network(
+                  controller.vlogerFace.value,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -177,7 +190,9 @@ class _VlogDetailState extends State<VlogDetail> {
             ),
             SizedBox(height: 2.h),
             Text(
-              '赞',
+              widget.likeCounts == 0
+                  ? '赞'
+                  : DataUtil().generator(widget.likeCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],

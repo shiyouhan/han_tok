@@ -52,9 +52,13 @@ class LikeView extends GetView {
               String vlogId = mineController.likeList[index].vlogId;
               String vlogerId = mineController.likeList[index].vlogerId;
               String url = mineController.likeList[index].url;
+              int likeCounts = mineController.likeList[index].likeCounts;
               return GestureDetector(
                 onTap: () => Get.to(() => VlogDetailView(
-                    vlogId: vlogId, vlogerId: vlogerId, url: url)),
+                    vlogId: vlogId,
+                    vlogerId: vlogerId,
+                    url: url,
+                    likeCounts: likeCounts)),
                 child: Stack(
                   children: [
                     AbsorbPointer(

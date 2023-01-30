@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/controller/user_info_controller.dart';
+import 'package:han_tok/app/utils/DataUtil.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../data/base_style.dart';
@@ -17,13 +18,15 @@ class OpusDetailView extends GetView {
   String vlogId;
   String vlogerId;
   String url;
+  int likeCounts;
   String updatedTime;
   OpusDetailView(
       {Key? key,
       required this.vlogId,
       required this.vlogerId,
       required this.url,
-      required this.updatedTime})
+      required this.updatedTime,
+      required this.likeCounts})
       : super(key: key);
 
   @override
@@ -62,6 +65,7 @@ class OpusDetailView extends GetView {
                 vlogId: vlogId,
                 vlogerId: vlogerId,
                 updatedTime: updatedTime,
+                likeCounts: likeCounts,
                 url: url),
           ),
         ),
@@ -75,11 +79,13 @@ class OpusDetail extends StatefulWidget {
   String vlogerId;
   String updatedTime;
   String url;
+  int likeCounts;
   OpusDetail(
       {Key? key,
       required this.vlogId,
       required this.vlogerId,
       required this.url,
+      required this.likeCounts,
       required this.updatedTime})
       : super(key: key);
 
@@ -201,7 +207,9 @@ class _OpusDetailState extends State<OpusDetail> {
             ),
             SizedBox(height: 2.h),
             Text(
-              '赞',
+              widget.likeCounts == 0
+                  ? '赞'
+                  : DataUtil().generator(widget.likeCounts),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
