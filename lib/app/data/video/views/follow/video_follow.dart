@@ -45,7 +45,7 @@ class VideoFollow {
     FollowController followController = Get.put(FollowController());
     List<VideoFollow> list = followController.followList
         .map((e) => VideoFollow(
-            vlogId: '',
+            vlogId: e.vlogId.toString(),
             vlogerId: e.vlogerId.toString(),
             vlogerFace: e.vlogerFace.toString(),
             vlogerName: e.vlogerName.toString(),
@@ -54,11 +54,11 @@ class VideoFollow {
             cover: e.cover.toString(),
             width: 100,
             height: 100,
-            likeCounts: 99,
-            commentsCounts: 99,
-            isPrivate: 1,
-            doIFollowVloger: true,
-            doILikeThisVlog: true,
+            likeCounts: e.likeCounts,
+            commentsCounts: e.commentsCounts,
+            isPrivate: e.isPrivate,
+            doIFollowVloger: e.doIFollowVloger,
+            doILikeThisVlog: e.doILikeThisVlog,
             play: true))
         .toList();
     return list;

@@ -5,8 +5,11 @@ import 'package:han_tok/app/modules/mine/model/Follow.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../main.dart';
+import '../../../modules/index/controllers/follow_controller.dart';
 
 class VideoController extends GetxController {
+  FollowController followController = Get.put(FollowController());
+
   @override
   void onInit() async {
     followList.value = await getVideo();
@@ -32,10 +35,14 @@ class VideoController extends GetxController {
   final followed = false.obs;
   final isMine = false.obs;
 
+  final doILikeThisVlog = false.obs;
+  final likeCounts = 0.obs;
+
   void renew() async {
     followList.value = await getVideo();
     followList.value =
         followList.map((element) => Follow.fromJson(element)).toList();
+    followController.follow();
     update();
   }
 

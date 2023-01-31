@@ -2,6 +2,8 @@
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
+import 'package:han_tok/app/modules/index/controllers/com_controller.dart';
+import 'package:han_tok/app/modules/index/controllers/follow_controller.dart';
 import 'package:han_tok/app/modules/login/controllers/login_bottom_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +15,7 @@ import '../model/PublicList.dart';
 class MineController extends GetxController {
   var loginController = Get.find<LoginBottomController>();
   VideoController videoController = Get.put(VideoController());
+  ComController comController = Get.put(ComController());
 
   final city = ''.obs;
   final page = 1.obs;
@@ -55,6 +58,14 @@ class MineController extends GetxController {
   void renewFans() async {
     fanList.value = await getFanList();
     fanList.value = fanList.map((element) => Fan.fromJson(element)).toList();
+    comController.friend();
+    update();
+  }
+
+  void renewLike() async {
+    likeList.value = await getLike();
+    likeList.value =
+        likeList.map((element) => LikeList.fromJson(element)).toList();
     update();
   }
 

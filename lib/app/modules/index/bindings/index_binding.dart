@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:han_tok/app/modules/index/controllers/com_controller.dart';
 import 'package:han_tok/app/modules/index/controllers/follow_controller.dart';
 import 'package:han_tok/app/modules/index/controllers/info_like_controller.dart';
 import 'package:han_tok/app/modules/index/controllers/info_opus_controller.dart';
@@ -12,6 +13,9 @@ import '../controllers/index_controller.dart';
 class IndexBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<ComController>(
+      () => ComController(),
+    );
     Get.lazyPut<FollowController>(
       () => FollowController(),
     );

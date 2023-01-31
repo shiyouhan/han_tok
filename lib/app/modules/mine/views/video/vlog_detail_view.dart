@@ -6,7 +6,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
+import 'package:like_button/like_button.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../data/base_style.dart';
@@ -90,6 +92,7 @@ class VlogDetail extends StatefulWidget {
 
 class _VlogDetailState extends State<VlogDetail> {
   VlogDetailController controller = Get.put(VlogDetailController());
+  VideoController videoController = Get.put(VideoController());
   late VideoPlayerController _controller;
 
   @override
@@ -156,45 +159,112 @@ class _VlogDetailState extends State<VlogDetail> {
 
     Widget rightInfo = Column(
       children: [
-        GestureDetector(
-          onTap: () =>
-              Get.to(() => UserInfo(vlogerId: controller.vlogerId.value)),
-          child: Container(
-            width: 48.w,
-            height: 48.w,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(24.r),
-              color: Colors.white70,
-            ),
-            child: ClipOval(
-              child: Obx(
-                () => Image.network(
-                  controller.vlogerFace.value,
-                  fit: BoxFit.cover,
+        SizedBox(
+          width: 52.w,
+          height: 56.h,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () =>
+                    Get.to(() => UserInfo(vlogerId: controller.vlogerId.value)),
+                child: Container(
+                  width: 48.w,
+                  height: 48.w,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(24.r),
+                    color: Colors.white70,
+                  ),
+                  child: ClipOval(
+                    child: Obx(
+                      () => Image.network(
+                        controller.vlogerFace.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Obx(
+                () => controller.doIFollowVloger.value == false
+                    ? Positioned(
+                        left: 14,
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: () => controller.follow(),
+                          child: Container(
+                            width: 22.w,
+                            height: 22.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(11.r),
+                              color: Colors.pink,
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Positioned(
+                        left: 14,
+                        bottom: 0,
+                        child: Container(
+                          width: 22.w,
+                          height: 22.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(11.r),
+                          ),
+                        ),
+                      ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 16.h),
         Column(
           children: [
-            Icon(
-              Icons.favorite,
-              size: 40,
-              color: Colors.white,
+            Obx(
+              () => controller.doILikeThisVlog.value == false
+                  ? LikeButton(
+                      size: 40,
+                      circleColor: CircleColor(
+                          start: Color(0XF8FA9FB7), end: Colors.red),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Color(0XF8FA9FB7),
+                        dotSecondaryColor: Colors.red,
+                      ),
+                      onTap: (isLiked) {
+                        return controller.changeData(isLiked);
+                      },
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                          size: 40,
+                        );
+                      },
+                    )
+                  : GestureDetector(
+                      onTap: () => controller.unlike(),
+                      child: Icon(
+                        Icons.favorite,
+                        size: 40,
+                        color: Colors.red,
+                      ),
+                    ),
             ),
             SizedBox(height: 2.h),
-            Text(
-              widget.likeCounts == 0
-                  ? '赞'
-                  : DataUtil().generator(widget.likeCounts),
-              style: BaseStyle.fs12.copyWith(color: Colors.white),
-            )
+            Obx(
+              () => Text(
+                DataUtil().generator(controller.likeCounts.value),
+                style: BaseStyle.fs12.copyWith(color: Colors.white),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 16.h),

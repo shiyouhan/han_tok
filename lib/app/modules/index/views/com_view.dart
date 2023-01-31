@@ -1,21 +1,242 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../data/video/controller/friend_list_controller.dart';
+import '../../../data/video/video_page.dart';
+import '../../../data/video/video_scaffold.dart';
+import '../../../data/video/views/friend/video_follow.dart';
+import '../controllers/com_controller.dart';
 
 class ComView extends GetView {
   const ComView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    ComController controller = Get.put(ComController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ComView'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text(
-          'ComView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+      resizeToAvoidBottomInset: true, //输入框抵住键盘
+      body: Obx(() => controller.friendList.isEmpty
+          ? Container(color: Colors.black)
+          : RecommendPage()),
+    );
+  }
+}
+
+class RecommendPage extends StatefulWidget {
+  const RecommendPage({super.key});
+
+  @override
+  State<RecommendPage> createState() => _RecommendPageState();
+}
+
+class _RecommendPageState extends State<RecommendPage>
+    with WidgetsBindingObserver {
+  VideoScaffoldController tkController = VideoScaffoldController();
+
+  final PageController _pageController = PageController();
+
+  final FriendListController _videoListController = FriendListController();
+
+  /// 记录点赞
+  Map<int, bool> favoriteMap = {};
+
+  List<VideoFriend> videoDataList = [];
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state != AppLifecycleState.resumed) {
+      _videoListController.currentPlayer.pause();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _videoListController.currentPlayer.pause();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    videoDataList = VideoFriend.fetchVideo();
+    WidgetsBinding.instance.addObserver(this);
+    _videoListController.init(
+      pageController: _pageController,
+      initialList: videoDataList
+          .map(
+            (e) => VPVideoController(
+              videoInfo: e,
+              builder: () => VideoPlayerController.network(e.url),
+            ),
+          )
+          .toList(),
+      videoProvider: (int index, List<VPVideoController> list) async {
+        return videoDataList
+            .map(
+              (e) => VPVideoController(
+                videoInfo: e,
+                builder: () => VideoPlayerController.network(e.url),
+              ),
+            )
+            .toList();
+      },
+    );
+    _videoListController.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    tkController.addListener(
+      () {
+        if (tkController.value == VideoPagePosition.middle) {
+          _videoListController.currentPlayer.play();
+        } else {
+          _videoListController.currentPlayer.pause();
+        }
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Widget? currentPage;
+
+    // switch (tabBarType) {
+    //   case TikTokPageTag.home:
+    //     break;
+    //   case TikTokPageTag.follow:
+    //     currentPage = FollowPage();
+    //     break;
+    //   case TikTokPageTag.msg:
+    //     currentPage = MsgPage();
+    //     break;
+    //   case TikTokPageTag.me:
+    //     currentPage = UserPage(isSelfPage: true);
+    //     break;
+    // }
+    // double a = MediaQuery.of(context).size.aspectRatio;
+    // bool hasBottomPadding = a < 0.55;
+
+    // bool hasBackground = hasBottomPadding;
+    // hasBackground = tabBarType != TikTokPageTag.home;
+    // if (hasBottomPadding) {
+    //   hasBackground = true;
+    // }
+    // Widget tikTokTabBar = TikTokTabBar(
+    //   // hasBackground: hasBackground,
+    //   // current: tabBarType,
+    //   onTabSwitch: (type) async {
+    //     setState(() {
+    //       // tabBarType = type;
+    //       if (type == TikTokPageTag.home) {
+    //         _videoListController.currentPlayer.play();
+    //       } else {
+    //         _videoListController.currentPlayer.pause();
+    //       }
+    //     });
+    //   },
+    //   // onAddButton: () {
+    //   //   Navigator.of(context).push(
+    //   //     MaterialPageRoute(
+    //   //       fullscreenDialog: true,
+    //   //       builder: (context) => CameraPage(),
+    //   //     ),
+    //   //   );
+    //   // },
+    // );
+
+    // var userPage = UserPage(
+    //   isSelfPage: false,
+    //   canPop: true,
+    //   onPop: () {
+    //     tkController.animateToMiddle();
+    //   },
+    // );
+    // var searchPage = SearchPage(
+    //   onPop: tkController.animateToMiddle,
+    // );
+
+    // var header = tabBarType == TikTokPageTag.home
+    //     ? TikTokHeader(
+    //         onSearch: () {
+    //           tkController.animateToLeft();
+    //         },
+    //       )
+    //     : Container();
+
+    // 组合
+    return VideoScaffold(
+      controller: tkController,
+      // hasBottomPadding: hasBackground,
+      // tabBar: tikTokTabBar,
+      // header: header,
+      // leftPage: searchPage,
+      // rightPage: userPage,
+      // enableGesture: tabBarType == TikTokPageTag.home,
+      // onPullDownRefresh: _fetchData,
+      page: Stack(
+        // index: currentPage == null ? 0 : 1,
+        children: <Widget>[
+          PageView.builder(
+            key: Key('home'),
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            itemCount: _videoListController.videoCount,
+            itemBuilder: (context, i) {
+              // 拼一个视频组件出来
+              // bool isF = SafeMap(favoriteMap)[i].boolean;
+              var player = _videoListController.playerOfIndex(i)!;
+              var data = player.videoInfo!;
+
+              Widget currentVideo = Center(
+                child: AspectRatio(
+                  aspectRatio: player.controller.value.aspectRatio,
+                  child: VideoPlayer(player.controller),
+                ),
+              );
+
+              currentVideo = VideoPage(
+                // 手势播放与自然播放都会产生暂停按钮状态变化，待处理
+                hidePauseIcon: !player.showPauseIcon.value,
+                // aspectRatio: deviceRatio,
+                key: Key('${data.url}$i'),
+                tag: data.url,
+                userInfoWidget: VideoUserInfo(
+                  desc: data.content,
+                  vlogId: data.vlogId,
+                  vlogerId: data.vlogerId,
+                  vlogerFace: data.vlogerFace,
+                  vlogerName: data.vlogerName,
+                  likeCounts: data.likeCounts,
+                  commentsCounts: data.commentsCounts,
+                  doILikeThisVlog: data.doILikeThisVlog,
+                ),
+                onSingleTap: () async {
+                  if (player.controller.value.isPlaying) {
+                    await player.pause();
+                  } else {
+                    await player.play();
+                  }
+                  setState(() {});
+                },
+                onAddFavorite: () {
+                  setState(() {
+                    favoriteMap[i] = true;
+                  });
+                },
+                // rightButtonColumn: buttons,
+                video: currentVideo, bottomPadding: 0,
+              );
+              return currentVideo;
+            },
+          ),
+          // currentPage ?? Container(),
+        ],
       ),
     );
   }

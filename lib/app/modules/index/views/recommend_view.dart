@@ -207,11 +207,13 @@ class _RecommendPageState extends State<RecommendPage>
                 tag: data.url,
                 userInfoWidget: VideoUserInfo(
                   desc: data.content,
+                  vlogId: data.vlogId,
                   vlogerId: data.vlogerId,
                   vlogerFace: data.vlogerFace,
                   vlogerName: data.vlogerName,
                   likeCounts: data.likeCounts,
                   commentsCounts: data.commentsCounts,
+                  doILikeThisVlog: data.doILikeThisVlog,
                 ),
                 onSingleTap: () async {
                   if (player.controller.value.isPlaying) {

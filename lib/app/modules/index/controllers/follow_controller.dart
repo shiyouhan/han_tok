@@ -13,9 +13,7 @@ class FollowController extends GetxController {
 
   @override
   void onInit() async {
-    followList.value = await getVideo();
-    followList.value =
-        followList.map((element) => FollowList.fromJson(element)).toList();
+    follow();
     super.onInit();
   }
 
@@ -29,6 +27,12 @@ class FollowController extends GetxController {
     super.onClose();
   }
 
+  void follow() async => {
+        followList.value = await getVideo(),
+        followList.value =
+            followList.map((element) => FollowList.fromJson(element)).toList(),
+      };
+
   //TODO:获取首页视频列表
   Future<List> getVideo() async {
     var prefs = await SharedPreferences.getInstance();
@@ -36,7 +40,6 @@ class FollowController extends GetxController {
 
     var result = await request.get(
         '/vlog/followList?page=${page.value}&pageSize=${pageSize.value}&myId=$id');
-    // followList.value = result['rows'];
     print(result);
     return result['rows'];
   }

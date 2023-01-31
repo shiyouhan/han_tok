@@ -46,10 +46,6 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
     controller.query();
     controller.queryFollow();
     controller.getFollowAndFan();
-    // for (var element in controller.publicList) {
-    //   controller.publicPraised += element.likeCounts;
-    // }
-    // print(controller.publicPraised);
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -432,7 +428,7 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                                             vertical: 26.h),
                                                     child: Obx(
                                                       () => Text(
-                                                        '"${controller.nickname.value}"共获得 ${DataUtil().generator(controller.publicPraised.value)} 个赞',
+                                                        '"${controller.nickname.value}"共获得 ${DataUtil().generator(controller.totalLikeMeCounts.value)} 个赞',
                                                         style: BaseStyle.fs16
                                                             .copyWith(
                                                                 color: Colors
@@ -472,11 +468,14 @@ class _UserInfoState extends State<UserInfo> with TickerProviderStateMixin {
                                             }),
                                         child: Row(
                                           children: [
-                                            Text(
-                                              DataUtil().generator(controller
-                                                  .publicPraised.value),
-                                              style: BaseStyle.fs16.copyWith(
-                                                  fontWeight: FontWeight.bold),
+                                            Obx(
+                                              () => Text(
+                                                DataUtil().generator(controller
+                                                    .totalLikeMeCounts.value),
+                                                style: BaseStyle.fs16.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                             ),
                                             SizedBox(width: 5.h),
                                             Text(

@@ -1,22 +1,18 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print, unnecessary_overrides
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
-import 'package:han_tok/app/modules/mine/controllers/private_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../main.dart';
+import '../model/Video.dart';
 
 class CompositionController extends GetxController {
-  MineController mineController = Get.put(MineController());
-  PrivateController privateController = Get.put(PrivateController());
-
-  var publicPraised = 0.obs;
-  var praised = 0.obs;
+  final vlogId = ''.obs;
+  final likeCounts = 0.obs;
 
   @override
   void onInit() async {
-    for (var element in mineController.publicList) {
-      publicPraised += element.likeCounts;
-    }
-    praised = privateController.privatePraised + publicPraised.toInt();
     super.onInit();
   }
 
@@ -28,5 +24,21 @@ class CompositionController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  //todo:获取视频详情
+  getDetail(String vlogId) async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+
+    request.get('/vlog/detail?userId=$id&vlogId=$vlogId').then((value) async {
+      // videoController.doILikeThisVlog.value =
+      //     Video.fromJson(value).doILikeThisVlog;
+      likeCounts.value = Video.fromJson(value).likeCounts;
+      print(value);
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
   }
 }

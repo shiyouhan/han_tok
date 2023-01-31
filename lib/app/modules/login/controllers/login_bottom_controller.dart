@@ -14,7 +14,6 @@ import '../model/User.dart';
 import '../views/reset_password_view.dart';
 
 class LoginBottomController extends GetxController {
-  // Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   var phoneController = TextEditingController().obs;
   var codeController = TextEditingController().obs;
   var phoneController1 = TextEditingController().obs;
@@ -52,6 +51,7 @@ class LoginBottomController extends GetxController {
   final description = '这家伙很懒，什么都没留下~'.obs;
   final canHantokNumBeUpdated = 1.obs;
   final bg = 'http://img.syhan.top/uPic/youhua.jpeg'.obs;
+  final totalLikeMeCounts = 0.obs;
 
   @override
   void onInit() {
@@ -192,6 +192,7 @@ class LoginBottomController extends GetxController {
       district.value = User.fromJson(value).district;
       description.value = User.fromJson(value).description;
       bg.value = User.fromJson(value).bg;
+      totalLikeMeCounts.value = User.fromJson(value).totalLikeMeCounts;
       location.value =
           '${country.value}-${province.value}-${city.value}-${district.value}';
       year.value = int.parse(birthday.value.substring(0, 4));

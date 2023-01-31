@@ -6,7 +6,7 @@ class IndexController extends GetxController
   final select = 0.obs;
   final currentIndex = 2.obs;
 
-  final tabs = ['同城', '关注', '推荐'];
+  final tabs = ['粉丝', '关注', '推荐'];
 
   late TabController tabController;
 

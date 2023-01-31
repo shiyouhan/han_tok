@@ -10,7 +10,7 @@ import '../../../../data/base_style.dart';
 import '../../controllers/like_controller.dart';
 import 'vlog_detail_view.dart';
 
-class LikeView extends GetView {
+class LikeView extends GetView<LikeController> {
   const LikeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

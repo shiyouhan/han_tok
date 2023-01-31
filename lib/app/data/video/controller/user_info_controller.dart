@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../../main.dart';
 import '../../../modules/index/model/User.dart';
+import '../../../modules/mine/controllers/vlog_detail_controller.dart';
 import '../../../modules/mine/model/Fan.dart';
 import '../../../modules/mine/model/Follow.dart';
 import '../../../modules/mine/model/LikeList.dart';
@@ -17,6 +18,7 @@ import '../../../utils/BirthUtil.dart';
 class UserInfoController extends GetxController {
   MineController mineController = Get.put(MineController());
   VideoController videoController = Get.put(VideoController());
+  VlogDetailController detailController = Get.put(VlogDetailController());
   final vlogerId = ''.obs;
   final isMine = false.obs;
 
@@ -27,8 +29,6 @@ class UserInfoController extends GetxController {
   var fanList = [].obs;
   var followList = [].obs;
 
-  var publicPraised = 0.obs;
-
   final id = ''.obs;
   final nickname = ''.obs;
   final hantokNum = ''.obs;
@@ -38,6 +38,7 @@ class UserInfoController extends GetxController {
   final province = ''.obs;
   final bg = 'http://img.syhan.top/uPic/grey.jpg'.obs;
   final description = ''.obs;
+  final totalLikeMeCounts = 0.obs;
 
   var year = 2000.obs;
   var month = 12.obs;
@@ -85,15 +86,12 @@ class UserInfoController extends GetxController {
       province.value = User.fromJson(value).province;
       description.value = User.fromJson(value).description;
       bg.value = User.fromJson(value).bg;
+      totalLikeMeCounts.value = User.fromJson(value).totalLikeMeCounts;
       year.value = int.parse(birthday.value.substring(0, 4));
       month.value = int.parse(birthday.value.substring(6, 7));
       day.value = int.parse(birthday.value.substring(9, 10));
       late DateTime brt = DateTime(year.value, month.value, day.value);
       age.value = BirthUtil.getAge(brt);
-      for (var element in publicList) {
-        publicPraised += element.likeCounts;
-      }
-      print(publicPraised);
       print(value);
     }).catchError((error) {
       EasyLoading.showError('数据解析异常');
@@ -139,6 +137,7 @@ class UserInfoController extends GetxController {
             headers: headers)
         .then((value) async {
       videoController.followed.value = true;
+      detailController.doIFollowVloger.value = true;
       print(value);
       videoController.renew();
     }).catchError((error) {
@@ -164,8 +163,10 @@ class UserInfoController extends GetxController {
             headers: headers)
         .then((value) async {
       videoController.followed.value = false;
+      detailController.doIFollowVloger.value = false;
       print(value);
       videoController.renew();
+      // detailController.getDetail();
     }).catchError((error) {
       EasyLoading.showError('数据解析异常');
       print(error);

@@ -55,6 +55,8 @@ dependencies:
   popover: ^0.2.8
   # 扫描
   scan: ^1.6.0
+  # 点赞特效
+  like_button: ^2.0.5
   # 国际化
   flutter_localizations:
     sdk: flutter

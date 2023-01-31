@@ -750,6 +750,7 @@ class _MineViewState extends State<MineView>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
                                         onTap: () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -771,7 +772,7 @@ class _MineViewState extends State<MineView>
                                                             vertical: 26.h),
                                                     child: Obx(
                                                       () => Text(
-                                                        '"${loginController.nickname.value}"共获得 ${DataUtil().generator(compositionController.praised.value)} 个赞',
+                                                        '"${loginController.nickname.value}"共获得 ${DataUtil().generator(loginController.totalLikeMeCounts.value)} 个赞',
                                                         style: BaseStyle.fs16
                                                             .copyWith(
                                                                 color: Colors
@@ -814,8 +815,9 @@ class _MineViewState extends State<MineView>
                                             Obx(
                                               () => Text(
                                                 DataUtil().generator(
-                                                    compositionController
-                                                        .praised.value),
+                                                    loginController
+                                                        .totalLikeMeCounts
+                                                        .value),
                                                 style: BaseStyle.fs16.copyWith(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -832,7 +834,6 @@ class _MineViewState extends State<MineView>
                                       SizedBox(width: 18.h),
                                       InkWell(
                                         onTap: () => {
-                                          // countController.friend(),
                                           Get.to(() => MineCountView()),
                                         },
                                         child: Row(

@@ -1,21 +1,19 @@
-// ignore_for_file: unnecessary_overrides, depend_on_referenced_packages, avoid_print
+// ignore_for_file: depend_on_referenced_packages, unnecessary_overrides, avoid_print
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:han_tok/app/modules/index/model/IndexList.dart';
 
 import '../../../../main.dart';
+import '../model/FollowList.dart';
 
-class RecommendController extends GetxController {
+class ComController extends GetxController {
   final page = 1.obs;
   final pageSize = 99.obs;
-  var videoList = [].obs;
+  var friendList = [].obs;
 
   @override
   void onInit() async {
-    videoList.value = await getVideo();
-    videoList.value =
-        videoList.map((element) => IndexList.fromJson(element)).toList();
+    friend();
     super.onInit();
   }
 
@@ -29,13 +27,19 @@ class RecommendController extends GetxController {
     super.onClose();
   }
 
+  void friend() async => {
+        friendList.value = await getVideo(),
+        friendList.value =
+            friendList.map((element) => FollowList.fromJson(element)).toList(),
+      };
+
   //TODO:获取首页视频列表
   Future<List> getVideo() async {
     var prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id')!;
+
     var result = await request.get(
-        '/vlog/indexList?page=${page.value}&pageSize=${pageSize.value}&userId=$id');
-    videoList.value = result['rows'];
+        '/vlog/friendList?page=${page.value}&pageSize=${pageSize.value}&myId=$id');
     print(result);
     return result['rows'];
   }

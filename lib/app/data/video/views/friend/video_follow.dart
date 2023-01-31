@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 
-import '../../../../modules/index/controllers/recommend_controller.dart';
+import '../../../../modules/index/controllers/com_controller.dart';
+import '../../../../modules/index/controllers/follow_controller.dart';
 
 Socket? socket;
 
-class Video {
-  Video({
+class VideoFriend {
+  VideoFriend({
     required this.vlogId,
     required this.vlogerId,
     required this.vlogerFace,
@@ -41,10 +42,10 @@ class Video {
   final bool doILikeThisVlog;
   final bool play;
 
-  static List<Video> fetchVideo() {
-    RecommendController recommendController = Get.put(RecommendController());
-    List<Video> list = recommendController.videoList
-        .map((e) => Video(
+  static List<VideoFriend> fetchVideo() {
+    ComController comController = Get.put(ComController());
+    List<VideoFriend> list = comController.friendList
+        .map((e) => VideoFriend(
             vlogId: e.vlogId.toString(),
             vlogerId: e.vlogerId.toString(),
             vlogerFace: e.vlogerFace.toString(),
@@ -59,7 +60,7 @@ class Video {
             isPrivate: e.isPrivate,
             doIFollowVloger: e.doIFollowVloger,
             doILikeThisVlog: e.doILikeThisVlog,
-            play: e.play))
+            play: true))
         .toList();
     return list;
   }

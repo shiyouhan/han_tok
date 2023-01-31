@@ -1,10 +1,12 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MineCountController extends GetxController
     with GetSingleTickerProviderStateMixin {
   final select = 0.obs;
-  final currentIndex = 0.obs;
+  final currentIndex = 1.obs;
 
   final tabs = ['朋友', '关注', '粉丝'];
 

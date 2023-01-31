@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:han_tok/app/utils/DataUtil.dart';
+import 'package:like_button/like_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ import 'package:han_tok/app/data/video/user_info.dart';
 
 import '../../../main.dart';
 import '../../modules/mine/controllers/mine_controller.dart';
+import '../../modules/mine/model/Video.dart';
 import '../../utils/Iconfont.dart';
 import 'video_gesture.dart';
 
@@ -88,8 +90,8 @@ class VideoPage extends StatelessWidget {
                 width: double.infinity,
                 alignment: Alignment.center,
                 child: Icon(
-                  Icons.play_circle_outline,
-                  size: 120,
+                  Icons.play_arrow_rounded,
+                  size: 100.0,
                   color: Colors.white.withOpacity(0.4),
                 ),
               ),
@@ -154,19 +156,23 @@ class _VideoLoadingPlaceHolderState extends State<VideoLoadingPlaceHolder>
 
 class VideoUserInfo extends StatefulWidget {
   final String? desc;
+  final String? vlogId;
   final String? vlogerId;
   final String? vlogerName;
   final String? vlogerFace;
   final int? likeCounts;
   final int? commentsCounts;
+  final bool? doILikeThisVlog;
   const VideoUserInfo({
     Key? key,
+    this.vlogId,
     this.vlogerId,
     this.vlogerFace,
     this.vlogerName,
     this.desc,
     this.likeCounts,
     this.commentsCounts,
+    this.doILikeThisVlog,
   }) : super(key: key);
 
   @override
@@ -223,12 +229,87 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
     });
   }
 
+  //todo:获取视频详情
+  getDetail() async {
+    var prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id')!;
+
+    request
+        .get('/vlog/detail?userId=$id&vlogId=${widget.vlogId}')
+        .then((value) async {
+      videoController.doILikeThisVlog.value =
+          Video.fromJson(value).doILikeThisVlog;
+      videoController.likeCounts.value = Video.fromJson(value).likeCounts;
+      print(value);
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  //TODO:点赞
+  Future<bool> changeData(status) async {
+    like();
+    return Future.value(!status);
+  }
+
+  //TODO:视频点赞
+  like() async {
+    var prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken')!;
+    String id = prefs.getString('id')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+    request
+        .post(
+            '/vlog/like?userId=$id&vlogId=${widget.vlogId}&vlogerId=${widget.vlogerId}',
+            headers: headers)
+        .then((value) {
+      print(value);
+      videoController.doILikeThisVlog.value = true;
+      getDetail();
+      mineController.renewLike();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  //TODO:视频取消点赞
+  unlike() async {
+    var prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken')!;
+    String id = prefs.getString('id')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+    request
+        .post(
+            '/vlog/unlike?userId=$id&vlogId=${widget.vlogId}&vlogerId=${widget.vlogerId}',
+            headers: headers)
+        .then((value) {
+      print(value);
+      videoController.doILikeThisVlog.value = false;
+      getDetail();
+      mineController.renewLike();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
   getRefresh() async {
     print('页面刷新');
   }
 
   @override
   void initState() {
+    getDetail();
     queryFollow();
     super.initState();
   }
@@ -372,16 +453,43 @@ class _VideoUserInfoState extends State<VideoUserInfo> {
         SizedBox(height: 10.h),
         Column(
           children: [
-            Icon(
-              Icons.favorite,
-              size: 40,
-              color: Colors.white,
+            Obx(
+              () => videoController.doILikeThisVlog.value == false
+                  ? LikeButton(
+                      size: 40,
+                      circleColor: CircleColor(
+                          start: Color(0XF8FA9FB7), end: Colors.red),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Color(0XF8FA9FB7),
+                        dotSecondaryColor: Colors.red,
+                      ),
+                      onTap: (isLiked) {
+                        return changeData(isLiked);
+                      },
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                          size: 40,
+                        );
+                      },
+                    )
+                  : GestureDetector(
+                      onTap: () => unlike(),
+                      child: Icon(
+                        Icons.favorite,
+                        size: 40,
+                        color: Colors.red,
+                      ),
+                    ),
             ),
             SizedBox(height: 2.h),
-            Text(
-              DataUtil().generator(widget.likeCounts),
-              style: BaseStyle.fs12.copyWith(color: Colors.white),
-            )
+            Obx(
+              () => Text(
+                DataUtil().generator(videoController.likeCounts.value),
+                style: BaseStyle.fs12.copyWith(color: Colors.white),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 10.h),
