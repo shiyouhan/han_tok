@@ -8,7 +8,7 @@ import 'package:video_player/video_player.dart';
 import '../../../data/video/controller/friend_list_controller.dart';
 import '../../../data/video/video_page.dart';
 import '../../../data/video/video_scaffold.dart';
-import '../../../data/video/views/friend/video_follow.dart';
+import '../../../data/video/model/friend/video_follow.dart';
 import '../controllers/com_controller.dart';
 
 class ComView extends GetView {

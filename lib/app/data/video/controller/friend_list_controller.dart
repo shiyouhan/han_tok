@@ -5,10 +5,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:han_tok/app/data/video/views/follow/video_follow.dart';
 import 'package:video_player/video_player.dart';
 
-import '../views/friend/video_follow.dart';
+import '../model/friend/video_follow.dart';
 
 typedef LoadMoreVideo = Future<List<VPVideoController>> Function(
   int index,

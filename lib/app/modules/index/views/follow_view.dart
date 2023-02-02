@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/data/video/views/follow/video_follow.dart';
+import 'package:han_tok/app/data/video/model/follow/video_follow.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/video/controller/follow_list_controller.dart';

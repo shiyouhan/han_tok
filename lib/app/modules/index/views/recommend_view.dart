@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:han_tok/app/data/video/views/index/video.dart';
+import 'package:han_tok/app/data/video/model/index/video.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/video/controller/video_list_controller.dart';
@@ -231,7 +231,11 @@ class _RecommendPageState extends State<RecommendPage>
                 // rightButtonColumn: buttons,
                 video: currentVideo, bottomPadding: 0,
               );
-              return currentVideo;
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.black,
+                body: currentVideo,
+              );
             },
           ),
           // currentPage ?? Container(),

@@ -1,15 +1,9 @@
+// ignore_for_file: file_names
+
 class DateUtil {
   String getComparedTime(String dateTime) {
     Duration difference = DateTime.now().difference(DateTime.parse(dateTime));
-    final List prefix = [
-      "just now",
-      "second(s) ago",
-      "minute(s) ago",
-      "hour(s) ago",
-      "day(s) ago",
-      "month(s) ago",
-      "year(s) ago"
-    ];
+    final List prefix = ["刚才", "秒前", "分钟前", "小时前", "天前", "月前", "年前"];
     if (difference.inDays == 0) {
       if (difference.inMinutes == 0) {
         if (difference.inSeconds < 20) {

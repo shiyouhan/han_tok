@@ -7,7 +7,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../views/index/video.dart';
+import '../model/index/video.dart';
 
 typedef LoadMoreVideo = Future<List<VPVideoController>> Function(
   int index,
