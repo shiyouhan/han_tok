@@ -20,7 +20,6 @@ class VideoController extends GetxController {
     followList.value = await getVideo();
     followList.value =
         followList.map((element) => Follow.fromJson(element)).toList();
-    // commentController = TextEditingController();
     super.onInit();
   }
 
@@ -170,6 +169,20 @@ class VideoController extends GetxController {
       "headerUserToken": token,
     };
     if (vlogerId.value == id) {
+      request
+          .post(
+              '/comment/delete?commentUserId=${commentUserId.value}&commentId=${commentId.value}&vlogId=${vlogId.value}',
+              headers: headers)
+          .then((value) async {
+        print(commentId.value);
+        print(value);
+        EasyLoading.showSuccess('删除成功');
+        renewComment();
+      }).catchError((error) {
+        EasyLoading.showError('数据解析异常');
+        print(error);
+      });
+    } else if (commentUserId.value == id) {
       request
           .post(
               '/comment/delete?commentUserId=${commentUserId.value}&commentId=${commentId.value}&vlogId=${vlogId.value}',

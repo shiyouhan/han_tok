@@ -10,10 +10,12 @@ import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
 import '../../../../data/video/controller/user_info_controller.dart';
 import '../../../../data/video/user_info.dart';
 import '../../../../utils/DataUtil.dart';
+import '../../../../utils/DateUtil.dart';
 import '../../../../utils/Iconfont.dart';
 import '../../controllers/like_detail_controller.dart';
 
@@ -95,6 +97,7 @@ class _LikeDetailState extends State<LikeDetail> {
   UserInfoController infoController = Get.put(UserInfoController());
   LoginBottomController loginController = Get.put(LoginBottomController());
   late VideoPlayerController _controller;
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -113,7 +116,22 @@ class _LikeDetailState extends State<LikeDetail> {
     } else {
       controller.isMine.value = false;
     }
+    controller.renewComment();
+    controller.commentController = TextEditingController();
     super.initState();
+  }
+
+  //显示底部弹框的功能
+  void showBottomSheet() {
+    //用于在底部打开弹框的效果
+    showModalBottomSheet(
+      builder: (BuildContext context) {
+        //构建弹框中的内容
+        return buildBottomSheetWidget(context);
+      },
+      context: context,
+      backgroundColor: Colors.transparent,
+    );
   }
 
   @override
@@ -292,14 +310,324 @@ class _LikeDetailState extends State<LikeDetail> {
         SizedBox(height: 16.h),
         Column(
           children: [
-            Icon(
-              IconFont.pinglun,
-              size: 32,
-              color: Colors.white,
+            GestureDetector(
+              onTap: () => {
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  isDismissible: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (BuildContext context) {
+                    return AnimatedPadding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      duration: Duration(microseconds: 100),
+                      child: Container(
+                        height:
+                            MediaQuery.of(context).viewInsets.bottom.toInt() ==
+                                    0
+                                ? size.height * 0.7
+                                : size.height * 0.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: SafeArea(
+                            child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                // color: Colors.white,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 12.h, bottom: 18.h),
+                                        child: Obx(
+                                          () => Text(
+                                            '${controller.commentList.length}条评论',
+                                            style: BaseStyle.fs14,
+                                          ),
+                                        ),
+                                      ),
+                                      Obx(
+                                        () => Container(
+                                          height: MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom
+                                                      .toInt() ==
+                                                  0
+                                              ? size.height * 0.52
+                                              : size.height * 0.36,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w),
+                                          child: controller.commentList.isEmpty
+                                              ? Center(
+                                                  child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: size.width * 0.4,
+                                                      child: Image.asset(
+                                                          'assets/images/pinglun.png',
+                                                          fit: BoxFit.fill),
+                                                    ),
+                                                    SizedBox(height: 10.h),
+                                                    Text(
+                                                      '平等表达，友善交流',
+                                                      style: BaseStyle.fs14G,
+                                                    ),
+                                                  ],
+                                                ))
+                                              : SingleChildScrollView(
+                                                  child: Column(
+                                                    children:
+                                                        controller.commentList
+                                                            .map(
+                                                              (element) =>
+                                                                  GestureDetector(
+                                                                      onLongPress:
+                                                                          () =>
+                                                                              {
+                                                                                controller.commentId.value = element.commentId,
+                                                                                controller.commentUserId.value = element.commentUserId,
+                                                                                showBottomSheet(),
+                                                                              },
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            EdgeInsets.only(bottom: 10),
+                                                                        child:
+                                                                            Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Container(
+                                                                              width: 40.w,
+                                                                              height: 40.h,
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(20.r),
+                                                                              ),
+                                                                              child: ClipRRect(
+                                                                                borderRadius: BorderRadius.circular(20.r),
+                                                                                child: Image.network(element.commentUserFace.toString()),
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: EdgeInsets.only(left: 14),
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  SizedBox(
+                                                                                    width: 2 * (size.width / 3),
+                                                                                    child: Column(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                      children: [
+                                                                                        Padding(
+                                                                                            padding: EdgeInsets.only(bottom: 4),
+                                                                                            child: Row(
+                                                                                              children: [
+                                                                                                Text(
+                                                                                                  element.commentUserNickname,
+                                                                                                  style: BaseStyle.fs14G,
+                                                                                                ),
+                                                                                                SizedBox(width: 4.w),
+                                                                                                widget.vlogerId == element.vlogerId
+                                                                                                    ? Container(
+                                                                                                        decoration: BoxDecoration(color: Colors.pink, borderRadius: BorderRadius.circular(2.r)),
+                                                                                                        padding: EdgeInsets.symmetric(horizontal: 2),
+                                                                                                        child: Text(
+                                                                                                          '作者',
+                                                                                                          style: BaseStyle.fs12.copyWith(color: Colors.white),
+                                                                                                        ),
+                                                                                                      )
+                                                                                                    : Container(),
+                                                                                                element.replyedUserNickname != null
+                                                                                                    ? Row(
+                                                                                                        children: [
+                                                                                                          // SizedBox(width: 6.w),
+                                                                                                          Icon(Icons.arrow_right, size: 24, color: Colors.grey),
+                                                                                                          SizedBox(width: 4.w),
+                                                                                                          Text(
+                                                                                                            element.replyedUserNickname,
+                                                                                                            style: BaseStyle.fs14.copyWith(color: Colors.grey),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      )
+                                                                                                    : Container(),
+                                                                                              ],
+                                                                                            )),
+                                                                                        Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                element.content,
+                                                                                                style: BaseStyle.fs16,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  SizedBox(height: 4.h),
+                                                                                  SizedBox(
+                                                                                    width: size.width - 86.w,
+                                                                                    child: Row(
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              DateUtil().getComparedTime(element.createTime.toString()),
+                                                                                              style: BaseStyle.fs14G,
+                                                                                            ),
+                                                                                            SizedBox(width: 16.h),
+                                                                                            GestureDetector(
+                                                                                              onTap: () => {
+                                                                                                controller.fatherCommentId.value = element.commentId,
+                                                                                                FocusScope.of(context).requestFocus(focusNode),
+                                                                                              },
+                                                                                              child: Text(
+                                                                                                '回复',
+                                                                                                style: BaseStyle.fs14.copyWith(color: Colors.black87),
+                                                                                              ),
+                                                                                            )
+                                                                                          ],
+                                                                                        ),
+                                                                                        Spacer(),
+                                                                                        GestureDetector(
+                                                                                          child: Row(
+                                                                                            children: [
+                                                                                              element.isLike == 0
+                                                                                                  ? GestureDetector(
+                                                                                                      onTap: () => {
+                                                                                                        controller.commentId.value = element.commentId,
+                                                                                                        controller.commentLike(),
+                                                                                                      },
+                                                                                                      child: Icon(Icons.favorite_border, size: 14, color: Colors.grey),
+                                                                                                    )
+                                                                                                  : GestureDetector(
+                                                                                                      onTap: () => {
+                                                                                                        controller.commentId.value = element.commentId,
+                                                                                                        controller.commentUnLike(),
+                                                                                                      },
+                                                                                                      child: Icon(Icons.favorite, size: 14, color: Colors.redAccent),
+                                                                                                    ),
+                                                                                              SizedBox(width: 2.w),
+                                                                                              Text(
+                                                                                                element.likeCounts.toString(),
+                                                                                                style: BaseStyle.fs14G,
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        )
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  // element.isLike == 1
+                                                                                  //     ? Container(
+                                                                                  //         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                                                                                  //         margin: EdgeInsets.only(top: 2.h),
+                                                                                  //         decoration: BoxDecoration(color: Colors.grey.withOpacity(.2), borderRadius: BorderRadius.circular(2.r)),
+                                                                                  //         child: Text(
+                                                                                  //           '作者赞过',
+                                                                                  //           style: BaseStyle.fs10.copyWith(color: Colors.black.withOpacity(.8)),
+                                                                                  //         ),
+                                                                                  //       )
+                                                                                  //     : Container(),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      )),
+                                                            )
+                                                            .toList(),
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    height: 1.h,
+                                    color: Colors.grey.withOpacity(.2),
+                                    margin: EdgeInsets.only(bottom: 6.h),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 16),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.r),
+                                      color: BaseData.bodyColor,
+                                    ),
+                                    child: TextField(
+                                      cursorColor: Colors.red,
+                                      focusNode: focusNode,
+                                      decoration: InputDecoration(
+                                        hintText: '善语结善缘，恶言伤人心',
+                                        hintStyle: BaseStyle.fs14G,
+                                        border: InputBorder.none,
+                                        suffixIcon: Icon(Icons.alternate_email),
+                                      ),
+                                      controller: controller.commentController,
+                                      onChanged: (value) {
+                                        controller.commentStr(value);
+                                      },
+                                      onSubmitted: (value) {
+                                        controller.commentCreate();
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              right: 16,
+                              top: 12,
+                              child: GestureDetector(
+                                onTap: () => Get.back(),
+                                child: Icon(Icons.clear),
+                              ),
+                            ),
+                          ],
+                        )),
+                      ),
+                    );
+                  },
+                ),
+              },
+              child: Icon(
+                IconFont.pinglun,
+                size: 32,
+                color: Colors.white,
+              ),
             ),
             SizedBox(height: 4.h),
             Text(
-              '抢首评',
+              controller.commentList.isEmpty
+                  ? '抢首评'
+                  : DataUtil().generator(controller.commentList.length),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
@@ -411,6 +739,50 @@ class _LikeDetailState extends State<LikeDetail> {
             child: rightInfo,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildBottomSheetWidget(BuildContext context) {
+    LikeDetailController controller = Get.put(LikeDetailController());
+    return SafeArea(
+      child: Container(
+        height: 50.h,
+        margin: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                controller.delete();
+                Navigator.of(context).pop();
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                height: 50.h,
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      IconFont.shanchu,
+                      size: 20,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "删除改评论",
+                      style: BaseStyle.fs16,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

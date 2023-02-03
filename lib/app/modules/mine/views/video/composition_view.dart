@@ -63,12 +63,20 @@ class CompositionView extends GetView {
               itemCount: mineController.publicList.length,
               itemBuilder: (context, index) {
                 String vlogId = mineController.publicList[index].id;
+                String vlogerId = mineController.publicList[index].vlogerId;
                 String url = mineController.publicList[index].url;
                 int likeCounts = mineController.publicList[index].likeCounts;
+                String createdTime =
+                    mineController.publicList[index].createdTime;
 
                 return GestureDetector(
                   onTap: () => Get.to(() => VideoDetailView(
-                      vlogId: vlogId, url: url, likeCounts: likeCounts)),
+                        vlogId: vlogId,
+                        url: url,
+                        likeCounts: likeCounts,
+                        vlogerId: vlogerId,
+                        createdTime: createdTime,
+                      )),
                   child: Stack(
                     children: [
                       AbsorbPointer(

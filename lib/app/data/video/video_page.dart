@@ -761,17 +761,17 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                                                                                       ],
                                                                                     ),
                                                                                   ),
-                                                                                  element.isLike == 1
-                                                                                      ? Container(
-                                                                                          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
-                                                                                          margin: EdgeInsets.only(top: 2.h),
-                                                                                          decoration: BoxDecoration(color: Colors.grey.withOpacity(.2), borderRadius: BorderRadius.circular(2.r)),
-                                                                                          child: Text(
-                                                                                            '作者赞过',
-                                                                                            style: BaseStyle.fs10.copyWith(color: Colors.black.withOpacity(.8)),
-                                                                                          ),
-                                                                                        )
-                                                                                      : Container(),
+                                                                                  // element.isLike == 1
+                                                                                  //     ? Container(
+                                                                                  //         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                                                                                  //         margin: EdgeInsets.only(top: 2.h),
+                                                                                  //         decoration: BoxDecoration(color: Colors.grey.withOpacity(.2), borderRadius: BorderRadius.circular(2.r)),
+                                                                                  //         child: Text(
+                                                                                  //           '作者赞过',
+                                                                                  //           style: BaseStyle.fs10.copyWith(color: Colors.black.withOpacity(.8)),
+                                                                                  //         ),
+                                                                                  //       )
+                                                                                  //     : Container(),
                                                                                 ],
                                                                               ),
                                                                             ),
@@ -853,7 +853,9 @@ class _VideoUserInfoState extends State<VideoUserInfo>
             ),
             SizedBox(height: 4.h),
             Text(
-              DataUtil().generator(videoController.commentList.length),
+              videoController.commentList.isEmpty
+                  ? '抢首评'
+                  : DataUtil().generator(videoController.commentList.length),
               style: BaseStyle.fs12.copyWith(color: Colors.white),
             )
           ],
