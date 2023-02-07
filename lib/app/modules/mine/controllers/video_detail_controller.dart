@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/mine/controllers/mine_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
@@ -12,7 +13,9 @@ import '../model/Video.dart';
 
 class VideoDetailController extends GetxController {
   VideoController videoController = Get.put(VideoController());
+  MineController mineController = Get.put(MineController());
   TextEditingController commentController = TextEditingController();
+
   final vlogId = ''.obs;
   final vlogerId = ''.obs;
   final createdTime = ''.obs;
@@ -184,6 +187,58 @@ class VideoDetailController extends GetxController {
       EasyLoading.showSuccess('删除成功');
       renewComment();
       videoController.renewComment();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  //todo:公开转隐私
+  private() async {
+    var prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken')!;
+    String id = prefs.getString('id')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+
+    request
+        .post('/vlog/changeToPrivate?userId=$id&vlogId=${vlogId.value}',
+            headers: headers)
+        .then((value) async {
+      isPrivate.value = 1;
+      print(value);
+      EasyLoading.showToast('已设置为仅自己可见');
+      mineController.renewPrivate();
+      mineController.renewPublic();
+    }).catchError((error) {
+      EasyLoading.showError('数据解析异常');
+      print(error);
+    });
+  }
+
+  //todo:隐私转公开
+  public() async {
+    var prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken')!;
+    String id = prefs.getString('id')!;
+
+    Map<String, dynamic> headers = {
+      "headerUserId": id,
+      "headerUserToken": token,
+    };
+
+    request
+        .post('/vlog/changeToPublic?userId=$id&vlogId=${vlogId.value}',
+            headers: headers)
+        .then((value) async {
+      isPrivate.value = 0;
+      print(value);
+      EasyLoading.showToast('已设置为所有人可见');
+      mineController.renewPrivate();
+      mineController.renewPublic();
     }).catchError((error) {
       EasyLoading.showError('数据解析异常');
       print(error);

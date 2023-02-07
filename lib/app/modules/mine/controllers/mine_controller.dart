@@ -3,7 +3,6 @@
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/index/controllers/com_controller.dart';
-import 'package:han_tok/app/modules/index/controllers/follow_controller.dart';
 import 'package:han_tok/app/modules/login/controllers/login_bottom_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,6 +52,20 @@ class MineController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void renewPublic() async {
+    publicList.value = await getPublic();
+    publicList.value =
+        publicList.map((element) => PublicList.fromJson(element)).toList();
+    update();
+  }
+
+  void renewPrivate() async {
+    privateList.value = await getPrivate();
+    privateList.value =
+        privateList.map((element) => PublicList.fromJson(element)).toList();
+    update();
   }
 
   void renewFans() async {

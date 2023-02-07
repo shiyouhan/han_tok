@@ -24,6 +24,8 @@ dependencies:
   flutter_baidu_mapapi_map: ^3.3.0
   # 权限处理
   permission_handler: ^10.2.0
+  # 文件权限
+  path_provider: ^2.0.12
   # 使用svg图标
   flutter_svg: ^1.1.6
   # 国家地区选择器
@@ -57,6 +59,19 @@ dependencies:
   scan: ^1.6.0
   # 点赞特效
   like_button: ^2.0.5
+  # 保存图片
+  image_gallery_saver: ^1.7.1
+  gallery_saver: ^2.3.2
+  # 视频缩略图
+  video_thumbnail: ^0.5.3
+  # 相机
+  camera: ^0.10.3
+  # 手电筒控制
+  torch_light: ^1.0.0
+  # 相册管理
+  photo_manager: ^2.5.2
+  # 视频压缩
+  video_compress: ^3.1.2
   # 国际化
   flutter_localizations:
     sdk: flutter

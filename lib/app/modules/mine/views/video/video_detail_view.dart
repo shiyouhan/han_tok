@@ -1,13 +1,21 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors, depend_on_referenced_packages
+// ignore_for_file: must_be_immutable, prefer_const_constructors, depend_on_referenced_packages, prefer_const_literals_to_create_immutables, use_build_context_synchronously, avoid_print
 
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/mine/controllers/video_detail_controller.dart';
 import 'package:han_tok/app/utils/DataUtil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../data/base_data.dart';
@@ -98,11 +106,80 @@ class _VideoDetailState extends State<VideoDetail> {
   VideoDetailController controller = Get.put(VideoDetailController());
   late VideoPlayerController _controller;
   FocusNode focusNode = FocusNode();
+  double percent = 0.0;
+
+  Future<bool> requestPermission() async {
+    late PermissionStatus status;
+    // 1、读取系统权限的弹框
+    if (Platform.isIOS) {
+      status = await Permission.photosAddOnly.request();
+    } else {
+      status = await Permission.storage.request();
+    }
+    // 2、假如你点not allow后，下次点击不会在出现系统权限的弹框（系统权限的弹框只会出现一次），
+    // 这时候需要你自己写一个弹框，然后去打开app权限的页面
+    if (status != PermissionStatus.granted) {
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: const Text('You need to grant album permissions'),
+              content: const Text(
+                  'Please go to your mobile phone to set the permission to open the corresponding album'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: const Text('cancle'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: const Text('confirm'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // 打开手机上该app权限的页面
+                    openAppSettings();
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  // 保存图片的权限校验
+  checkPermission(Future<dynamic> fun) async {
+    bool mark = await requestPermission();
+    mark ? fun : null;
+  }
+
+  // 保存视频
+  saveVideo() async {
+    var appDocDir = await getTemporaryDirectory();
+    String savePath =
+        '${appDocDir.path}/Video-${DateTime.now().millisecondsSinceEpoch}.mp4';
+    await Dio().download(widget.url, savePath,
+        onReceiveProgress: (count, total) {
+      print("${(count / total * 100).toStringAsFixed(0)}%");
+      percent = double.parse((count / total * 100).toStringAsFixed(0));
+    });
+    final result = await ImageGallerySaver.saveFile(savePath);
+    if (result['isSuccess']) {
+      EasyLoading.showToast("保存视频成功");
+      Get.back();
+    } else {
+      EasyLoading.showToast("保存网络图片失败");
+    }
+  }
 
   @override
   void initState() {
     controller.vlogId.value = widget.vlogId;
     controller.vlogerId.value = widget.vlogerId;
+    // controller.url.value = widget.url;
     controller.createdTime.value = widget.createdTime;
     controller.getDetail();
     _controller = VideoPlayerController.network(widget.url);
@@ -574,10 +651,139 @@ class _VideoDetailState extends State<VideoDetail> {
           ],
         ),
         SizedBox(height: 16.h),
-        Icon(
-          Icons.more_horiz,
-          size: 32,
-          color: Colors.white,
+        GestureDetector(
+          onTap: () => {
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              isDismissible: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              builder: (BuildContext context) {
+                return Container(
+                  height: size.height * 0.26,
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 12.h),
+                      Container(
+                        width: 35.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => controller.public(),
+                        child: Container(
+                          margin: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(
+                                IconFont.gongkai,
+                                size: 16,
+                                color: Colors.black,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  '公开 · 所有人可见',
+                                  style: BaseStyle.fs14
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Spacer(),
+                              Obx(
+                                () => controller.isPrivate.value == 0
+                                    ? Icon(Icons.check, size: 16)
+                                    : Container(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        width: size.width - 32.w,
+                        color: BaseData.bodyColor,
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => controller.private(),
+                        child: Container(
+                          margin: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(
+                                IconFont.simi,
+                                size: 16,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  '私密 · 仅自己可见',
+                                  style: BaseStyle.fs14
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Spacer(),
+                              Obx(
+                                () => controller.isPrivate.value == 1
+                                    ? Icon(Icons.check, size: 16)
+                                    : Container(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        width: size.width - 32.w,
+                        color: BaseData.bodyColor,
+                      ),
+                      GestureDetector(
+                        onTap: () => checkPermission(saveVideo()),
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          margin: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.vertical_align_bottom,
+                                size: 16,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  '下载并保存至相册',
+                                  style: BaseStyle.fs14
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          },
+          child: Icon(
+            Icons.more_horiz,
+            size: 32,
+            color: Colors.white,
+          ),
         ),
         SizedBox(height: 16.h),
         Stack(

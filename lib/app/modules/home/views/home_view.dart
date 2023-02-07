@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unnecessary_import
 
 import 'dart:ui';
 
@@ -14,7 +14,6 @@ import '../../camera/views/camera_view.dart';
 import '../../friend/views/friend_view.dart';
 import '../../index/views/index_view.dart';
 import '../../login/controllers/login_bottom_controller.dart';
-import '../../login/views/login_bottom_view.dart';
 import '../../message/views/message_view.dart';
 import '../../mine/views/mine_view.dart';
 
@@ -40,8 +39,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final paddingTop = MediaQueryData.fromWindow(window).padding.top;
+    // final size = MediaQuery.of(context).size;
+    // final paddingTop = MediaQueryData.fromWindow(window).padding.top;
     return Container(
       color: bottomColor,
       child: SafeArea(
@@ -135,6 +134,9 @@ class _HomeViewState extends State<HomeView> {
                   if (e == 2)
                     {
                       Get.to(() => CameraView()),
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //     MaterialPageRoute(builder: (context) => CameraView()),
+                      //     (route) => route == null),
                     }
                 },
               ),

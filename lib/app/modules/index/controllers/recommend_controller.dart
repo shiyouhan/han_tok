@@ -12,10 +12,8 @@ class RecommendController extends GetxController {
   var videoList = [].obs;
 
   @override
-  void onInit() async {
-    videoList.value = await getVideo();
-    videoList.value =
-        videoList.map((element) => IndexList.fromJson(element)).toList();
+  void onInit() {
+    renewIndex();
     super.onInit();
   }
 
@@ -28,6 +26,12 @@ class RecommendController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  void renewIndex() async => {
+        videoList.value = await getVideo(),
+        videoList.value =
+            videoList.map((element) => IndexList.fromJson(element)).toList(),
+      };
 
   //TODO:获取首页视频列表
   Future<List> getVideo() async {

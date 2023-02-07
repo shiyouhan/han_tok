@@ -47,8 +47,8 @@ class Request {
   void init(
       {baseUrl = 'localhost',
       HttpResponseFormat? responseFormat,
-      connectTimeOut = 5000,
-      receiveTimeOut = 5000,
+      connectTimeOut = 60000,
+      receiveTimeOut = 60000,
       commonParam}) {
     _options = BaseOptions(
       /// 基础url

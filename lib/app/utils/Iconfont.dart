@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
 
@@ -36,4 +36,6 @@ class IconFont {
   static const IconData bolt_circle = IconData(0xe6f1, fontFamily: fontFamily);
   static const IconData apple = IconData(0xe624, fontFamily: fontFamily);
   static const IconData weixin = IconData(0xe665, fontFamily: fontFamily);
+  static const IconData gongkai = IconData(0xe81b, fontFamily: fontFamily);
+  static const IconData simi = IconData(0xe81c, fontFamily: fontFamily);
 }
