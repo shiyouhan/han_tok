@@ -38,4 +38,8 @@ class IconFont {
   static const IconData weixin = IconData(0xe665, fontFamily: fontFamily);
   static const IconData gongkai = IconData(0xe81b, fontFamily: fontFamily);
   static const IconData simi = IconData(0xe81c, fontFamily: fontFamily);
+  static const IconData pinglun_b = IconData(0xe641, fontFamily: fontFamily);
+  static const IconData favourite = IconData(0xe83f, fontFamily: fontFamily);
+  static const IconData shoucang_b = IconData(0xeca7, fontFamily: fontFamily);
+  static const IconData zhuanfa_b = IconData(0xe88f, fontFamily: fontFamily);
 }
