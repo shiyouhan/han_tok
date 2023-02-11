@@ -1,16 +1,9 @@
 # han_tok
 
-A new Flutter project.
+跨平台短视频社交应用的设计与开发
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* 2022.11.14 搭建项目脚手架
+* 2023.01.11 开始远程备份
+* 2023.02.11 完成基础功能 --> V 1.0
