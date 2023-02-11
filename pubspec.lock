@@ -217,6 +217,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.6"
+  dropdown_button_plus:
+    dependency: "direct main"
+    description:
+      name: dropdown_button_plus
+      sha256: a64e9cba331a6683148376795af8dc912116236b3ed83d1579979014f7b06bce
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.2"
   fake_async:
     dependency: transitive
     description:

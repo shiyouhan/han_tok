@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/message/views/message_interact_view.dart';
 
 import '../../../data/base_data.dart';
 import '../../../data/base_style.dart';
@@ -665,6 +666,7 @@ class MessageView extends GetView<MessageController> {
           ),
           SizedBox(height: 10.h),
           ListTile(
+            onTap: () => Get.to(() => MessageInteractView()),
             leading: Icon(
               Icons.account_circle,
               color: Colors.pinkAccent,

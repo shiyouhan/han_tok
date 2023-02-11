@@ -72,6 +72,8 @@ dependencies:
   photo_manager: ^2.5.2
   # 视频压缩
   video_compress: ^3.1.2
+  # 下拉框
+  dropdown_button_plus: ^0.0.2
   # 国际化
   flutter_localizations:
     sdk: flutter

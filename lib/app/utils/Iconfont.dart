@@ -42,4 +42,6 @@ class IconFont {
   static const IconData favourite = IconData(0xe83f, fontFamily: fontFamily);
   static const IconData shoucang_b = IconData(0xeca7, fontFamily: fontFamily);
   static const IconData zhuanfa_b = IconData(0xe88f, fontFamily: fontFamily);
+  static const IconData guanzhu = IconData(0xe6d8, fontFamily: fontFamily);
+  static const IconData dianzan = IconData(0xe8c3, fontFamily: fontFamily);
 }
