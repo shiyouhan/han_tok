@@ -978,6 +978,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.3"
+  widget_to_image:
+    dependency: "direct main"
+    description:
+      name: widget_to_image
+      sha256: dd4d843001eab804fd04c86d84be5a34bd36fc797c5bf5f73f8d06a0a8ec29ee
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   win32:
     dependency: transitive
     description:

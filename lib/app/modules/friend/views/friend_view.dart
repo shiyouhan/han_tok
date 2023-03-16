@@ -16,6 +16,7 @@ import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
 import '../../index/views/index_view.dart';
 import '../../index/views/tabbar/index_scan_view.dart';
+import '../../index/views/tabbar/index_search_view.dart';
 import '../controllers/friend_controller.dart';
 
 class FriendView extends GetView<FriendController> {
@@ -422,7 +423,7 @@ class FriendView extends GetView<FriendController> {
         ),
         actions: [
           GestureDetector(
-            // onTap: () => Get.to(() => SearchUserView()),
+            onTap: () => Get.to(() => IndexSearchView()),
             child: Icon(
               Icons.search,
               size: 32,

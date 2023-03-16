@@ -212,6 +212,8 @@ class _RecommendPageState extends State<RecommendPage>
                   vlogerId: data.vlogerId,
                   vlogerFace: data.vlogerFace,
                   vlogerName: data.vlogerName,
+                  url: data.url,
+                  cover: data.cover,
                   likeCounts: data.likeCounts,
                   commentsCounts: data.commentsCounts,
                   doILikeThisVlog: data.doILikeThisVlog,
@@ -224,11 +226,11 @@ class _RecommendPageState extends State<RecommendPage>
                   }
                   setState(() {});
                 },
-                onAddFavorite: () {
-                  setState(() {
-                    favoriteMap[i] = true;
-                  });
-                },
+                // onAddFavorite: () {
+                //   setState(() {
+                //     favoriteMap[i] = true;
+                //   });
+                // },
                 // rightButtonColumn: buttons,
                 video: currentVideo, bottomPadding: 0,
               );

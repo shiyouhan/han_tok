@@ -74,6 +74,8 @@ dependencies:
   video_compress: ^3.1.2
   # 下拉框
   dropdown_button_plus: ^0.0.2
+  # widget转图片
+  widget_to_image: ^2.0.0
   # 国际化
   flutter_localizations:
     sdk: flutter

@@ -1,11 +1,20 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, avoid_print, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously
 
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:han_tok/app/utils/DataUtil.dart';
 import 'package:han_tok/app/utils/DateUtil.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:like_button/like_button.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -14,11 +23,13 @@ import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/data/base_style.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
+import 'package:widget_to_image/widget_to_image.dart';
 
 import '../../../main.dart';
 import '../../modules/mine/controllers/mine_controller.dart';
 import '../../modules/mine/model/Video.dart';
 import '../../utils/Iconfont.dart';
+import '../../utils/ImageLoaderUtil.dart';
 import 'video_gesture.dart';
 
 ///
@@ -50,6 +61,7 @@ class VideoPage extends StatelessWidget {
     this.video,
     this.hidePauseIcon = false,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // 用户信息
@@ -157,20 +169,25 @@ class _VideoLoadingPlaceHolderState extends State<VideoLoadingPlaceHolder>
 
 class VideoUserInfo extends StatefulWidget {
   final String? desc;
+  final String? cover;
   final String? vlogId;
   final String? vlogerId;
   final String? vlogerName;
   final String? vlogerFace;
+  final String? url;
   final int? likeCounts;
   final int? commentsCounts;
   final bool? doILikeThisVlog;
+
   const VideoUserInfo({
     Key? key,
     this.vlogId,
     this.vlogerId,
     this.vlogerFace,
     this.vlogerName,
+    this.url,
     this.desc,
+    this.cover,
     this.likeCounts,
     this.commentsCounts,
     this.doILikeThisVlog,
@@ -184,8 +201,11 @@ class _VideoUserInfoState extends State<VideoUserInfo>
     with WidgetsBindingObserver {
   VideoController videoController = Get.put(VideoController());
   MineController mineController = Get.put(MineController());
-  //TextEditingController commentController = TextEditingController();
+
   FocusNode focusNode = FocusNode();
+  final GlobalKey _globalKey = GlobalKey();
+  ByteData? _byteData;
+  double percent = 0.0;
 
   //TODO:查看是否关注
   queryFollow() async {
@@ -323,6 +343,151 @@ class _VideoUserInfoState extends State<VideoUserInfo>
       backgroundColor: Colors.transparent,
     );
   }
+
+  //显示底部弹框的功能
+  void showBottomSheetOne() {
+    //用于在底部打开弹框的效果
+    showModalBottomSheet(
+      builder: (BuildContext context) {
+        //构建弹框中的内容
+        return buildBottomSheetWidgetOne(context);
+      },
+      context: context,
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  Future<bool> requestPermission() async {
+    late PermissionStatus status;
+    // 1、读取系统权限的弹框
+    if (Platform.isIOS) {
+      status = await Permission.photosAddOnly.request();
+    } else {
+      status = await Permission.storage.request();
+    }
+    // 2、假如你点not allow后，下次点击不会在出现系统权限的弹框（系统权限的弹框只会出现一次），
+    // 这时候需要你自己写一个弹框，然后去打开app权限的页面
+    if (status != PermissionStatus.granted) {
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: const Text('You need to grant album permissions'),
+              content: const Text(
+                  'Please go to your mobile phone to set the permission to open the corresponding album'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: const Text('cancle'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: const Text('confirm'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // 打开手机上该app权限的页面
+                    openAppSettings();
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  // 保存图片的权限校验
+  checkPermission(Future<dynamic> fun) async {
+    bool mark = await requestPermission();
+    mark ? fun : null;
+  }
+
+  // 保存视频
+  saveVideo() async {
+    var appDocDir = await getTemporaryDirectory();
+    String savePath =
+        '${appDocDir.path}/Video-${DateTime.now().millisecondsSinceEpoch}.mp4';
+    await Dio().download(widget.url!, savePath,
+        onReceiveProgress: (count, total) {
+      print("${(count / total * 100).toStringAsFixed(0)}%");
+      percent = double.parse((count / total * 100).toStringAsFixed(0));
+    });
+    final result = await ImageGallerySaver.saveFile(savePath);
+    if (result['isSuccess']) {
+      EasyLoading.showToast("保存视频成功");
+      Get.back();
+    } else {
+      EasyLoading.showToast("保存视频失败");
+    }
+  }
+
+  //申请存本地相册权限
+  Future<bool> getPormiation() async {
+    if (Platform.isIOS) {
+      var status = await Permission.photos.status;
+      if (status.isDenied) {
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.photos,
+        ].request();
+        // saveImage(globalKey);
+      }
+      return status.isGranted;
+    } else {
+      var status = await Permission.storage.status;
+      if (status.isDenied) {
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.storage,
+        ].request();
+      }
+      return status.isGranted;
+    }
+  }
+
+  Future<void> saveSignImg() async {
+    ///通过globalkey将Widget保存为ui.Image
+    ui.Image image =
+        await ImageLoaderUtil.imageLoader.getImageFromWidget(_globalKey);
+
+    // 将image转化成byte
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    //获取保存相册权限，如果没有，则申请改权限
+    bool permition = await getPormiation();
+
+    var status = await Permission.photos.status;
+    if (permition) {
+      if (Platform.isIOS) {
+        if (status.isGranted) {
+          Uint8List images = byteData!.buffer.asUint8List();
+          final result = await ImageGallerySaver.saveImage(images,
+              quality: 100, name: widget.vlogerName.toString());
+          EasyLoading.showToast("保存成功");
+        }
+        if (status.isDenied) {
+          print("IOS拒绝");
+        }
+      } else {
+        //安卓
+        if (status.isGranted) {
+          print("Android已授权");
+          Uint8List images = byteData!.buffer.asUint8List();
+          final result = await ImageGallerySaver.saveImage(images, quality: 60);
+          if (result != null) {
+            EasyLoading.showToast("保存成功");
+          } else {
+            print('error');
+            // toast("保存失败");
+          }
+        }
+      }
+    }else{
+      //重新请求--第一次请求权限时，保存方法不会走，需要重新调一次
+      saveSignImg();
+    }
+  }
+
 
   @override
   void initState() {
@@ -1136,33 +1301,143 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                               SizedBox(width: 16.w),
                               Padding(
                                 padding: EdgeInsets.only(right: 22.w),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 50.w,
-                                      height: 50.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(25.r),
-                                        color: BaseData.bodyColor,
+                                child: GestureDetector(
+                                  onTap: () => checkPermission(saveVideo()),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 50.w,
+                                        height: 50.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25.r),
+                                          color: BaseData.bodyColor,
+                                        ),
+                                        child: Icon(
+                                          Icons.vertical_align_bottom,
+                                          size: 28,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                      child: Icon(
-                                        Icons.vertical_align_bottom,
-                                        size: 28,
-                                        color: Colors.grey,
+                                      SizedBox(height: 10.h),
+                                      Text(
+                                        '保存至相册',
+                                        style: BaseStyle.fs10,
                                       ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      '保存至相册',
-                                      style: BaseStyle.fs10,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(right: 22.w),
+                                child: GestureDetector(
+                                  onTap: () => {
+                                    Clipboard.setData(ClipboardData(
+                                        text: widget.url.toString())),
+                                    EasyLoading.showToast('复制成功',
+                                        toastPosition:
+                                            EasyLoadingToastPosition.bottom),
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 50.w,
+                                        height: 50.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25.r),
+                                          color: BaseData.bodyColor,
+                                        ),
+                                        child: Icon(
+                                          IconFont.lianjie,
+                                          size: 28,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      Text(
+                                        '复制链接',
+                                        style: BaseStyle.fs10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return GestureDetector(
+                                        onTap: () => saveSignImg(),
+                                        child: RepaintBoundary(
+                                          key: _globalKey,
+                                          child: SimpleDialog(
+                                            title: SizedBox(
+                                              width: size.height * 0.15,
+                                              height: size.height * 0.25,
+                                              child: Image.network(
+                                                widget.cover.toString(),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                            titlePadding: EdgeInsets.zero,
+                                            contentPadding: EdgeInsets.zero,
+                                            children: [
+                                              Container(
+                                                // alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 10.h,
+                                                    horizontal: 10.w),
+                                                child: Row(
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          '@ ' +
+                                                              widget.vlogerName
+                                                                  .toString(),
+                                                          style: BaseStyle.fs14
+                                                              .copyWith(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                        SizedBox(height: 6.h),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(
+                                                                widget.desc
+                                                                    .toString(),
+                                                                overflow: TextOverflow
+                                                                    .ellipsis,
+                                                                style: BaseStyle.fs12
+                                                                    .copyWith(
+                                                                    color: Colors
+                                                                        .black54),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -1175,41 +1450,18 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                                         color: BaseData.bodyColor,
                                       ),
                                       child: Icon(
-                                        IconFont.lianjie,
+                                        IconFont.copy,
                                         size: 28,
                                         color: Colors.grey,
                                       ),
                                     ),
                                     SizedBox(height: 10.h),
                                     Text(
-                                      '复制链接',
+                                      '生成图片',
                                       style: BaseStyle.fs10,
                                     ),
                                   ],
                                 ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 50.w,
-                                    height: 50.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25.r),
-                                      color: BaseData.bodyColor,
-                                    ),
-                                    child: Icon(
-                                      IconFont.copy,
-                                      size: 28,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Text(
-                                    '生成图片',
-                                    style: BaseStyle.fs10,
-                                  ),
-                                ],
                               ),
                             ],
                           ),
@@ -1292,6 +1544,49 @@ class _VideoUserInfoState extends State<VideoUserInfo>
             GestureDetector(
               onTap: () {
                 videoController.delete();
+                Navigator.of(context).pop();
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                height: 50.h,
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      IconFont.shanchu,
+                      size: 20,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "删除改评论",
+                      style: BaseStyle.fs16,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildBottomSheetWidgetOne(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        height: 50.h,
+        margin: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                saveSignImg();
                 Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,

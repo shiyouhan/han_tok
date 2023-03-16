@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/modules/camera/controllers/camera_detail_controller.dart';
 
 import '../../../data/base_style.dart';
 
 class CameraDetailView extends GetView {
   const CameraDetailView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     CameraDetailController controller = Get.put(CameraDetailController());
@@ -47,7 +49,7 @@ class CameraDetailView extends GetView {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  color: Colors.red,
+                  color: Colors.white,
                   child: TextFormField(
                     maxLines: 10,
                     cursorColor: Colors.red,
@@ -63,23 +65,27 @@ class CameraDetailView extends GetView {
                     },
                   ),
                 ),
+                Container(
+                  width: size.width,
+                  height: 1.h,
+                  color: BaseData.bodyColor,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    '视频缩略图',
+                    style: BaseStyle.fs12G,
+                  ),
+                ),
                 Obx(
                   () => Image.network(
                     // cameraController.coverUrl.value,
                     controller.cover.value,
-                    //'assets/images/zan.png',
                     width: 80.w,
                     height: 120.h,
                     fit: BoxFit.fill,
                   ),
                 ),
-                // Image.asset(
-                //   // cameraController.cover.value,
-                //   'assets/images/zan.png',
-                //   width: 80.w,
-                //   height: 120.h,
-                //   fit: BoxFit.fill,
-                // ),
                 Spacer(),
                 GestureDetector(
                   onTap: () => controller.createVideo(),

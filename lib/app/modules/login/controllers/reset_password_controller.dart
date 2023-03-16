@@ -41,7 +41,7 @@ class ResetPasswordController extends GetxController {
     if (loginController.phoneController1.value.text.isNotEmpty) {
       await request
           .post(
-              '/passport/getSMSCode?mobile=${loginController.phoneController1.value.text}')
+              '/passport/getSMSCode?type=2&mobile=${loginController.phoneController1.value.text}')
           .then((value) {
         print(value);
       }).catchError((error) {

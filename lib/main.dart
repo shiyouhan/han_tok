@@ -18,7 +18,7 @@ Request request = Request();
 
 void main() {
   request.init(
-    baseUrl: NetUrl.kHttp_HostName,
+    baseUrl: NetUrl.http_HostName,
     responseFormat: HttpResponseFormat('code', 'msg', true, 'data'),
   );
   runApp(MyApp());

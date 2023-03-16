@@ -50,7 +50,7 @@ class LoginBottomController extends GetxController {
   final district = ''.obs;
   final description = '这家伙很懒，什么都没留下~'.obs;
   final canHantokNumBeUpdated = 1.obs;
-  final bg = 'http://img.syhan.top/uPic/youhua.jpeg'.obs;
+  final bg = 'http://img.syhan.top/uPic/grey_bg.png'.obs;
   final totalLikeMeCounts = 0.obs;
 
   @override
@@ -80,7 +80,7 @@ class LoginBottomController extends GetxController {
   getVerify() async {
     if (phoneController.value.text.isNotEmpty) {
       await request
-          .post('/passport/getSMSCode?mobile=${phoneController.value.text}')
+          .post('/passport/getSMSCode?type=1&mobile=${phoneController.value.text}')
           .then((value) {
         print(value);
       }).catchError((error) {
@@ -94,7 +94,7 @@ class LoginBottomController extends GetxController {
   getCode() async {
     if (phoneController1.value.text.isNotEmpty) {
       await request
-          .post('/passport/getSMSCode?mobile=${phoneController1.value.text}')
+          .post('/passport/getSMSCode?type=2&mobile=${phoneController1.value.text}')
           .then((value) {
         print(value);
         Get.to(() => ResetPasswordView());
@@ -181,7 +181,7 @@ class LoginBottomController extends GetxController {
     request.get('/userInfo/query?userId=$id').then((value) async {
       mobile.value = User.fromJson(value).mobile;
       nickname.value = User.fromJson(value).nickname;
-      password.value = User.fromJson(value).password;
+      password.value = User.fromJson(value).password!;
       hantokNum.value = User.fromJson(value).hantokNum;
       avatar.value = User.fromJson(value).avatar;
       sex.value = User.fromJson(value).sex;

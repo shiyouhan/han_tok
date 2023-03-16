@@ -9,7 +9,7 @@ import '../modules/home/views/home_view.dart';
 import '../modules/index/bindings/index_binding.dart';
 import '../modules/index/views/index_view.dart';
 import '../modules/login/bindings/login_binding.dart';
-import '../modules/login/views/login_view.dart';
+import '../modules/login/views/start_view.dart';
 import '../modules/message/bindings/message_binding.dart';
 import '../modules/message/views/message_view.dart';
 import '../modules/mine/bindings/mine_binding.dart';
@@ -57,7 +57,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LOGIN,
-      page: () => const LoginView(),
+      page: () => const StartView(),
       binding: LoginBinding(),
     ),
   ];

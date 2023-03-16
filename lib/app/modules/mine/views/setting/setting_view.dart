@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/login/views/login_view.dart';
+import 'package:han_tok/app/modules/mine/controllers/setting_controller.dart';
 
 import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';
@@ -24,6 +25,8 @@ class SettingView extends GetView {
   @override
   Widget build(BuildContext context) {
     LoginBottomController loginController = Get.put(LoginBottomController());
+    SettingController controller = Get.put(SettingController());
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -279,6 +282,7 @@ class SettingView extends GetView {
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
+                                controller.logOut();
                                 Get.offAll(() => LoginView());
                               },
                             ),

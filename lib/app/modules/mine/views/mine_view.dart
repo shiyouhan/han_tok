@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, library_prefixes, depend_on_referenced_packages
+// ignore_for_file: avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, library_prefixes, depend_on_referenced_packages, unrelated_type_equality_checks
 
 import 'dart:io';
 import 'dart:ui';
@@ -13,7 +13,6 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart';
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
@@ -27,6 +26,7 @@ import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
 import '../../../utils/DataUtil.dart';
 import '../../../utils/Iconfont.dart';
+import '../../index/views/tabbar/index_search_view.dart';
 import '../../login/controllers/login_bottom_controller.dart';
 import '../controllers/composition_controller.dart';
 import '../controllers/mine_controller.dart';
@@ -34,7 +34,6 @@ import 'count/mine_count_view.dart';
 import 'info/info_desc_view.dart';
 import 'info/mine_info_view.dart';
 import 'setting/setting_view.dart';
-import 'top/search_view.dart';
 import 'top/visit_view.dart';
 import 'video/collect_view.dart';
 import 'video/composition_view.dart';
@@ -289,7 +288,7 @@ class _MineViewState extends State<MineView>
               ),
               SizedBox(width: 12.w),
               GestureDetector(
-                onTap: () => Get.to(() => SearchView()),
+                onTap: () => Get.to(() => IndexSearchView()),
                 child: _showTitle
                     ? Icon(
                         Icons.search,
@@ -960,180 +959,225 @@ class _MineViewState extends State<MineView>
                                     ),
                                   ),
                                   SizedBox(height: 12.h),
-                                  Row(
-                                    children: [
-                                      Obx(
-                                        () => GestureDetector(
-                                          // onTap: () => Get.to(MineInfoView()),
-                                          child: loginController.sex.value == 2
-                                              ? Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 2),
-                                                  decoration: BoxDecoration(
-                                                    color: Config
-                                                        .primarySwatchColor
-                                                        .shade50,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                2.r)),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.add,
-                                                        size: 12,
-                                                      ),
-                                                      SizedBox(width: 5.w),
-                                                      Text(
-                                                        '添加年龄、所在地等标签',
-                                                        style: BaseStyle.fs12,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              : Row(
-                                                  children: [
-                                                    Obx(
-                                                      () =>
-                                                          loginController.sex
-                                                                      .value ==
-                                                                  3
-                                                              ? Container()
-                                                              : Container(
-                                                                  padding: EdgeInsets
-                                                                      .symmetric(
-                                                                          horizontal:
-                                                                              10,
-                                                                          vertical:
-                                                                              2),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Config
-                                                                        .primarySwatchColor
-                                                                        .shade50,
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(2.r)),
-                                                                  ),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Icon(
-                                                                          loginController.sex.value == 1
-                                                                              ? IconFont
-                                                                                  .nan
-                                                                              : IconFont
-                                                                                  .nv,
-                                                                          color: loginController.sex.value == 1
-                                                                              ? Colors.blueAccent
-                                                                              : Colors.red,
-                                                                          size: 12),
-                                                                      SizedBox(
-                                                                          width:
-                                                                              2.w),
-                                                                      Text(
-                                                                        loginController.birthday.isEmpty
-                                                                            ? (loginController.sex.value == 1
-                                                                                ? '男'
-                                                                                : '女')
-                                                                            : loginController.age.value,
-                                                                        style: BaseStyle
-                                                                            .fs12,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                    ),
-                                                    Obx(() => loginController
-                                                                .sex.value ==
-                                                            3
-                                                        ? Container()
-                                                        : SizedBox(
-                                                            width: 10.w)),
-                                                    Obx(
-                                                      () => loginController
-                                                                  .country
-                                                                  .value ==
-                                                              ''
-                                                          ? Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          4,
-                                                                      vertical:
-                                                                          1),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Config
-                                                                    .primarySwatchColor
-                                                                    .shade50,
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            2.r)),
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Icon(
-                                                                    Icons.add,
-                                                                    size: 12,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          5.w),
-                                                                  Obx(
-                                                                    () => Text(
-                                                                      loginController.age.value == '' &&
-                                                                              loginController.country.value ==
-                                                                                  ''
-                                                                          ? '添加年龄、所在地等标签'
-                                                                          : (loginController.country.value == '' && loginController.age.value != ''
-                                                                              ? '添加所在地标签'
-                                                                              : '添加年龄'),
-                                                                      style: BaseStyle
-                                                                          .fs12,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )
-                                                          : (loginController
-                                                                      .country
-                                                                      .value !=
-                                                                  ''
-                                                              ? Container(
-                                                                  padding: EdgeInsets
-                                                                      .symmetric(
-                                                                          horizontal:
-                                                                              4,
-                                                                          vertical:
-                                                                              1),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Config
-                                                                        .primarySwatchColor
-                                                                        .shade50,
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(2.r)),
-                                                                  ),
-                                                                  child: Text(
-                                                                    // '${loginController.province.value.substring(0, loginController.province.value.lastIndexOf('省'))} · ${loginController.city.value.substring(0, loginController.city.value.lastIndexOf('市'))}',
-                                                                    '${loginController.province.value} · ${loginController.city.value}',
-                                                                    style:
-                                                                        BaseStyle
-                                                                            .fs12,
-                                                                  ),
-                                                                )
-                                                              : Container()),
-                                                    ),
-                                                  ],
-                                                ),
+                                  GestureDetector(
+                                    onTap: () => Get.to(() => MineInfoView()),
+                                    child: Row(
+                                      children: [
+                                        Obx(() =>
+                                        loginController.sex.value == 2
+                                            ? (loginController.age.value == 0
+                                            ? Container() :
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: Config
+                                                    .primarySwatchColor
+                                                    .shade50,
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius.circular(
+                                                        2.r)),
+                                              ),
+                                              child: Text(
+                                                '${loginController.age.value}岁',
+                                                style: BaseStyle.fs12,
+                                              ),
+                                            ),
+                                            SizedBox(width: 4.w),
+                                          ],
+                                        )
+                                        ) : Container()
                                         ),
-                                      ),
-                                      Spacer(),
-                                    ],
+                                        Obx(
+                                              () => GestureDetector(
+                                            // onTap: () => Get.to(MineInfoView()),
+                                            child: loginController.sex.value == 2
+                                                ? Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: Config
+                                                    .primarySwatchColor
+                                                    .shade50,
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius.circular(
+                                                        2.r)),
+                                              ),
+                                              child: loginController.age.value == 0
+                                                  ? Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 12,
+                                                  ),
+                                                  SizedBox(width: 5.w),
+                                                  Text(
+                                                    '添加年龄、所在地等标签',
+                                                    style: BaseStyle.fs12,
+                                                  ),
+                                                ],
+                                              ):Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 12,
+                                                  ),
+                                                  SizedBox(width: 5.w),
+                                                  Text(
+                                                    '添加所在地等标签',
+                                                    style: BaseStyle.fs12,
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                                : Row(
+                                              children: [
+                                                Obx(
+                                                      () =>
+                                                  loginController.sex
+                                                      .value ==
+                                                      3
+                                                      ? Container()
+                                                      : Container(
+                                                    padding: EdgeInsets
+                                                        .symmetric(
+                                                        horizontal:
+                                                        10,
+                                                        vertical:
+                                                        2),
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      color: Config
+                                                          .primarySwatchColor
+                                                          .shade50,
+                                                      borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(2.r)),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                            loginController.sex.value == 1
+                                                                ? IconFont
+                                                                .nan
+                                                                : IconFont
+                                                                .nv,
+                                                            color: loginController.sex.value == 1
+                                                                ? Colors.blueAccent
+                                                                : Colors.red,
+                                                            size: 12),
+                                                        SizedBox(
+                                                            width:
+                                                            2.w),
+                                                        Text(
+                                                          loginController.birthday.isEmpty
+                                                              ? (loginController.sex.value == 1
+                                                              ? '男'
+                                                              : '女')
+                                                              : loginController.age.value,
+                                                          style: BaseStyle
+                                                              .fs12,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Obx(() => loginController
+                                                    .sex.value ==
+                                                    3
+                                                    ? Container()
+                                                    : SizedBox(
+                                                    width: 10.w)),
+                                                Obx(
+                                                      () => loginController
+                                                      .country
+                                                      .value ==
+                                                      ''
+                                                      ? Container(
+                                                    padding: EdgeInsets
+                                                        .symmetric(
+                                                        horizontal:
+                                                        4,
+                                                        vertical:
+                                                        1),
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      color: Config
+                                                          .primarySwatchColor
+                                                          .shade50,
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius
+                                                          .circular(
+                                                          2.r)),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.add,
+                                                          size: 12,
+                                                        ),
+                                                        SizedBox(
+                                                            width:
+                                                            5.w),
+                                                        Obx(
+                                                              () => Text(
+                                                            loginController.age.value == '' &&
+                                                                loginController.country.value ==
+                                                                    ''
+                                                                ? '添加年龄、所在地等标签'
+                                                                : (loginController.country.value == '' && loginController.age.value != ''
+                                                                ? '添加所在地标签'
+                                                                : '添加年龄'),
+                                                            style: BaseStyle
+                                                                .fs12,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                      : (loginController
+                                                      .country
+                                                      .value !=
+                                                      ''
+                                                      ? Container(
+                                                    padding: EdgeInsets
+                                                        .symmetric(
+                                                        horizontal:
+                                                        4,
+                                                        vertical:
+                                                        1),
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      color: Config
+                                                          .primarySwatchColor
+                                                          .shade50,
+                                                      borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(2.r)),
+                                                    ),
+                                                    child: Text(
+                                                      // '${loginController.province.value.substring(0, loginController.province.value.lastIndexOf('省'))} · ${loginController.city.value.substring(0, loginController.city.value.lastIndexOf('市'))}',
+                                                      '${loginController.province.value} · ${loginController.city.value}',
+                                                      style:
+                                                      BaseStyle
+                                                          .fs12,
+                                                    ),
+                                                  )
+                                                      : Container()),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 12.h),
                                   Row(

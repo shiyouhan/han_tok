@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, no_leading_underscores_for_local_identifiers
+// ignore_for_file: file_names, no_leading_underscores_for_local_identifiers, prefer_void_to_null
 
 class User {
   User({
@@ -26,7 +26,7 @@ class User {
   });
   late final String id;
   late final String mobile;
-  late final String password;
+  late final String? password;
   late final String nickname;
   late final String hantokNum;
   late final String avatar;

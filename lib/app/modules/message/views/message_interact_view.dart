@@ -73,24 +73,6 @@ class _MessageInteractViewState extends State<MessageInteractView> {
     );
     final DropdownMenuItem item4 = DropdownMenuItem(
       onTap: () => controller.renewFour(),
-      value: '收到的评论',
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 10.w, right: 16.w),
-            child: Image.asset(
-              'assets/images/shoudao.png',
-              width: 22.w,
-              height: 22.h,
-            ),
-          ),
-          Text('收到的评论',
-              style: BaseStyle.fs16.copyWith(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-    final DropdownMenuItem item5 = DropdownMenuItem(
-      onTap: () => controller.renewThree(),
       value: '发出的评论',
       child: Row(
         children: [
@@ -107,6 +89,24 @@ class _MessageInteractViewState extends State<MessageInteractView> {
         ],
       ),
     );
+    final DropdownMenuItem item5 = DropdownMenuItem(
+      onTap: () => controller.renewThree(),
+      value: '收到的评论',
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 10.w, right: 16.w),
+            child: Image.asset(
+              'assets/images/shoudao.png',
+              width: 22.w,
+              height: 22.h,
+            ),
+          ),
+          Text('收到的评论',
+              style: BaseStyle.fs16.copyWith(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
     items.add(item1);
     items.add(item2);
     items.add(item3);
@@ -117,6 +117,8 @@ class _MessageInteractViewState extends State<MessageInteractView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('消息', style: BaseStyle.fs16),
@@ -152,51 +154,106 @@ class _MessageInteractViewState extends State<MessageInteractView> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Obx(() => Column(
-                  children: controller.messageList
-                      .map(
-                        (element) => Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => Get.to(() =>
-                                    UserInfo(vlogerId: element.fromUserId)),
-                                child: Container(
-                                  width: 56.w,
-                                  height: 56.w,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 1.w,
+            child: Obx(
+              () => SizedBox(
+                height: size.height * 0.8,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: controller.messageList
+                        .map(
+                          (element) => Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Get.to(() =>
+                                      UserInfo(vlogerId: element.fromUserId)),
+                                  child: Container(
+                                    width: 56.w,
+                                    height: 56.w,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 1.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(28.r),
                                     ),
-                                    borderRadius: BorderRadius.circular(28.r),
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      element.fromFace,
-                                      fit: BoxFit.cover,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        element.fromFace,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.w),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => Get.to(() => UserInfo(
-                                            vlogerId: element.fromUserId)),
-                                        child: Text(
-                                          element.fromNickname,
-                                          style: BaseStyle.fs14.copyWith(
-                                              fontWeight: FontWeight.bold),
+                                Padding(
+                                    padding: EdgeInsets.only(left: 16.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => Get.to(() => UserInfo(
+                                              vlogerId: element.fromUserId)),
+                                          child: Text(
+                                            element.fromNickname,
+                                            style: BaseStyle.fs14.copyWith(
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                      ),
-                                      element.msgType == 3
-                                          ? GestureDetector(
+                                        element.msgType == 3
+                                            ? GestureDetector(
+                                                onTap: () => {
+                                                  if (element.msgType != 1)
+                                                    {
+                                                      Get.to(() =>
+                                                          MessageDetailView(
+                                                              vlogId: element
+                                                                  .msgContent
+                                                                  .vlogId,
+                                                              // vlogerId: element.fromUserId,
+                                                              vlogerId: element
+                                                                  .toUserId,
+                                                              url: element
+                                                                  .msgContent
+                                                                  .url))
+                                                    }
+                                                },
+                                                child: Text(
+                                                  element.msgContent
+                                                      .commentContent,
+                                                  style: BaseStyle.fs12,
+                                                ),
+                                              )
+                                            : Container(),
+                                        element.msgType == 4
+                                            ? GestureDetector(
+                                                onTap: () => {
+                                                  if (element.msgType != 1)
+                                                    {
+                                                      Get.to(() =>
+                                                          MessageDetailView(
+                                                              vlogId: element
+                                                                  .msgContent
+                                                                  .vlogId,
+                                                              // vlogerId: element.fromUserId,
+                                                              vlogerId: element
+                                                                  .toUserId,
+                                                              url: element
+                                                                  .msgContent
+                                                                  .url))
+                                                    }
+                                                },
+                                                child: Text(
+                                                  element.msgContent
+                                                      .commentContent,
+                                                  style: BaseStyle.fs12,
+                                                ),
+                                              )
+                                            : Container(),
+                                        Row(
+                                          children: [
+                                            GestureDetector(
                                               onTap: () => {
                                                 if (element.msgType != 1)
                                                   {
@@ -214,148 +271,103 @@ class _MessageInteractViewState extends State<MessageInteractView> {
                                                   }
                                               },
                                               child: Text(
-                                                element
-                                                    .msgContent.commentContent,
+                                                element.msgType == 1
+                                                    ? '关注了你'
+                                                    : (element.msgType == 2
+                                                        ? '点赞了你的视频'
+                                                        : (element.msgType == 3
+                                                            ? '评论了你'
+                                                            : (element.msgType ==
+                                                                    4
+                                                                ? '回复了你'
+                                                                : '点赞了你的评论'))),
                                                 style: BaseStyle.fs12,
                                               ),
-                                            )
-                                          : Container(),
-                                      element.msgType == 4
-                                          ? GestureDetector(
-                                              onTap: () => {
-                                                if (element.msgType != 1)
-                                                  {
-                                                    Get.to(() =>
-                                                        MessageDetailView(
-                                                            vlogId: element
-                                                                .msgContent
-                                                                .vlogId,
-                                                            // vlogerId: element.fromUserId,
-                                                            vlogerId: element
-                                                                .toUserId,
-                                                            url: element
-                                                                .msgContent
-                                                                .url))
-                                                  }
-                                              },
-                                              child: Text(
-                                                element
-                                                    .msgContent.commentContent,
-                                                style: BaseStyle.fs12,
-                                              ),
-                                            )
-                                          : Container(),
-                                      Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () => {
-                                              if (element.msgType != 1)
-                                                {
-                                                  Get.to(() =>
-                                                      MessageDetailView(
-                                                          vlogId: element
-                                                              .msgContent
-                                                              .vlogId,
-                                                          // vlogerId: element.fromUserId,
-                                                          vlogerId:
-                                                              element.toUserId,
-                                                          url: element
-                                                              .msgContent.url))
-                                                }
-                                            },
-                                            child: Text(
-                                              element.msgType == 1
-                                                  ? '关注了你'
-                                                  : (element.msgType == 2
-                                                      ? '点赞了你的视频'
-                                                      : (element.msgType == 3
-                                                          ? '评论了你'
-                                                          : (element.msgType ==
-                                                                  4
-                                                              ? '回复了你'
-                                                              : '点赞了你的评论'))),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              DateUtil().getComparedTime(
+                                                  element.createTime),
                                               style: BaseStyle.fs12,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Text(
-                                            DateUtil().getComparedTime(
-                                                element.createTime),
-                                            style: BaseStyle.fs12,
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  )),
-                              Spacer(),
-                              element.msgType == 1
-                                  ? (element.msgContent.isFriend == false
-                                      ? GestureDetector(
-                                          onTap: () => {
-                                            controller.vlogerId.value =
-                                                element.fromUserId,
-                                            controller.follow(),
-                                          },
-                                          child: Container(
-                                            width: 70.w,
-                                            alignment: Alignment.center,
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 6.h),
-                                            decoration: BoxDecoration(
-                                              color: Color(0XF8FA9FB7),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.r),
-                                            ),
-                                            child: Text('回关',
-                                                style: BaseStyle.fs14.copyWith(
-                                                    color: Colors.white)),
-                                          ),
+                                            )
+                                          ],
                                         )
-                                      : GestureDetector(
-                                          onTap: () => {
-                                            controller.vlogerId.value =
-                                                element.fromUserId,
-                                            controller.cancel(),
-                                          },
-                                          child: Container(
-                                            width: 70.w,
-                                            alignment: Alignment.center,
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 6.h),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.grey.withOpacity(.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.r),
+                                      ],
+                                    )),
+                                Spacer(),
+                                element.msgType == 1
+                                    ? (element.msgContent.isFriend == false
+                                        ? GestureDetector(
+                                            onTap: () => {
+                                              controller.vlogerId.value =
+                                                  element.fromUserId,
+                                              controller.follow(),
+                                            },
+                                            child: Container(
+                                              width: 70.w,
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 6.h),
+                                              decoration: BoxDecoration(
+                                                color: Color(0XF8FA9FB7),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                              ),
+                                              child: Text('回关',
+                                                  style: BaseStyle.fs14
+                                                      .copyWith(
+                                                          color: Colors.white)),
                                             ),
-                                            child: Text('已互关',
-                                                style: BaseStyle.fs14),
+                                          )
+                                        : GestureDetector(
+                                            onTap: () => {
+                                              controller.vlogerId.value =
+                                                  element.fromUserId,
+                                              controller.cancel(),
+                                            },
+                                            child: Container(
+                                              width: 70.w,
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 6.h),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    Colors.grey.withOpacity(.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                              ),
+                                              child: Text('已互关',
+                                                  style: BaseStyle.fs14),
+                                            ),
+                                          ))
+                                    : GestureDetector(
+                                        onTap: () => Get.to(() =>
+                                            MessageDetailView(
+                                                vlogId:
+                                                    element.msgContent.vlogId,
+                                                // vlogerId: element.fromUserId,
+                                                vlogerId: element.toUserId,
+                                                url: element.msgContent.url)),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5.r),
+                                          child: Image.network(
+                                            element.msgContent.vlogCover,
+                                            width: 48.w,
+                                            height: 64.h,
+                                            fit: BoxFit.cover,
                                           ),
-                                        ))
-                                  : GestureDetector(
-                                      onTap: () =>
-                                          Get.to(() => MessageDetailView(
-                                              vlogId: element.msgContent.vlogId,
-                                              // vlogerId: element.fromUserId,
-                                              vlogerId: element.toUserId,
-                                              url: element.msgContent.url)),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        child: Image.network(
-                                          element.msgContent.vlogCover,
-                                          width: 48.w,
-                                          height: 64.h,
-                                          fit: BoxFit.cover,
                                         ),
-                                      ),
-                                    )
-                            ],
+                                      )
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                )),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

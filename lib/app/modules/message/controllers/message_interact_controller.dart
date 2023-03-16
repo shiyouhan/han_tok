@@ -135,6 +135,7 @@ class MessageInteractController extends GetxController {
         .then((value) async {
       videoController.followed.value = true;
       videoController.renew();
+      mineController.renewFans();
       renewOne();
       print(value);
     }).catchError((error) {

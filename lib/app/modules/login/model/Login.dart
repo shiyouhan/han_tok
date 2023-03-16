@@ -26,7 +26,7 @@ class Login {
   });
   late final String id;
   late final String mobile;
-  late final String password;
+  late final String? password;
   late final String nickname;
   late final String hantokNum;
   late final String avatar;

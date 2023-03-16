@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/data/video/user_info.dart';
 import 'package:han_tok/app/modules/message/views/message_interact_view.dart';
 
 import '../../../data/base_data.dart';
 import '../../../data/base_style.dart';
 import '../../../data/theme_data.dart';
 import '../../../utils/Iconfont.dart';
+import '../../index/views/tabbar/index_search_view.dart';
 import '../../login/controllers/login_bottom_controller.dart';
 import '../controllers/message_controller.dart';
 import 'friend/friends_view.dart';
 
 class MessageView extends GetView<MessageController> {
   const MessageView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     LoginBottomController loginController = Get.put(LoginBottomController());
@@ -496,27 +499,36 @@ class MessageView extends GetView<MessageController> {
                                   children: controller.followList
                                       .map((element) => Column(
                                             children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(width: 12.w),
-                                                  SizedBox(
-                                                    width: 56.w,
-                                                    height: 56.h,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              28.r),
-                                                      child: Image.network(
-                                                        element.face.toString(),
-                                                        fit: BoxFit.cover,
+                                              GestureDetector(
+                                                onTap: () => Get.to(
+                                                  () => UserInfo(
+                                                    vlogerId: element.vlogerId,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(width: 12.w),
+                                                    SizedBox(
+                                                      width: 56.w,
+                                                      height: 56.h,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(28.r),
+                                                        child: Image.network(
+                                                          element.face
+                                                              .toString(),
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(width: 12.w),
-                                                  Text(
-                                                    element.nickname.toString(),
-                                                  )
-                                                ],
+                                                    SizedBox(width: 12.w),
+                                                    Text(
+                                                      element.nickname
+                                                          .toString(),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                               SizedBox(height: 10.h),
                                               Container(
@@ -575,7 +587,7 @@ class MessageView extends GetView<MessageController> {
         ),
         actions: [
           GestureDetector(
-            // onTap: () => Get.to(() => SearchUserView()),
+            onTap: () => Get.to(() => IndexSearchView()),
             child: Icon(
               Icons.search,
               size: 32,

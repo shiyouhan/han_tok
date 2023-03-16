@@ -2,8 +2,8 @@
 
 class NetUrl {
   ///测试
-  // static const String kHttp_HostName = "http://localhost:8099";
+  // static const String http_HostName = "http://localhost:8099";
 
   ///正式
-  static const String kHttp_HostName = "http://syhan.top:8099/";
+  static const String http_HostName = "http://syhan.top:8099/";
 }

@@ -38,7 +38,7 @@ class AccountPasswordController extends GetxController {
   getVerify() async {
     if (passwordController.value.text.isNotEmpty) {
       await request
-          .post('/passport/getSMSCode?mobile=${loginController.mobile.value}')
+          .post('/passport/getSMSCode?type=2&mobile=${loginController.mobile.value}')
           .then((value) {
         code.value = value;
         print(value);
