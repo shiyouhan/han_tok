@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, depend_on_referenced_packages, avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, unused_local_variable
 
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -23,7 +23,6 @@ import 'package:han_tok/app/data/base_data.dart';
 import 'package:han_tok/app/data/base_style.dart';
 import 'package:han_tok/app/data/video/controller/video_controller.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
-import 'package:widget_to_image/widget_to_image.dart';
 
 import '../../../main.dart';
 import '../../modules/mine/controllers/mine_controller.dart';
@@ -204,7 +203,6 @@ class _VideoUserInfoState extends State<VideoUserInfo>
 
   FocusNode focusNode = FocusNode();
   final GlobalKey _globalKey = GlobalKey();
-  ByteData? _byteData;
   double percent = 0.0;
 
   //TODO:查看是否关注
@@ -482,12 +480,11 @@ class _VideoUserInfoState extends State<VideoUserInfo>
           }
         }
       }
-    }else{
+    } else {
       //重新请求--第一次请求权限时，保存方法不会走，需要重新调一次
       saveSignImg();
     }
   }
-
 
   @override
   void initState() {
@@ -1387,7 +1384,6 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                                             contentPadding: EdgeInsets.zero,
                                             children: [
                                               Container(
-                                                // alignment: Alignment.center,
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 10.h,
                                                     horizontal: 10.w),
@@ -1395,9 +1391,11 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                                                   children: [
                                                     Column(
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                      MainAxisAlignment
+                                                          .center,
                                                       crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                      CrossAxisAlignment
+                                                          .start,
                                                       children: [
                                                         Text(
                                                           '@ ' +
@@ -1410,26 +1408,29 @@ class _VideoUserInfoState extends State<VideoUserInfo>
                                                                   .bold),
                                                         ),
                                                         SizedBox(height: 6.h),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Text(
-                                                                widget.desc
-                                                                    .toString(),
-                                                                overflow: TextOverflow
-                                                                    .ellipsis,
-                                                                style: BaseStyle.fs12
-                                                                    .copyWith(
-                                                                    color: Colors
-                                                                        .black54),
+                                                        SizedBox(
+                                                          width: size.height * 0.3 - 20.w,
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: Text(
+                                                                  widget.desc
+                                                                      .toString(),
+                                                                  overflow: TextOverflow
+                                                                      .ellipsis,
+                                                                  style: BaseStyle.fs12
+                                                                      .copyWith(
+                                                                      color: Colors
+                                                                          .black54),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
                                                   ],
-                                                )
+                                                ),
                                               ),
                                             ],
                                           ),

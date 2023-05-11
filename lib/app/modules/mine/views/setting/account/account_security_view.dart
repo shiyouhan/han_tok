@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/mine/views/setting/setting_view.dart';
 
 import '../../../../../data/base_data.dart';
 import '../../../../../data/base_style.dart';
@@ -27,6 +28,7 @@ class AccountSecurityView extends GetView {
         ),
         leading: GestureDetector(
           onTap: () => Get.back(),
+          // onTap: () => Get.to(() => SettingView()),
           child: Icon(
             Icons.arrow_back_ios,
             color: Colors.black,

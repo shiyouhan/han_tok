@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/index/views/tabbar/index_search_view.dart';
 import 'package:like_button/like_button.dart';
 import 'package:video_player/video_player.dart';
 
@@ -52,7 +53,7 @@ class SearchDetailView extends GetView {
                 Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: GestureDetector(
-                    // onTap: () => Get.back(),
+                    onTap: () => Get.to(() => IndexSearchView()),
                     child: Icon(
                       Icons.search_rounded,
                       size: 28,

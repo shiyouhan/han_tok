@@ -53,6 +53,13 @@ class LoginBottomController extends GetxController {
   final bg = 'http://img.syhan.top/uPic/grey_bg.png'.obs;
   final totalLikeMeCounts = 0.obs;
 
+  final showPassword = false.obs;
+
+//改变显示/隐藏状态
+  void togglevisibility() {
+    showPassword.value = !showPassword.value;
+  }
+
   @override
   void onInit() {
     super.onInit();

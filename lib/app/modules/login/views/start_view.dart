@@ -83,7 +83,7 @@ class _StartViewState extends State<StartView> {
                         child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/logo.png',
+                        Image.asset('assets/images/file.png',
                             width: 120.w, height: 120.h),
                         Padding(
                           padding: EdgeInsets.only(top: 8.h),

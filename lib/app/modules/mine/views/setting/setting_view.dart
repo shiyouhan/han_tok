@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/login/views/login_view.dart';
 import 'package:han_tok/app/modules/mine/controllers/setting_controller.dart';
+import 'package:han_tok/app/modules/mine/views/mine_view.dart';
 
 import '../../../../data/base_data.dart';
 import '../../../../data/base_style.dart';

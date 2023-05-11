@@ -99,9 +99,18 @@ class LoginPasswordView extends GetView {
                 child: Obx(
                   () => TextFormField(
                     cursorColor: Colors.red,
+                    obscureText: !controller.showPassword.value,
                     decoration: InputDecoration(
                       hintText: "请输入密码",
                       border: InputBorder.none,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          controller.togglevisibility();
+                        },
+                        child: Icon( //显示切换密码显示/隐藏
+                          controller.showPassword.value == true ? Icons.visibility : Icons
+                              .visibility_off, color: Colors.grey.withOpacity(.3),),
+                      ),
                     ),
                     controller: controller.passwordController.value,
                     onChanged: (value) {

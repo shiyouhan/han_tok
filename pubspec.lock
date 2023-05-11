@@ -105,6 +105,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
+  control_center:
+    dependency: "direct main"
+    description:
+      name: control_center
+      sha256: c25895dc2c59fb9c339a2185f4ceb7226161ba68dd3515af884caffb9e8d0bdf
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
   convert:
     dependency: transitive
     description:
@@ -978,6 +986,38 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.3"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      sha256: "47663d51a9061451aa3880a214ee9a65dcbb933b77bc44388e194279ab3ccaf6"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.7"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "5906c9aa8c88ed372b2ad3c88c942790b4fb16f73fdd1c0647b4d747d9cf5b3f"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.4.5"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "1939c39e2150fb4d30fd3cc59a891a49fed9935db53007df633ed83581b6117b"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: d601aba11ad8d4481e17a34a76fa1d30dee92dcbbe2c58b0df3120e9453099c7
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.3"
   widget_to_image:
     dependency: "direct main"
     description:
@@ -1011,5 +1051,5 @@ packages:
     source: hosted
     version: "6.1.0"
 sdks:
-  dart: ">=2.18.6 <4.0.0"
+  dart: ">=2.18.6 <3.0.0"
   flutter: ">=3.3.0"

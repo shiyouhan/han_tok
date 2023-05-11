@@ -131,13 +131,10 @@ class _HomeViewState extends State<HomeView> {
                       //   },
                       // ),
                     },
-                  if (e == 2)
-                    {
-                      Get.to(() => CameraView()),
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //     MaterialPageRoute(builder: (context) => CameraView()),
-                      //     (route) => route == null),
-                    }
+                  // if (e == 2)
+                  //   {
+                  //     Get.to(() => CameraView()),
+                  //   }
                 },
               ),
             ),

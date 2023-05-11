@@ -495,724 +495,767 @@ class _MineViewState extends State<MineView>
                       ],
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: size.height * 0.14),
-                      SizedBox(
-                        width: size.width,
-                        child: Row(
-                          children: [
-                            SizedBox(width: 14),
-                            GestureDetector(
-                              onTap: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    color: Colors.black,
-                                    child: SizedBox(
-                                      height: size.height,
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            top: paddingTop + 10.h,
-                                            left: 16.w,
-                                            child: GestureDetector(
-                                              onTap: () => Get.back(),
-                                              child: Icon(
-                                                Icons.clear,
-                                                size: 28,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          Obx(
-                                            () => Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 100 + paddingTop),
-                                              child: SizedBox(
-                                                width: size.width,
-                                                height: size.width,
-                                                child: Image.network(
-                                                  loginController.avatar.value,
-                                                  fit: BoxFit.fill,
+                  SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: size.height * 0.14),
+                        SizedBox(
+                          width: size.width,
+                          child: Row(
+                            children: [
+                              SizedBox(width: 14),
+                              GestureDetector(
+                                onTap: () => showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      color: Colors.black,
+                                      child: SizedBox(
+                                        height: size.height,
+                                        child: Stack(
+                                          children: [
+                                            Positioned(
+                                              top: paddingTop + 10.h,
+                                              left: 16.w,
+                                              child: GestureDetector(
+                                                onTap: () => Get.back(),
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  size: 28,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            bottom: 40,
-                                            child: Container(
-                                              width: size.width - 32.w,
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 16.w),
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(5.r),
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  ListTile(
-                                                    onTap: () async {
-                                                      List<Media>? res =
-                                                          await ImagesPicker
-                                                              .pick(
-                                                        count: 1,
-                                                        pickType: PickType.all,
-                                                        language:
-                                                            Language.System,
-                                                        maxTime: 30,
-                                                        // maxSize: 500,
-                                                        cropOpt: CropOption(
-                                                          // aspectRatio: CropAspectRatio.wh16x9,
-                                                          cropType:
-                                                              CropType.circle,
-                                                        ),
-                                                      );
-                                                      print(res);
-                                                      uploadAvatar(res);
-                                                      if (res != null) {
-                                                        print(res
-                                                            .map((e) => e.path)
-                                                            .toList());
-                                                        setState(() {
-                                                          path =
-                                                              res[0].thumbPath!;
-                                                        });
-                                                      }
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    title: Text(
-                                                      '更换头像',
-                                                      style: BaseStyle.fs16W,
-                                                    ),
-                                                    trailing: Icon(
-                                                      IconFont.bianji,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      height: 1,
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50
-                                                          .withOpacity(.3)),
-                                                  ListTile(
-                                                    onTap: () async {
-                                                      File file =
-                                                          await downloadFile(
-                                                              loginController
-                                                                  .avatar
-                                                                  .value);
-                                                      bool res =
-                                                          await ImagesPicker
-                                                              .saveImageToAlbum(
-                                                                  file,
-                                                                  albumName:
-                                                                      "chaves");
-                                                      print(res);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      EasyLoading.showToast(
-                                                          '下载成功');
-                                                    },
-                                                    title: Text(
-                                                      '保存头像',
-                                                      style: BaseStyle.fs16W,
-                                                    ),
-                                                    trailing: Icon(
-                                                      Icons
-                                                          .vertical_align_bottom,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      height: 1,
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50
-                                                          .withOpacity(.3)),
-                                                  ListTile(
-                                                    // onTap: () => Get.to(
-                                                    //     () => InfoQrcodeView()),
-                                                    title: Text(
-                                                      '查看HanTok码',
-                                                      style: BaseStyle.fs16W,
-                                                    ),
-                                                    trailing: Icon(
-                                                      Icons.qr_code,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              child: Container(
-                                width: 80.w,
-                                height: 80.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40.r),
-                                  border: Border.all(
-                                    width: 2.w,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40.r),
-                                  child: Obx(
-                                    () => Image.network(
-                                      loginController.avatar.value,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 16.w),
-                            Obx(
-                              () => Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    loginController.nickname.value,
-                                    style: BaseStyle.fs20W
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 2.h),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => {
-                                          Clipboard.setData(ClipboardData(
-                                              text: loginController
-                                                  .hantokNum.value)),
-                                          EasyLoading.showToast(
-                                              '已复制HanTok号：${loginController.hantokNum.value}'),
-                                        },
-                                        child: Text(
-                                          'HanTok号：${loginController.hantokNum.value}',
-                                          // '抖音号： 1755888613',
-                                          style: BaseStyle.fs12
-                                              .copyWith(color: Colors.white),
-                                        ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      GestureDetector(
-                                        // onTap: () =>
-                                        //     Get.to(() => InfoQrcodeView()),
-                                        child: Icon(
-                                          Icons.qr_code,
-                                          size: 12,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Container(
-                        width: size.width,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.r),
-                            topRight: Radius.circular(10.r),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 18.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () => showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return SimpleDialog(
-                                                title: SizedBox(
-                                                  height: 140.h,
-                                                  child: Image.asset(
-                                                    'assets/images/zan.png',
+                                            Obx(
+                                                  () => Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 100 + paddingTop),
+                                                child: SizedBox(
+                                                  width: size.width,
+                                                  height: size.width,
+                                                  child: Image.network(
+                                                    loginController.avatar.value,
                                                     fit: BoxFit.fill,
                                                   ),
                                                 ),
-                                                titlePadding: EdgeInsets.zero,
-                                                contentPadding: EdgeInsets.zero,
-                                                children: [
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 26.h),
-                                                    child: Obx(
-                                                      () => Text(
-                                                        '"${loginController.nickname.value}"共获得 ${DataUtil().generator(loginController.totalLikeMeCounts.value)} 个赞',
-                                                        style: BaseStyle.fs16
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        .7)),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 40,
+                                              child: Container(
+                                                width: size.width - 32.w,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 16.w),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.2),
+                                                  borderRadius:
+                                                  BorderRadius.circular(5.r),
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    ListTile(
+                                                      onTap: () async {
+                                                        List<Media>? res =
+                                                        await ImagesPicker
+                                                            .pick(
+                                                          count: 1,
+                                                          pickType: PickType.all,
+                                                          language:
+                                                          Language.System,
+                                                          maxTime: 30,
+                                                          // maxSize: 500,
+                                                          cropOpt: CropOption(
+                                                            // aspectRatio: CropAspectRatio.wh16x9,
+                                                            cropType:
+                                                            CropType.circle,
+                                                          ),
+                                                        );
+                                                        print(res);
+                                                        uploadAvatar(res);
+                                                        if (res != null) {
+                                                          print(res
+                                                              .map((e) => e.path)
+                                                              .toList());
+                                                          setState(() {
+                                                            path =
+                                                            res[0].thumbPath!;
+                                                          });
+                                                        }
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      title: Text(
+                                                        '更换头像',
+                                                        style: BaseStyle.fs16W,
+                                                      ),
+                                                      trailing: Icon(
+                                                        IconFont.bianji,
+                                                        color: Colors.white,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Container(
-                                                    height: 1.h,
-                                                    color: Colors.grey
-                                                        .withOpacity(.2),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () => Get.back(),
-                                                    behavior:
-                                                        HitTestBehavior.opaque,
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 12.h),
-                                                      child: Text(
-                                                        '确认',
-                                                        style: BaseStyle.fs16
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                    Container(
+                                                        height: 1,
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50
+                                                            .withOpacity(.3)),
+                                                    ListTile(
+                                                      onTap: () async {
+                                                        File file =
+                                                        await downloadFile(
+                                                            loginController
+                                                                .avatar
+                                                                .value);
+                                                        bool res =
+                                                        await ImagesPicker
+                                                            .saveImageToAlbum(
+                                                            file,
+                                                            albumName:
+                                                            "chaves");
+                                                        print(res);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        EasyLoading.showToast(
+                                                            '下载成功');
+                                                      },
+                                                      title: Text(
+                                                        '保存头像',
+                                                        style: BaseStyle.fs16W,
+                                                      ),
+                                                      trailing: Icon(
+                                                        Icons
+                                                            .vertical_align_bottom,
+                                                        color: Colors.white,
                                                       ),
                                                     ),
-                                                  )
-                                                ],
-                                              );
-                                            }),
-                                        child: Row(
-                                          children: [
-                                            Obx(
-                                              () => Text(
-                                                DataUtil().generator(
-                                                    loginController
-                                                        .totalLikeMeCounts
-                                                        .value),
-                                                style: BaseStyle.fs16.copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    Container(
+                                                        height: 1,
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50
+                                                            .withOpacity(.3)),
+                                                    ListTile(
+                                                      // onTap: () => Get.to(
+                                                      //     () => InfoQrcodeView()),
+                                                      title: Text(
+                                                        '查看HanTok码',
+                                                        style: BaseStyle.fs16W,
+                                                      ),
+                                                      trailing: Icon(
+                                                        Icons.qr_code,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: 5.h),
-                                            Text(
-                                              '获赞',
-                                              style: BaseStyle.fs16,
                                             ),
                                           ],
                                         ),
                                       ),
-                                      SizedBox(width: 18.h),
-                                      InkWell(
-                                        onTap: () => {
-                                          Get.to(() => MineCountView()),
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '0',
-                                              style: BaseStyle.fs16.copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(width: 5.h),
-                                            Text(
-                                              '朋友',
-                                              style: BaseStyle.fs16,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 18.h),
-                                      InkWell(
-                                        onTap: () => {
-                                          // countController.follow(),
-                                          Get.to(() => MineCountView()),
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Obx(
-                                              () => Text(
-                                                DataUtil().generator(
-                                                    videoController
-                                                        .followList.length),
-                                                style: BaseStyle.fs16.copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5.h),
-                                            Text(
-                                              '关注',
-                                              style: BaseStyle.fs16,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 18.h),
-                                      InkWell(
-                                        onTap: () => {
-                                          // countController.fan(),
-                                          Get.to(() => MineCountView()),
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Obx(
-                                              () => Text(
-                                                DataUtil().generator(
-                                                    controller.fanList.length),
-                                                style: BaseStyle.fs16.copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5.h),
-                                            Text(
-                                              '粉丝',
-                                              style: BaseStyle.fs16,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                    );
+                                  },
+                                ),
+                                child: Container(
+                                  width: 80.w,
+                                  height: 80.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40.r),
+                                    border: Border.all(
+                                      width: 2.w,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                  SizedBox(height: 12.h),
-                                  Obx(
-                                    () => GestureDetector(
-                                      onTap: () => Get.to(() => InfoDescView()),
-                                      child: loginController
-                                                  .description.value ==
-                                              '这家伙很懒，什么都没留下~'
-                                          ? Row(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40.r),
+                                    child: Obx(
+                                          () => Image.network(
+                                        loginController.avatar.value,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 16.w),
+                              Obx(
+                                    () => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      loginController.nickname.value,
+                                      style: BaseStyle.fs20W
+                                          .copyWith(fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 2.h),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => {
+                                            Clipboard.setData(ClipboardData(
+                                                text: loginController
+                                                    .hantokNum.value)),
+                                            EasyLoading.showToast(
+                                                '已复制HanTok号：${loginController.hantokNum.value}'),
+                                          },
+                                          child: Text(
+                                            'HanTok号：${loginController.hantokNum.value}',
+                                            // '抖音号： 1755888613',
+                                            style: BaseStyle.fs12
+                                                .copyWith(color: Colors.white),
+                                          ),
+                                        ),
+                                        SizedBox(width: 2.w),
+                                        GestureDetector(
+                                          // onTap: () =>
+                                          //     Get.to(() => InfoQrcodeView()),
+                                          child: Icon(
+                                            Icons.qr_code,
+                                            size: 12,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        Container(
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.r),
+                              topRight: Radius.circular(10.r),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 18.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () => showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return SimpleDialog(
+                                                  title: SizedBox(
+                                                    height: 140.h,
+                                                    child: Image.asset(
+                                                      'assets/images/zan.png',
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                  titlePadding: EdgeInsets.zero,
+                                                  contentPadding: EdgeInsets.zero,
+                                                  children: [
+                                                    Container(
+                                                      alignment: Alignment.center,
+                                                      padding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 26.h),
+                                                      child: Obx(
+                                                            () => Text(
+                                                          '"${loginController.nickname.value}"共获得 ${DataUtil().generator(loginController.totalLikeMeCounts.value)} 个赞',
+                                                          style: BaseStyle.fs16
+                                                              .copyWith(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                  .7)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 1.h,
+                                                      color: Colors.grey
+                                                          .withOpacity(.2),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () => Get.back(),
+                                                      behavior:
+                                                      HitTestBehavior.opaque,
+                                                      child: Container(
+                                                        alignment:
+                                                        Alignment.center,
+                                                        padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 12.h),
+                                                        child: Text(
+                                                          '确认',
+                                                          style: BaseStyle.fs16
+                                                              .copyWith(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              }),
+                                          child: Row(
+                                            children: [
+                                              Obx(
+                                                    () => Text(
+                                                  DataUtil().generator(
+                                                      loginController
+                                                          .totalLikeMeCounts
+                                                          .value),
+                                                  style: BaseStyle.fs16.copyWith(
+                                                      fontWeight:
+                                                      FontWeight.bold),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5.h),
+                                              Text(
+                                                '获赞',
+                                                style: BaseStyle.fs16,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: 18.h),
+                                        InkWell(
+                                          onTap: () => {
+                                            Get.to(() => MineCountView()),
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '0',
+                                                style: BaseStyle.fs16.copyWith(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              SizedBox(width: 5.h),
+                                              Text(
+                                                '朋友',
+                                                style: BaseStyle.fs16,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: 18.h),
+                                        InkWell(
+                                          onTap: () => {
+                                            // countController.follow(),
+                                            Get.to(() => MineCountView()),
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Obx(
+                                                    () => Text(
+                                                  DataUtil().generator(
+                                                      videoController
+                                                          .followList.length),
+                                                  style: BaseStyle.fs16.copyWith(
+                                                      fontWeight:
+                                                      FontWeight.bold),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5.h),
+                                              Text(
+                                                '关注',
+                                                style: BaseStyle.fs16,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: 18.h),
+                                        InkWell(
+                                          onTap: () => {
+                                            // countController.fan(),
+                                            Get.to(() => MineCountView()),
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Obx(
+                                                    () => Text(
+                                                  DataUtil().generator(
+                                                      controller.fanList.length),
+                                                  style: BaseStyle.fs16.copyWith(
+                                                      fontWeight:
+                                                      FontWeight.bold),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5.h),
+                                              Text(
+                                                '粉丝',
+                                                style: BaseStyle.fs16,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    Obx(
+                                          () => GestureDetector(
+                                        onTap: () => Get.to(() => InfoDescView()),
+                                        child: loginController
+                                            .description.value ==
+                                            '这家伙很懒，什么都没留下~'
+                                            ? Row(
+                                          children: [
+                                            Text(
+                                              '点击添加介绍，让大家认识你',
+                                              style: BaseStyle.fs14,
+                                              maxLines: 3,
+                                              overflow:
+                                              TextOverflow.ellipsis,
+                                            ),
+                                            Row(
                                               children: [
-                                                Text(
-                                                  '点击添加介绍，让大家认识你',
+                                                SizedBox(width: 5.w),
+                                                Icon(
+                                                  Icons.border_color,
+                                                  size: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                            : Row(
+                                          children: [
+                                            Expanded(
+                                              child: Obx(
+                                                    () => Text(
+                                                  // descController.desc.isNotEmpty
+                                                  //     ? descController.desc.value
+                                                  //     : '点击添加介绍，让大家认识你',
+                                                  loginController
+                                                      .description
+                                                      .value ==
+                                                      '这家伙很懒，什么都没留下~'
+                                                      ? '点击添加介绍，让大家认识你'
+                                                      : loginController
+                                                      .description
+                                                      .value,
                                                   style: BaseStyle.fs14,
                                                   maxLines: 3,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                 ),
-                                                Row(
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    GestureDetector(
+                                      onTap: () => Get.to(() => MineInfoView()),
+                                      child: Row(
+                                        children: [
+                                          Obx(() =>
+                                          loginController.sex.value == 2
+                                              ? (loginController.age.value == 0
+                                              ? Container() :
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: Config
+                                                      .primarySwatchColor
+                                                      .shade50,
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(
+                                                          2.r)),
+                                                ),
+                                                child: Text(
+                                                  '${loginController.age.value}岁',
+                                                  style: BaseStyle.fs12,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4.w),
+                                            ],
+                                          )
+                                          ) : Container()
+                                          ),
+                                          Obx(() =>
+                                          loginController.sex.value == 2
+                                              ? (loginController.country.isEmpty
+                                              ? Container() :
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: Config
+                                                      .primarySwatchColor
+                                                      .shade50,
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(
+                                                          2.r)),
+                                                ),
+                                                child: Text(
+                                                  '${loginController.province.value.substring(0, loginController.province.value.length - 1)} · ${loginController.city.value.substring(0, loginController.city.value.length - 1)}',
+                                                  style: BaseStyle.fs12,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4.w),
+                                            ],
+                                          )
+                                          ) : Container()
+                                          ),
+                                          Obx(
+                                                () => GestureDetector(
+                                              // onTap: () => Get.to(MineInfoView()),
+                                              child: loginController.sex.value == 2
+                                                  ? Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: Config
+                                                      .primarySwatchColor
+                                                      .shade50,
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(
+                                                          2.r)),
+                                                ),
+                                                child: loginController.age.value == 0
+                                                    ? Row(
                                                   children: [
-                                                    SizedBox(width: 5.w),
                                                     Icon(
-                                                      Icons.border_color,
+                                                      Icons.add,
                                                       size: 12,
-                                                      color: Colors.grey,
+                                                    ),
+                                                    SizedBox(width: 5.w),
+                                                    Text(
+                                                      '添加年龄、所在地等标签',
+                                                      style: BaseStyle.fs12,
                                                     ),
                                                   ],
-                                                )
-                                              ],
-                                            )
-                                          : Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Obx(
-                                                    () => Text(
-                                                      // descController.desc.isNotEmpty
-                                                      //     ? descController.desc.value
-                                                      //     : '点击添加介绍，让大家认识你',
-                                                      loginController
-                                                                  .description
-                                                                  .value ==
-                                                              '这家伙很懒，什么都没留下~'
-                                                          ? '点击添加介绍，让大家认识你'
-                                                          : loginController
-                                                              .description
-                                                              .value,
-                                                      style: BaseStyle.fs14,
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                ):(loginController.country.isNotEmpty ? Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.add,
+                                                      size: 12,
                                                     ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.h),
-                                  GestureDetector(
-                                    onTap: () => Get.to(() => MineInfoView()),
-                                    child: Row(
-                                      children: [
-                                        Obx(() =>
-                                        loginController.sex.value == 2
-                                            ? (loginController.age.value == 0
-                                            ? Container() :
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 2),
-                                              decoration: BoxDecoration(
-                                                color: Config
-                                                    .primarySwatchColor
-                                                    .shade50,
-                                                borderRadius:
-                                                BorderRadius.all(
-                                                    Radius.circular(
-                                                        2.r)),
-                                              ),
-                                              child: Text(
-                                                '${loginController.age.value}岁',
-                                                style: BaseStyle.fs12,
-                                              ),
-                                            ),
-                                            SizedBox(width: 4.w),
-                                          ],
-                                        )
-                                        ) : Container()
-                                        ),
-                                        Obx(
-                                              () => GestureDetector(
-                                            // onTap: () => Get.to(MineInfoView()),
-                                            child: loginController.sex.value == 2
-                                                ? Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 2),
-                                              decoration: BoxDecoration(
-                                                color: Config
-                                                    .primarySwatchColor
-                                                    .shade50,
-                                                borderRadius:
-                                                BorderRadius.all(
-                                                    Radius.circular(
-                                                        2.r)),
-                                              ),
-                                              child: loginController.age.value == 0
-                                                  ? Row(
+                                                    SizedBox(width: 5.w),
+                                                    Text(
+                                                      '添加性别等标签',
+                                                      style: BaseStyle.fs12,
+                                                    ),
+                                                  ],
+                                                ): Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.add,
+                                                      size: 12,
+                                                    ),
+                                                    SizedBox(width: 5.w),
+                                                    Text(
+                                                      '添加所在地等标签',
+                                                      style: BaseStyle.fs12,
+                                                    ),
+                                                  ],
+                                                )),
+                                              )
+                                                  : Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    size: 12,
-                                                  ),
-                                                  SizedBox(width: 5.w),
-                                                  Text(
-                                                    '添加年龄、所在地等标签',
-                                                    style: BaseStyle.fs12,
-                                                  ),
-                                                ],
-                                              ):Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    size: 12,
-                                                  ),
-                                                  SizedBox(width: 5.w),
-                                                  Text(
-                                                    '添加所在地等标签',
-                                                    style: BaseStyle.fs12,
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                                : Row(
-                                              children: [
-                                                Obx(
-                                                      () =>
-                                                  loginController.sex
-                                                      .value ==
-                                                      3
-                                                      ? Container()
-                                                      : Container(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                        horizontal:
-                                                        10,
-                                                        vertical:
-                                                        2),
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50,
-                                                      borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(2.r)),
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                            loginController.sex.value == 1
-                                                                ? IconFont
-                                                                .nan
-                                                                : IconFont
-                                                                .nv,
-                                                            color: loginController.sex.value == 1
-                                                                ? Colors.blueAccent
-                                                                : Colors.red,
-                                                            size: 12),
-                                                        SizedBox(
-                                                            width:
-                                                            2.w),
-                                                        Text(
-                                                          loginController.birthday.isEmpty
-                                                              ? (loginController.sex.value == 1
-                                                              ? '男'
-                                                              : '女')
-                                                              : loginController.age.value,
-                                                          style: BaseStyle
-                                                              .fs12,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Obx(() => loginController
-                                                    .sex.value ==
-                                                    3
-                                                    ? Container()
-                                                    : SizedBox(
-                                                    width: 10.w)),
-                                                Obx(
-                                                      () => loginController
-                                                      .country
-                                                      .value ==
-                                                      ''
-                                                      ? Container(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                        horizontal:
-                                                        4,
-                                                        vertical:
-                                                        1),
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50,
-                                                      borderRadius: BorderRadius
-                                                          .all(Radius
-                                                          .circular(
-                                                          2.r)),
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.add,
-                                                          size: 12,
-                                                        ),
-                                                        SizedBox(
-                                                            width:
-                                                            5.w),
-                                                        Obx(
-                                                              () => Text(
-                                                            loginController.age.value == '' &&
-                                                                loginController.country.value ==
-                                                                    ''
-                                                                ? '添加年龄、所在地等标签'
-                                                                : (loginController.country.value == '' && loginController.age.value != ''
-                                                                ? '添加所在地标签'
-                                                                : '添加年龄'),
+                                                  Obx(
+                                                        () =>
+                                                    loginController.sex
+                                                        .value ==
+                                                        3
+                                                        ? Container()
+                                                        : Container(
+                                                      padding: EdgeInsets
+                                                          .symmetric(
+                                                          horizontal:
+                                                          10,
+                                                          vertical:
+                                                          2),
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50,
+                                                        borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(2.r)),
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                              loginController.sex.value == 1
+                                                                  ? IconFont
+                                                                  .nan
+                                                                  : IconFont
+                                                                  .nv,
+                                                              color: loginController.sex.value == 1
+                                                                  ? Colors.blueAccent
+                                                                  : Colors.red,
+                                                              size: 12),
+                                                          SizedBox(
+                                                              width:
+                                                              2.w),
+                                                          Text(
+                                                            loginController.birthday.isEmpty
+                                                                ? (loginController.sex.value == 1
+                                                                ? '男'
+                                                                : '女')
+                                                                : loginController.age.value,
                                                             style: BaseStyle
                                                                 .fs12,
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  )
-                                                      : (loginController
-                                                      .country
-                                                      .value !=
-                                                      ''
-                                                      ? Container(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                        horizontal:
-                                                        4,
-                                                        vertical:
-                                                        1),
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50,
-                                                      borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(2.r)),
-                                                    ),
-                                                    child: Text(
-                                                      // '${loginController.province.value.substring(0, loginController.province.value.lastIndexOf('省'))} · ${loginController.city.value.substring(0, loginController.city.value.lastIndexOf('市'))}',
-                                                      '${loginController.province.value} · ${loginController.city.value}',
-                                                      style:
-                                                      BaseStyle
-                                                          .fs12,
-                                                    ),
-                                                  )
-                                                      : Container()),
-                                                ),
-                                              ],
+                                                  ),
+                                                  Obx(() => loginController
+                                                      .sex.value ==
+                                                      3
+                                                      ? Container()
+                                                      : SizedBox(
+                                                      width: 10.w)),
+                                                  Obx(
+                                                        () => loginController
+                                                        .country
+                                                        .value ==
+                                                        ''
+                                                        ? Container(
+                                                      padding: EdgeInsets
+                                                          .symmetric(
+                                                          horizontal:
+                                                          4,
+                                                          vertical:
+                                                          1),
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50,
+                                                        borderRadius: BorderRadius
+                                                            .all(Radius
+                                                            .circular(
+                                                            2.r)),
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.add,
+                                                            size: 12,
+                                                          ),
+                                                          SizedBox(
+                                                              width:
+                                                              5.w),
+                                                          Obx(
+                                                                () => Text(
+                                                              loginController.age.value == '' &&
+                                                                  loginController.country.value ==
+                                                                      ''
+                                                                  ? '添加年龄、所在地等标签'
+                                                                  : (loginController.country.value == '' && loginController.age.value != ''
+                                                                  ? '添加所在地标签'
+                                                                  : '添加年龄'),
+                                                              style: BaseStyle
+                                                                  .fs12,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                        : (loginController
+                                                        .country
+                                                        .value !=
+                                                        ''
+                                                        ? Container(
+                                                      padding: EdgeInsets
+                                                          .symmetric(
+                                                          horizontal:
+                                                          4,
+                                                          vertical:
+                                                          1),
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50,
+                                                        borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(2.r)),
+                                                      ),
+                                                      child: Text(
+                                                        // '${loginController.province.value.substring(0, loginController.province.value.lastIndexOf('省'))} · ${loginController.city.value.substring(0, loginController.city.value.lastIndexOf('市'))}',
+                                                        '${loginController.province.value.substring(0, loginController.province.value.length - 1)} · ${loginController.city.value.substring(0, loginController.city.value.length - 1)}',
+                                                        style:
+                                                        BaseStyle
+                                                            .fs12,
+                                                      ),
+                                                    )
+                                                        : Container()),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () =>
+                                              Get.to(() => MineInfoView()),
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 55, vertical: 6),
+                                            decoration: BoxDecoration(
+                                              color: Config
+                                                  .primarySwatchColor.shade50,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.r)),
+                                            ),
+                                            child: Text(
+                                              '编辑资料',
+                                              style: BaseStyle.fs16.copyWith(
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                           ),
                                         ),
                                         Spacer(),
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(height: 12.h),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () =>
-                                            Get.to(() => MineInfoView()),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 55, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: Config
-                                                .primarySwatchColor.shade50,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.r)),
-                                          ),
-                                          child: Text(
-                                            '编辑资料',
-                                            style: BaseStyle.fs16.copyWith(
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 60.h),
-                    ],
-                  ),
+                        SizedBox(height: 60.h),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

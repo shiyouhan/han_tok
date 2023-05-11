@@ -13,8 +13,10 @@ import 'package:han_tok/app/modules/mine/controllers/mine_count_controller.dart'
 import 'package:han_tok/app/modules/mine/controllers/mine_fan_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_follow_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/mine_info_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/privacy_policy_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/private_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/setting_controller.dart';
+import 'package:han_tok/app/modules/mine/controllers/user_agree_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/video_detail_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/visit_controller.dart';
 import 'package:han_tok/app/modules/mine/controllers/vlog_detail_controller.dart';
@@ -24,6 +26,12 @@ import '../controllers/mine_controller.dart';
 class MineBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<UserAgreeController>(
+      () => UserAgreeController(),
+    );
+    Get.lazyPut<PrivacyPolicyController>(
+      () => PrivacyPolicyController(),
+    );
     Get.lazyPut<SettingController>(
       () => SettingController(),
     );

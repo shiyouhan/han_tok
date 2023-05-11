@@ -18,6 +18,7 @@ import '../../../../utils/DataUtil.dart';
 import '../../../../utils/DateUtil.dart';
 import '../../../../utils/Iconfont.dart';
 import '../../controllers/like_detail_controller.dart';
+import '../tabbar/index_search_view.dart';
 
 class LikeDetailView extends GetView {
   String vlogId;
@@ -52,7 +53,7 @@ class LikeDetailView extends GetView {
                 Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: GestureDetector(
-                    // onTap: () => Get.back(),
+                    onTap: () => Get.to(() => IndexSearchView()),
                     child: Icon(
                       Icons.search_rounded,
                       size: 28,

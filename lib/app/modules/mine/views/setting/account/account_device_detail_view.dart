@@ -94,9 +94,9 @@ class AccountDeviceDetailView extends GetView {
                     ),
                     SizedBox(height: 10),
                     Obx(
-                      () => Text(mineController.city.value
-                          .substring(0, mineController.city.value.length - 1)),
+                      () => Text(loginController.city.value.substring(0, loginController.city.value.length - 1)),
                     ),
+                      // .substring(0, mineController.city.value.length - 1)
                   ],
                 ),
               ),

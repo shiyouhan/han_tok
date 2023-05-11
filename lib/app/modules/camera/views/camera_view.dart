@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
+import 'package:control_center/control_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,6 +13,7 @@ import 'package:han_tok/app/modules/home/views/home_view.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../utils/Iconfont.dart';
 import '../controllers/camera_controller.dart';
+import 'package:scan/scan.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({super.key});
@@ -22,7 +24,7 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewStage extends State<CameraView> {
   late CameraViewController _controller;
-  bool torchReady = false;
+  final _controlCenterPlugin = ControlCenter();
 
   @override
   void initState() {
@@ -58,8 +60,8 @@ class _CameraViewStage extends State<CameraView> {
                 color: Colors.white,
               ),
               onTap: () {
-                Get.to(() => HomeView());
-                // _controller.onCloseTap();
+                // Get.to(() => HomeView());
+                Get.back();
               },
             ),
           ),
@@ -115,8 +117,7 @@ class _CameraViewStage extends State<CameraView> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    Obx(
-                      () => GestureDetector(
+                    Obx(() => GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         child: Column(
                           children: [
@@ -143,9 +144,11 @@ class _CameraViewStage extends State<CameraView> {
                             ),
                           ],
                         ),
-                        onTap: () => _controller.onSwitchFlash(),
-                      ),
-                    ),
+                        onTap: () {
+                          _controller.onSwitchFlash();
+                          _controlCenterPlugin.openOrCloseFlashlight();
+                        }
+                    ),),
                   ],
                 )),
           ),

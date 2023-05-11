@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, prefer_const_constructors, unnecessary_import, depend_on_referenced_packages, unnecessary_overrides
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:han_tok/app/modules/camera/views/camera_detail_view.dart';
@@ -24,6 +25,8 @@ class CameraViewController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  IconData lightIcon = Icons.flash_on;
 
   CameraController? _cameraController;
 
@@ -79,7 +82,7 @@ class CameraViewController extends GetxController {
     _cameraController =
         CameraController(_cameras[cameraIndex], ResolutionPreset.max);
     _cameraController?.initialize().then((_) {
-      print('MOOC: _initCameraController, refresh controller: $cameraIndex');
+      print('_initCameraController, refresh controller: $cameraIndex');
 
       _cameraControllerObs.value = _cameraController;
     }).catchError((Object e) {
@@ -89,7 +92,7 @@ class CameraViewController extends GetxController {
             print('User denied camera access.');
             break;
           default:
-            print('MOOC: Handle other errors.');
+            print('Handle other errors.');
             break;
         }
       }
@@ -112,7 +115,7 @@ class CameraViewController extends GetxController {
   }
 
   void onSwitchFlash() {
-    _cameraController?.setFlashMode(flash ? FlashMode.off : FlashMode.always);
+    // _cameraController?.setFlashMode(flash ? FlashMode.off : FlashMode.always);
     flash = !flash;
   }
 }

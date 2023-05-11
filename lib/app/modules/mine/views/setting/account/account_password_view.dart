@@ -43,7 +43,7 @@ class AccountPasswordView extends GetView {
               ),
             ),
             Container(
-              height: 48.h,
+              // height: 48.h,
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: Config.primarySwatchColor.shade50,

@@ -15,6 +15,7 @@ import '../../../data/video/user_info.dart';
 import '../../../utils/DataUtil.dart';
 import '../../../utils/DateUtil.dart';
 import '../../../utils/Iconfont.dart';
+import '../../index/views/tabbar/index_search_view.dart';
 import '../controllers/message_detail_controller.dart';
 
 class MessageDetailView extends GetView {
@@ -49,7 +50,7 @@ class MessageDetailView extends GetView {
                 Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: GestureDetector(
-                    // onTap: () => Get.back(),
+                    onTap: () => Get.to(() => IndexSearchView()),
                     child: Icon(
                       Icons.search_rounded,
                       size: 28,

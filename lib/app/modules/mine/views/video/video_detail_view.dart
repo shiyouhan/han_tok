@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:han_tok/app/modules/index/views/tabbar/index_search_view.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,7 +60,7 @@ class VideoDetailView extends GetView {
                 Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: GestureDetector(
-                    // onTap: () => Get.back(),
+                    onTap: () => Get.to(() => IndexSearchView()),
                     child: Icon(
                       Icons.search_rounded,
                       size: 28,

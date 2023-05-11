@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+ // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 
@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(390, 844),
       minTextAdapt: true,
       builder: (context, _) => GetMaterialApp(
+        // showPerformanceOverlay: true,
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate, //安卓

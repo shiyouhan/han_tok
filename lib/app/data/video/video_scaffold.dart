@@ -315,7 +315,6 @@ class _MiddlePage extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     Widget mainVideoList = Container(
       color: Colors.black,
       child: page,

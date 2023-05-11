@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/camera/views/camera_view.dart';
 import 'package:han_tok/app/modules/index/views/tabbar/index_search_view.dart';
 import 'package:han_tok/app/utils/Iconfont.dart';
 import 'package:popover/popover.dart';
@@ -87,7 +88,7 @@ class Button extends StatelessWidget {
             child: Column(
               children: [
                 InkWell(
-                  onTap: () => Get.to(() => IndexScanView()),
+                  onTap: () => Get.to(() => CameraView()),
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: Row(

@@ -9,6 +9,8 @@ PODS:
   - BMKLocationKit (2.0.5)
   - camera_avfoundation (0.0.1):
     - Flutter
+  - control_center (0.0.1):
+    - Flutter
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -63,6 +65,8 @@ PODS:
   - video_thumbnail (0.0.1):
     - Flutter
     - libwebp
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
   - ZLPhotoBrowser (4.2.5):
     - ZLPhotoBrowser/Core (= 4.2.5)
   - ZLPhotoBrowser/Core (4.2.5)
@@ -70,6 +74,7 @@ PODS:
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - control_center (from `.symlinks/plugins/control_center/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_baidu_mapapi_base (from `.symlinks/plugins/flutter_baidu_mapapi_base/ios`)
@@ -89,6 +94,7 @@ DEPENDENCIES:
   - video_compress (from `.symlinks/plugins/video_compress/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -102,6 +108,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_settings/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
+  control_center:
+    :path: ".symlinks/plugins/control_center/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
@@ -140,12 +148,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
   video_thumbnail:
     :path: ".symlinks/plugins/video_thumbnail/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   BaiduMapKit: 54623026cd183511b1525a448094211d4fd5d646
   BMKLocationKit: c0a4266f84ad2a3296df8c24f14f0ed20dbbf0ee
   camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
+  control_center: 81cb8ed4c5a033315621ebc2368ee4ee1149fded
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_baidu_mapapi_base: 58a3649c5f54636944e771745628238ca14bc728
@@ -166,6 +177,7 @@ SPEC CHECKSUMS:
   video_compress: fce97e4fb1dfd88175aa07d2ffc8a2f297f87fbe
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: dc4994ccae5d52b617171c0acb6f80ac1b7a9983

@@ -3,10 +3,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:han_tok/app/data/video/user_info.dart';
+import 'package:han_tok/app/modules/camera/views/camera_view.dart';
 import 'package:han_tok/app/modules/message/views/message_interact_view.dart';
 
 import '../../../data/base_data.dart';
@@ -34,7 +36,9 @@ class MessageView extends GetView<MessageController> {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return Container(
+              return AnnotatedRegion<SystemUiOverlayStyle>(
+                 value: SystemUiOverlayStyle.light,
+                child: Container(
                 color: Colors.black,
                 child: SizedBox(
                   height: size.height,
@@ -185,18 +189,21 @@ class MessageView extends GetView<MessageController> {
                                                   color: Colors.white),
                                             ),
                                           ),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 60, vertical: 16),
-                                            decoration: BoxDecoration(
-                                              color: Config
-                                                  .primarySwatchColor.shade50,
-                                              borderRadius:
-                                                  BorderRadius.circular(30.r),
-                                            ),
-                                            child: Text(
-                                              '去拍摄',
-                                              style: BaseStyle.fs14,
+                                          GestureDetector(
+                                            onTap: () => Get.to(() => CameraView()),
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 60, vertical: 16),
+                                              decoration: BoxDecoration(
+                                                color: Config
+                                                    .primarySwatchColor.shade50,
+                                                borderRadius:
+                                                    BorderRadius.circular(30.r),
+                                              ),
+                                              child: Text(
+                                                '去拍摄',
+                                                style: BaseStyle.fs14,
+                                              ),
                                             ),
                                           )
                                         ],
@@ -239,24 +246,29 @@ class MessageView extends GetView<MessageController> {
                                                                   Colors.white),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 60,
-                                                            vertical: 16),
-                                                    decoration: BoxDecoration(
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30.r),
-                                                    ),
-                                                    child: Text(
-                                                      '去拍摄',
-                                                      style: BaseStyle.fs14,
-                                                    ),
-                                                  )
+                                                  GestureDetector(
+                                                      onTap: () =>
+                                                          Get.to(() => CameraView()),
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 60,
+                                                                vertical: 16),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Config
+                                                              .primarySwatchColor
+                                                              .shade50,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30.r),
+                                                        ),
+                                                        child: Text(
+                                                          '去拍摄',
+                                                          style: BaseStyle.fs14,
+                                                        ),
+                                                      ))
                                                 ],
                                               ),
                                             ),
@@ -287,22 +299,25 @@ class MessageView extends GetView<MessageController> {
                                                                   Colors.white),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 60,
-                                                            vertical: 16),
-                                                    decoration: BoxDecoration(
-                                                      color: Config
-                                                          .primarySwatchColor
-                                                          .shade50,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30.r),
-                                                    ),
-                                                    child: Text(
-                                                      '去拍摄',
-                                                      style: BaseStyle.fs14,
+                                                  GestureDetector(
+                                                    onTap: () => Get.to(() => CameraView()),
+                                                    child: Container(
+                                                      padding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 60,
+                                                          vertical: 16),
+                                                      decoration: BoxDecoration(
+                                                        color: Config
+                                                            .primarySwatchColor
+                                                            .shade50,
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            30.r),
+                                                      ),
+                                                      child: Text(
+                                                        '去拍摄',
+                                                        style: BaseStyle.fs14,
+                                                      ),
                                                     ),
                                                   )
                                                 ],
@@ -410,7 +425,7 @@ class MessageView extends GetView<MessageController> {
                     ],
                   ),
                 ),
-              );
+              ),);
             },
           ),
           child: Icon(

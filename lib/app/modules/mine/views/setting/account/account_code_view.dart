@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:han_tok/app/modules/mine/views/setting/account/account_security_view.dart';
 
 import '../../../../../data/base_style.dart';
 import '../../../../../data/theme_data.dart';
@@ -22,6 +23,14 @@ class AccountCodeView extends GetView {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
+        leading: GestureDetector(
+          onTap: () => Get.to(() => AccountSecurityView()),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 24,
+          ),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -43,7 +52,7 @@ class AccountCodeView extends GetView {
               ),
             ),
             Container(
-              height: 48.h,
+              // height: 48.h,
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               decoration: BoxDecoration(
                 color: Config.primarySwatchColor.shade50,
